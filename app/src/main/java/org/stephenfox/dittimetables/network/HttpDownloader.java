@@ -19,7 +19,7 @@ public class HttpDownloader {
     public static final int STATUS_CODE_OK = 200;
 
     public String getHttpData(String urlString) {
-        String dataStream;
+        String dataStream = null;
 
         try {
             URL courseURL = new URL(urlString);

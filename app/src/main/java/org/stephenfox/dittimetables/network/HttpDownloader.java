@@ -2,6 +2,7 @@ package org.stephenfox.dittimetables.network;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -16,37 +17,24 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HttpDownloader {
 
-    public static final int STATUS_CODE_OK = 200;
-
     public String getHttpData(String urlString) {
-        String dataStream = null;
+        String data = null;
 
         try {
-            URL courseURL = new URL(urlString);
-            HttpURLConnection urlConnection = (HttpURLConnection) courseURL.openConnection();
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
-            if (urlConnection.getResponseCode() == STATUS_CODE_OK) {
-                BufferedInputStream inStream = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
 
-                while ((line = bReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
 
-                dataStream = stringBuilder.toString();
 
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        catch (IOException e) {
+            e.printStackTrace();
 
-        return dataStream;
+            Log.v("IOExceptionShite", "FAILED");
+        }
+        return data;
     }
+
 
 }

@@ -31,15 +31,15 @@ public class CourseListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View cell = convertView;
+        View row = convertView;
 
-        if (cell == null) {
-            cell = inflater.inflate(R.layout.course_row, null);
+        if (row == null) {
+            row = inflater.inflate(R.layout.course_row, null);
         }
 
-        TextView courseName = (TextView) cell.findViewById(R.id.courseName);
+        TextView courseName = (TextView) row.findViewById(R.id.courseName);
         courseName.setText(courses[position]);
 
-        return cell;
+        return row;
     }
 }

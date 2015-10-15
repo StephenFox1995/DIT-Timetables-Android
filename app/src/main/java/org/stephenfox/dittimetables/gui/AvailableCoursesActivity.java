@@ -21,7 +21,7 @@ public class AvailableCoursesActivity extends ListActivity {
     String[] dummyCourses = {"DT228/3", "DT228/4"};
     String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
 
-    ArrayList<TimetableSession> sessions;
+
 
 
     @Override
@@ -31,8 +31,7 @@ public class AvailableCoursesActivity extends ListActivity {
         setListAdapter(new CourseListAdapter(this, dummyCourses));
 
 
-        sessions = new ArrayList<TimetableSession>();
-        sessions.add( new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture"));
+
 
     }
 
@@ -40,6 +39,10 @@ public class AvailableCoursesActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent timetableWeekDisplayIntent = new Intent(this, TimetableWeekDisplay.class);
+
+        ArrayList<TimetableSession> sessions = new ArrayList<TimetableSession>();
+        sessions.add( new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture"));
+
         timetableWeekDisplayIntent.putParcelableArrayListExtra("courseRequestURL", sessions);
         startActivity(timetableWeekDisplayIntent);
     }

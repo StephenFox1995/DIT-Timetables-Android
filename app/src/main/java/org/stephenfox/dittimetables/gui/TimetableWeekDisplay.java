@@ -5,7 +5,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,15 @@ import junit.framework.Assert;
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.TimetableSession;
 
+import java.util.ArrayList;
+
 public class TimetableWeekDisplay extends ListActivity {
 
     // TODO(stephenfox)
     // Should be a array of TimetableSessions:
     private TimetableSession timetableSession;
+
+    private ArrayList<TimetableSession> a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,9 @@ public class TimetableWeekDisplay extends ListActivity {
 
         Intent intent = getIntent();
 
-        this.timetableSession = intent.getParcelableExtra("courseRequestURL");
-        Assert.assertNotNull(timetableSession);
+        this.a = intent.getParcelableExtra("courseRequestURL");
+
+        this.timetableSession = a.get(0);
         setListAdapter(new TimetableWeekListAdapter(this, timetableSession));
     }
 
@@ -71,7 +75,7 @@ public class TimetableWeekDisplay extends ListActivity {
             if (row == null) {
                 row = inflater.inflate(R.layout.timetable_session_row, null);
             }
-            /* TODO(stephenfox):
+            /* TODO: (stephenfox):
             * Use full time component*/
             TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
             sessionTimeComponent.setText(timetableSession.getStartTime());

@@ -12,7 +12,9 @@ import android.os.Parcelable;
 public class TimetableSession implements Parcelable {
 
 
-    public TimetableSession(String startTime, String endTime, String sessionName, String[] sessionGroups, String sessionMaster, String sessionLocation, String sessionType) {
+    public TimetableSession(String startTime, String endTime, String sessionName,
+                            String[] sessionGroups, String sessionMaster, String sessionLocation,
+                            String sessionType) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.sessionName = sessionName;
@@ -79,13 +81,9 @@ public class TimetableSession implements Parcelable {
     private String sessionType;
 
 
-    public String getStartTime() {
-        return startTime;
-    }
+    public String getStartTime() { return startTime; }
 
-    public String getEndTime() {
-        return endTime;
-    }
+    public String getEndTime() { return endTime; }
 
     public String getSessionName() {
         return sessionName;

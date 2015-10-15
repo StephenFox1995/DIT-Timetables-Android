@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,9 @@ public class TimetableWeekDisplay extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timetable_week_display);
 
-        //Intent intent = getIntent();
-        //this.courseRequestURL = intent.getStringExtra("courseRequestURL");
+        Intent intent = getIntent();
+        this.courseRequestURL = intent.getStringExtra("courseRequestURL");
+        setListAdapter(new TimetableWeekListAdapter(this, courseRequestURL));
     }
 
 
@@ -60,12 +62,12 @@ public class TimetableWeekDisplay extends ListActivity {
             View row = convertView;
 
             if (row == null) {
-                inflater.inflate(R.layout.timetable_session_row, null);
+                row = inflater.inflate(R.layout.timetable_session_row, null);
             }
 
             TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
             sessionNameTextView.setText(sessionName);
-            return sessionNameTextView;
+            return row;
         }
     }
 

@@ -24,7 +24,11 @@ public class HttpDownloader {
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
+            if (conn.getResponseCode() == 200) {
 
+            } else {
+
+            }
 
 
         }

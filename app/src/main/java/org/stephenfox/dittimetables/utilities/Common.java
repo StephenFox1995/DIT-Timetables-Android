@@ -1,9 +1,6 @@
-package org.stephenfox.dittimetables.network;
+package org.stephenfox.dittimetables.utilities;
 
-/**
- *  A class that encapsulates all the common elements
- *  of the network package.
- */
+
 public class Common {
 
     /**

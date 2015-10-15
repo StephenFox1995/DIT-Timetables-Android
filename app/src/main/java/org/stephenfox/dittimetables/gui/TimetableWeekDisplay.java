@@ -12,11 +12,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import junit.framework.Assert;
+
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.network.TimetableSession;
 
 public class TimetableWeekDisplay extends ListActivity {
 
-    private String courseRequestURL;
+    // TODO(stephenfox)
+    // Should be a array of TimetableSessions:
+    private TimetableSession timetableSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,21 +29,23 @@ public class TimetableWeekDisplay extends ListActivity {
         setContentView(R.layout.timetable_week_display);
 
         Intent intent = getIntent();
-        this.courseRequestURL = intent.getStringExtra("courseRequestURL");
-        setListAdapter(new TimetableWeekListAdapter(this, courseRequestURL));
+
+        this.timetableSession = intent.getParcelableExtra("courseRequestURL");
+        Assert.assertNotNull(timetableSession);
+        setListAdapter(new TimetableWeekListAdapter(this, timetableSession));
     }
 
 
 
     class TimetableWeekListAdapter extends BaseAdapter {
 
-        private String sessionName = null;
+        private TimetableSession timetableSession;
         private LayoutInflater inflater;
 
-
-        public TimetableWeekListAdapter(Context context, String name) {
-            this.sessionName = name;
-            this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        public TimetableWeekListAdapter(Context context, TimetableSession session) {
+            this.timetableSession = session;
+            this.inflater =
+                    (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -48,7 +55,7 @@ public class TimetableWeekDisplay extends ListActivity {
 
         @Override
         public Object getItem(int position) {
-            return sessionName;
+            return timetableSession;
         }
 
         @Override
@@ -64,9 +71,14 @@ public class TimetableWeekDisplay extends ListActivity {
             if (row == null) {
                 row = inflater.inflate(R.layout.timetable_session_row, null);
             }
+            /* TODO(stephenfox):
+            * Use full time component*/
+            TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
+            sessionTimeComponent.setText(timetableSession.getStartTime());
 
             TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
-            sessionNameTextView.setText(sessionName);
+            sessionNameTextView.setText(timetableSession.getSessionName());
+
             return row;
         }
     }

@@ -1,11 +1,16 @@
 package org.stephenfox.dittimetables.network;
 
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * This class provides information for a single session
  * for a courses timetable. For example a session could be a
  * lab, lecture etc.
  */
-public class TimetableSession {
+public class TimetableSession implements Parcelable {
+
 
     public TimetableSession(String startTime, String endTime, String sessionName, String[] sessionGroups, String sessionMaster, String sessionLocation, String sessionType) {
         this.startTime = startTime;
@@ -15,6 +20,15 @@ public class TimetableSession {
         this.sessionMaster = sessionMaster;
         this.sessionLocation = sessionLocation;
         this.sessionType = sessionType;
+    }
+
+    public TimetableSession(Parcel source) {
+        this.startTime = source.readString();
+        this.endTime = source.readString();
+        this.sessionName = source.readString();
+        this.sessionMaster = source.readString();
+        this.sessionLocation = source.readString();
+        this.sessionType = source.readString();
     }
 
 
@@ -65,11 +79,6 @@ public class TimetableSession {
     private String sessionType;
 
 
-
-    public String getSessionType() {
-        return sessionType;
-    }
-
     public String getStartTime() {
         return startTime;
     }
@@ -82,17 +91,43 @@ public class TimetableSession {
         return sessionName;
     }
 
-    public String[] getSessionGroups() {
-        return sessionGroups;
+    public String[] getSessionGroups() { return sessionGroups; }
+
+    public String getSessionMaster() { return sessionMaster; }
+
+    public String getSessionLocation() { return sessionLocation; }
+
+    public String getSessionType() { return sessionType; }
+
+
+
+    public int describeContents() {
+        return 0;
     }
 
-    public String getSessionMaster() {
-        return sessionMaster;
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(getStartTime());
+        dest.writeString(getEndTime());
+        dest.writeString(getSessionName());
+        dest.writeArray(getSessionGroups());
+        dest.writeString(getSessionMaster());
+        dest.writeString(getSessionLocation());
+        dest.writeString(getSessionType());
     }
 
-    public String getSessionLocation() {
-        return sessionLocation;
-    }
+    public static final Creator<TimetableSession> CREATOR = new Creator<TimetableSession>() {
+        @Override
+        public TimetableSession createFromParcel(Parcel in) {
+            return new TimetableSession(in);
+        }
+
+        @Override
+        public TimetableSession[] newArray(int size) {
+            return new TimetableSession[size];
+        }
+    };
+
 
 
 }

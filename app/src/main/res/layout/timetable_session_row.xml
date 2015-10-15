@@ -7,10 +7,31 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="20dp"
+        android:id="@+id/timeComponent"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
         android:id="@+id/sessionName"/>
     
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:id="@+id/sessionGroups"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/sessionMaster"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/sessionLocation"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/sessionType"/>
 
 </LinearLayout>

@@ -28,7 +28,7 @@ public class TimetableSession implements Parcelable {
     this.startTime = source.readString();
     this.endTime = source.readString();
     this.sessionName = source.readString();
-    //this.sessionGroups = source.readStringArray();
+    this.sessionGroups = source.createStringArray();
     this.sessionMaster = source.readString();
     this.sessionLocation = source.readString();
     this.sessionType = source.readString();

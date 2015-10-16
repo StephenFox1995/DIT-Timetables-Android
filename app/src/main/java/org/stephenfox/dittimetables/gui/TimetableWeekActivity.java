@@ -16,7 +16,7 @@ import org.stephenfox.dittimetables.network.TimetableSession;
 
 import java.util.ArrayList;
 
-public class TimetableWeekDisplay extends ListActivity {
+public class TimetableWeekActivity extends ListActivity {
 
   // TODO(stephenfox)
   // Should be a array of TimetableSessions:
@@ -33,9 +33,7 @@ public class TimetableWeekDisplay extends ListActivity {
 
     sessions = intent.getParcelableArrayListExtra("courseRequestURL");
     this.timetableSession = sessions.get(0);
-    timetableSession.describeContents();
 
-    //this.timetableSession = a.get(0);
     setListAdapter(new TimetableWeekListAdapter(this, timetableSession));
 
   }
@@ -75,13 +73,24 @@ public class TimetableWeekDisplay extends ListActivity {
       if (row == null) {
         row = inflater.inflate(R.layout.timetable_session_row, null);
       }
-            /* TODO: (stephenfox):
-            * Use full time component*/
-      TextView sessionTimeComponent = (TextView) row.findViewById(R.id.timeComponent);
+
+
+      /* TODO: (stephenfox):
+      * Use full time component*/
+      TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
       sessionTimeComponent.setText(timetableSession.getStartTime());
 
-      TextView sessionNameTextView = (TextView) row.findViewById(R.id.sessionName);
+      TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
       sessionNameTextView.setText(timetableSession.getSessionName());
+
+      TextView sessionMasterTextView = (TextView)row.findViewById(R.id.sessionMaster);
+      sessionMasterTextView.setText(timetableSession.getSessionMaster());
+
+      TextView sessionLocationTextView = (TextView)row.findViewById(R.id.sessionLocation);
+      sessionLocationTextView.setText(timetableSession.getSessionLocation());
+
+      TextView sessionTypeTextView = (TextView)row.findViewById(R.id.sessionType);
+      sessionTypeTextView.setText(timetableSession.getSessionType());
 
       return row;
     }

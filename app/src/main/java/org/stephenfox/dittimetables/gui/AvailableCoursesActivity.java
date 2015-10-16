@@ -32,14 +32,16 @@ public class AvailableCoursesActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    Intent timetableWeekDisplayIntent = new Intent(this, TimetableWeekDisplay.class);
+    Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekActivity.class);
 
     ArrayList<TimetableSession> sessions = new ArrayList<TimetableSession>();
+
+    //TODO(stephenfox): This is le hardcoded.
     TimetableSession someSession = new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
     sessions.add(someSession);
 
-    timetableWeekDisplayIntent.putParcelableArrayListExtra("courseRequestURL", sessions);
-    startActivity(timetableWeekDisplayIntent);
+    timetableWeekActivityIntent.putParcelableArrayListExtra("courseRequestURL", sessions);
+    startActivity(timetableWeekActivityIntent);
   }
 
 

@@ -38,7 +38,10 @@ public class AvailableCoursesActivity extends ListActivity {
 
     //TODO(stephenfox): This is le hardcoded.
     TimetableSession someSession = new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
+    TimetableSession anotherSession = new TimetableSession("12:00", "13:00", "Knowledge Engineering", dummyGroups, "Richard Lawlor", "KE-4-008", "Lecture");
+
     sessions.add(someSession);
+    sessions.add(anotherSession);
 
     timetableWeekActivityIntent.putParcelableArrayListExtra("courseRequestURL", sessions);
     startActivity(timetableWeekActivityIntent);

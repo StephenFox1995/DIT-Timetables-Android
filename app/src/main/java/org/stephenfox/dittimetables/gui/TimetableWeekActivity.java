@@ -20,9 +20,8 @@ public class TimetableWeekActivity extends ListActivity {
 
   // TODO(stephenfox)
   // Should be a array of TimetableSessions:
-  private TimetableSession timetableSession;
+  private ArrayList<TimetableSession> timetableSessions;
 
-  private ArrayList<TimetableSession> sessions;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,33 +30,33 @@ public class TimetableWeekActivity extends ListActivity {
 
     Intent intent = getIntent();
 
-    sessions = intent.getParcelableArrayListExtra("courseRequestURL");
-    this.timetableSession = sessions.get(0);
+    this.timetableSessions = intent.getParcelableArrayListExtra("courseRequestURL");
 
-    setListAdapter(new TimetableWeekListAdapter(this, timetableSession));
+
+    setListAdapter(new TimetableWeekListAdapter(this, timetableSessions));
 
   }
 
 
   class TimetableWeekListAdapter extends BaseAdapter {
 
-    private TimetableSession timetableSession;
+    private ArrayList<TimetableSession> timetableSessions;
     private LayoutInflater inflater;
 
-    public TimetableWeekListAdapter(Context context, TimetableSession session) {
-      this.timetableSession = session;
+    public TimetableWeekListAdapter(Context context, ArrayList<TimetableSession> sessions) {
+      this.timetableSessions = sessions;
       this.inflater =
           (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-      return 1;
+      return timetableSessions.size();
     }
 
     @Override
     public Object getItem(int position) {
-      return timetableSession;
+      return timetableSessions;
     }
 
     @Override
@@ -77,20 +76,23 @@ public class TimetableWeekActivity extends ListActivity {
 
       /* TODO: (stephenfox):
       * Use full time component*/
-      TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
-      sessionTimeComponent.setText(timetableSession.getStartTime());
-
       TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
-      sessionNameTextView.setText(timetableSession.getSessionName());
+      sessionNameTextView.setText(timetableSessions.get(position).getSessionName());
+
+      TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
+      sessionTimeComponent.setText(timetableSessions.get(position).getStartTime());
+
+      TextView sessionGroupsTextView = (TextView)row.findViewById(R.id.sessionGroups);
+      sessionGroupsTextView.setText(timetableSessions.get(position).getSessionGroups()[0]);
 
       TextView sessionMasterTextView = (TextView)row.findViewById(R.id.sessionMaster);
-      sessionMasterTextView.setText(timetableSession.getSessionMaster());
+      sessionMasterTextView.setText(timetableSessions.get(position).getSessionMaster());
 
       TextView sessionLocationTextView = (TextView)row.findViewById(R.id.sessionLocation);
-      sessionLocationTextView.setText(timetableSession.getSessionLocation());
+      sessionLocationTextView.setText(timetableSessions.get(position).getSessionLocation());
 
       TextView sessionTypeTextView = (TextView)row.findViewById(R.id.sessionType);
-      sessionTypeTextView.setText(timetableSession.getSessionType());
+      sessionTypeTextView.setText(timetableSessions.get(position).getSessionType());
 
       return row;
     }

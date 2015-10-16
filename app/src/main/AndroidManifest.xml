@@ -21,6 +21,8 @@
 
         <activity android:name=".gui.TimetableWeekActivity" />
 
+        <activity android:name=".gui.TimetableWeekPagerActivity" />
+
     </application>
 
 </manifest>

@@ -1,10 +1,10 @@
 package org.stephenfox.dittimetables.gui;
 
 
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +16,24 @@ import org.stephenfox.dittimetables.network.TimetableSession;
 
 import java.util.ArrayList;
 
-public class TimetableWeekActivity extends ListActivity {
 
-  // TODO(stephenfox)
-  // Should be a array of TimetableSessions:
-  private ArrayList<TimetableSession> timetableSessions;
+public class TimetableWeekPageFragment extends ListFragment {
 
+  String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
+  TimetableSession someSession = new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
 
+  @Nullable
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.timetable_week_display);
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
 
-    Intent intent = getIntent();
+    ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.timetable_week_display, container, false);
 
-    this.timetableSessions = intent.getParcelableArrayListExtra("courseRequestURL");
+    ArrayList<TimetableSession> s = new ArrayList<>();
+    s.add(someSession);
 
-
-    setListAdapter(new TimetableWeekListAdapter(this, timetableSessions));
-
+    setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), s));
+    return rootView;
   }
 
 
@@ -43,26 +42,31 @@ public class TimetableWeekActivity extends ListActivity {
     private ArrayList<TimetableSession> timetableSessions;
     private LayoutInflater inflater;
 
+
     public TimetableWeekListAdapter(Context context, ArrayList<TimetableSession> sessions) {
       this.timetableSessions = sessions;
       this.inflater =
           (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+
     @Override
     public int getCount() {
       return timetableSessions.size();
     }
+
 
     @Override
     public Object getItem(int position) {
       return timetableSessions;
     }
 
+
     @Override
     public long getItemId(int position) {
       return position;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -97,5 +101,4 @@ public class TimetableWeekActivity extends ListActivity {
       return row;
     }
   }
-
 }

@@ -40,8 +40,6 @@ public class HttpDownloader {
         dataString = stringBuilder.toString();
         conn.disconnect();
 
-        Log.v("12345::", dataString);
-
       }
     } catch (IOException e) {
       e.printStackTrace();

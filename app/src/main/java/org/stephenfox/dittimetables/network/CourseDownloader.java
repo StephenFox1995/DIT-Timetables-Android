@@ -2,6 +2,7 @@ package org.stephenfox.dittimetables.network;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 public class CourseDownloader extends HttpDownloader {
@@ -17,8 +18,13 @@ public class CourseDownloader extends HttpDownloader {
    * which holds a courseName and id.
    */
   public void downloadCourseNamesAndIdentifiers() {
-    AsyncDownloader iDownloader = new AsyncDownloader(this);
-    iDownloader.execute(CourseDownloader.coursesURL);
+    AsyncDownloader asyncDownloader = new AsyncDownloader(this);
+
+    asyncDownloader.download(CourseDownloader.coursesURL, new HttpAsyncCallback() {
+      public void finished(String s) {
+        Log.v("12345::", s);
+      }
+    });
   }
 
 
@@ -29,7 +35,7 @@ public class CourseDownloader extends HttpDownloader {
   private class AsyncDownloader extends AsyncTask<String, Void, String> {
 
     private HttpDownloader httpDownloader;
-
+    private HttpAsyncCallback callback;
 
     public <T extends  HttpDownloader>AsyncDownloader(T httpDownloader) {
       this.httpDownloader = httpDownloader;
@@ -39,6 +45,29 @@ public class CourseDownloader extends HttpDownloader {
     protected String doInBackground(String... params) {
       return httpDownloader.getHttpData(params[0]);
     }
+
+    public void download(String s, HttpAsyncCallback callback) {
+      this.callback = callback;
+      execute(s);
+
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+      super.onPostExecute(s);
+      callback.finished(s);
+    }
+  }
+
+
+  /**
+   * A private interface which allows us to
+   * perform asynchronous callbacks when AsyncDownloader
+   * has finished downloading all the data from the
+   * server.
+   */
+  private interface HttpAsyncCallback {
+    public void finished(String s);
   }
 
 

@@ -1,5 +1,6 @@
 package org.stephenfox.dittimetables.gui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+
 import org.stephenfox.dittimetables.R;
 
 /**
@@ -24,6 +27,10 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_screen_slide);
+
+    Intent d = getIntent();
+    String s = d.getStringExtra("url");
+    Log.d("12345::", s);
 
     pager = (ViewPager)findViewById(R.id.slide);
     pageAdapter = new SliderAdapter(getSupportFragmentManager());

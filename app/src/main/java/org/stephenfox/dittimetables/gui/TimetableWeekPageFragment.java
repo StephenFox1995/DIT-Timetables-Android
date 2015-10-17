@@ -10,17 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.TimetableSession;
-
 import java.util.ArrayList;
 
 
+/**
+ * Fragment which displays a day of the week
+ * and the sessions belonging to that day.
+ */
 public class TimetableWeekPageFragment extends ListFragment {
 
   String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
   TimetableSession someSession = new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
+
 
   @Nullable
   @Override
@@ -35,6 +38,7 @@ public class TimetableWeekPageFragment extends ListFragment {
     setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), s));
     return rootView;
   }
+
 
 
   class TimetableWeekListAdapter extends BaseAdapter {

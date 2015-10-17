@@ -9,11 +9,16 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import org.stephenfox.dittimetables.R;
 
-
+/**
+ * This class manages a set of fragments see
+ * {@link org.stephenfox.dittimetables.gui.TimetableWeekPageFragment}
+ * for details on each fragment.
+ */
 public class TimetableWeekPagerActivity extends FragmentActivity {
 
   private ViewPager pager;
   private PagerAdapter pageAdapter;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

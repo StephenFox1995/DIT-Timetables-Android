@@ -12,11 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.network.CourseDownloader;
 
 public class AvailableCoursesActivity extends ListActivity {
 
   String[] dummyCourses = {"DT228/3", "DT228/4"};
-  String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
 
 
   @Override
@@ -24,26 +24,20 @@ public class AvailableCoursesActivity extends ListActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_available_courses);
     setListAdapter(new CourseListAdapter(this, dummyCourses));
+
+    CourseDownloader cDownloader = new CourseDownloader();
+    cDownloader.downloadCourseNamesAndIdentifiers();
+
   }
+
 
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
     Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
     startActivity(timetableWeekActivityIntent);
-
-//    ArrayList<TimetableSession> sessions = new ArrayList<TimetableSession>();
-//
-//    //TODO(stephenfox): This is le hardcoded.
-//    TimetableSession someSession = new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
-//    TimetableSession anotherSession = new TimetableSession("12:00", "13:00", "Knowledge Engineering", dummyGroups, "Richard Lawlor", "KE-4-008", "Lecture");
-//
-//    sessions.add(someSession);
-//    sessions.add(anotherSession);
-//
-//    timetableWeekActivityIntent.putParcelableArrayListExtra("courseRequestURL", sessions);
-//    startActivity(timetableWeekActivityIntent);
   }
+
 
 
   public class CourseListAdapter extends BaseAdapter {

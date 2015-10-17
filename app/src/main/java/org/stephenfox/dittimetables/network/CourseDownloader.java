@@ -2,10 +2,11 @@ package org.stephenfox.dittimetables.network;
 
 
 import android.os.AsyncTask;
-import android.util.Log;
+import org.stephenfox.dittimetables.gui.HttpAsyncCallback;
 
 
 public class CourseDownloader extends HttpDownloader {
+
 
   /**
    * The URL which hold all information on each course.
@@ -15,16 +16,14 @@ public class CourseDownloader extends HttpDownloader {
 
   /**
    * Downloads all the JSON data from {@link #coursesURL}
-   * which holds a courseName and id.
+   * which holds a course name and id.
+   *
+   * @param callback This object/callback will be messaged when the
+   *                 course name and identifiers have been downloaded.
    */
-  public void downloadCourseNamesAndIdentifiers() {
+  public void downloadCourseNamesAndIdentifiers(HttpAsyncCallback callback) {
     AsyncDownloader asyncDownloader = new AsyncDownloader(this);
-
-    asyncDownloader.download(CourseDownloader.coursesURL, new HttpAsyncCallback() {
-      public void finished(String s) {
-        Log.v("12345::", s);
-      }
-    });
+    asyncDownloader.download(CourseDownloader.coursesURL, callback);
   }
 
 
@@ -37,19 +36,29 @@ public class CourseDownloader extends HttpDownloader {
     private HttpDownloader httpDownloader;
     private HttpAsyncCallback callback;
 
+
     public <T extends  HttpDownloader>AsyncDownloader(T httpDownloader) {
       this.httpDownloader = httpDownloader;
     }
 
     @Override
     protected String doInBackground(String... params) {
+      // Download our http data.
       return httpDownloader.getHttpData(params[0]);
     }
 
-    public void download(String s, HttpAsyncCallback callback) {
-      this.callback = callback;
-      execute(s);
 
+    /**
+     * Downloads the course names and identifiers from the server.
+     *
+     * @param url The url string to fetch the data from.
+     * @param callback The object who will be called when all
+     *                 the information has been retrieved from the
+     *                 http request.
+     */
+    public void download(String url, HttpAsyncCallback callback) {
+      this.callback = callback;
+      execute(url);
     }
 
     @Override
@@ -58,17 +67,4 @@ public class CourseDownloader extends HttpDownloader {
       callback.finished(s);
     }
   }
-
-
-  /**
-   * A private interface which allows us to
-   * perform asynchronous callbacks when AsyncDownloader
-   * has finished downloading all the data from the
-   * server.
-   */
-  private interface HttpAsyncCallback {
-    public void finished(String s);
-  }
-
-
 }

@@ -26,7 +26,13 @@ public class AvailableCoursesActivity extends ListActivity {
     setListAdapter(new CourseListAdapter(this, dummyCourses));
 
     CourseDownloader cDownloader = new CourseDownloader();
-    cDownloader.downloadCourseNamesAndIdentifiers();
+
+    cDownloader.downloadCourseNamesAndIdentifiers(new HttpAsyncCallback() {
+      @Override
+      public void finished(String data) {
+
+      }
+    });
 
   }
 

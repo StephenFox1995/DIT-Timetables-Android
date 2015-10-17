@@ -11,5 +11,5 @@ public interface HttpAsyncCallback {
    * Called when a http request has finished.
    * @param data The data retrieved from the http request.
    */
-  public void finished(String data);
+  void finished(String data);
 }

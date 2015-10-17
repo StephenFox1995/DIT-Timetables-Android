@@ -18,6 +18,9 @@ public class HttpDownloader {
    * Note: this method must be called on
    * a separate thread and not on the main ui thread.
    * Otherwise a NetworkOnMainThreadException will be thrown.
+   *
+   * @return Returns a string of the data fetched from
+   *         the http request.
    */
   public String getHttpData(String urlString) {
     String dataString = null;
@@ -26,7 +29,7 @@ public class HttpDownloader {
       URL url = new URL(urlString);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-      if (conn.getResponseCode() == 200) {
+      if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
         BufferedInputStream inputStream = new BufferedInputStream(conn.getInputStream());
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -39,11 +42,9 @@ public class HttpDownloader {
 
         dataString = stringBuilder.toString();
         conn.disconnect();
-
       }
     } catch (IOException e) {
       e.printStackTrace();
-
       Log.v("IOException", "FAILED");
     }
     return dataString;

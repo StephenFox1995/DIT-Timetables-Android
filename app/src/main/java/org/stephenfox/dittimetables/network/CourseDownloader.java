@@ -43,8 +43,7 @@ public class CourseDownloader extends HttpDownloader {
 
     @Override
     protected String doInBackground(String... params) {
-      // Download our http data.
-      return httpDownloader.getHttpData(params[0]);
+      return httpDownloader.getHttpData(params[0]); // Download our http data.
     }
 
 

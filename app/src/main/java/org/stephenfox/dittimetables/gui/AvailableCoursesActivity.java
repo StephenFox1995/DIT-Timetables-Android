@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AvailableCoursesActivity extends ListActivity {
 
   private HashMap<Integer, String> courseIdentifiersAndNames;
@@ -40,7 +41,9 @@ public class AvailableCoursesActivity extends ListActivity {
           Log.d("DITTimetables", "Course names and identifiers successfully downloaded." + data);
 
           // TODO: Never parse if data is not sufficient.
-          beginJSONParsing(data);
+          courseIdentifiersAndNames = beginJSONParsing(data);
+          ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersAndNames);
+          setListAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
         }
       }
     });
@@ -50,25 +53,32 @@ public class AvailableCoursesActivity extends ListActivity {
   /**
    * Begins the parsing of the JSON data retrieved from
    * the http request.
+   *
+   * @param data The JSON data.
+   * @return A HashMap with a key value pair of <Integer, String>
+   *         The key is the course id and the value is the course title.
    */
-  private void beginJSONParsing(String data) {
+  private HashMap<Integer, String> beginJSONParsing(String data) {
     JsonParser jsonParser = new JsonParser();
-    this.courseIdentifiersAndNames = jsonParser.parseTitlesAndIdentifiers(data);
-    formatDataForAdapter(courseIdentifiersAndNames);
+    return jsonParser.parseTitlesAndIdentifiers(data);
   }
 
 
   /**
    * Formats the data retrieved from the server into
    * a format recognizable by CourseListAdapter.
+   *
+   * @param data A HashMap
+   * @return An ArrayList containing all the course titles in a
+   *         format that can be given to the CourseListAdapter.
    */
-  private void formatDataForAdapter(HashMap<Integer, String> data) {
+  private ArrayList<String> formatDataForAdapter(HashMap<Integer, String> data) {
     ArrayList<String> courseNames = new ArrayList<>();
 
     for (Integer key : data.keySet()) {
       courseNames.add(data.get(key));
     }
-    setListAdapter(new CourseListAdapter(this, courseNames));
+    return courseNames;
   }
 
 
@@ -102,6 +112,7 @@ public class AvailableCoursesActivity extends ListActivity {
     }
     return null;
   }
+
 
 
   private class CourseListAdapter extends BaseAdapter {

@@ -3,14 +3,16 @@ package org.stephenfox.dittimetables.gui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.network.AsyncDownloader;
+import org.stephenfox.dittimetables.network.JsonParser;
+import org.stephenfox.dittimetables.network.WeekDownloader;
 
 /**
  * This class manages a set of fragments see
@@ -29,8 +31,17 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
     setContentView(R.layout.activity_screen_slide);
 
     Intent d = getIntent();
-    String s = d.getStringExtra("url");
-    Log.d("12345::", s);
+    String url = d.getStringExtra("url");
+
+    WeekDownloader weekDownloader = new WeekDownloader();
+    weekDownloader.downloadWeekForCourse(url, new AsyncDownloader.HttpAsyncCallback() {
+      @Override
+      public void finished(String data) {
+        JsonParser jsonParser = new JsonParser();
+        jsonParser.parseSessionsForWeek(data);
+      }
+    });
+
 
     pager = (ViewPager)findViewById(R.id.slide);
     pageAdapter = new SliderAdapter(getSupportFragmentManager());

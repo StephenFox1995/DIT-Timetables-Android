@@ -4,7 +4,9 @@ package org.stephenfox.dittimetables.network;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import org.stephenfox.dittimetables.timetable.Day;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -13,7 +15,7 @@ public class JsonParser {
   private HashMap<Integer, String> courseIdentifiersAndTitles;
 
   /**
-   * Parses a string for names and
+   * Parses a JSON string for names and
    * identifiers for a course into JSON data.
    *
    * @return A hashmap containing the courses titles and identifiers.
@@ -36,10 +38,57 @@ public class JsonParser {
 
         courseIdentifiersAndTitles.put(courseId, courseName);
       }
-    } catch (JSONException e) {
+    }
+    catch (JSONException e) {
       e.printStackTrace();
     }
 
     return courseIdentifiersAndTitles;
+  }
+
+
+  /**
+   * Parses a JSON string into an array of timetables sessions.
+   * @param data The string to parse.
+   * @return An arraylist of timetable sessions.
+   */
+  public ArrayList<TimetableSession> parseSessionsForWeek(String data) {
+
+    ArrayList<TimetableSession> timetableSessions = new ArrayList<>();
+
+    try {
+      JSONObject jsonObject = new JSONObject(data);
+      JSONArray jsonArray = jsonObject.getJSONArray("objects");
+
+      for (int i = 0; i < jsonArray.length(); i++) {
+        JSONObject o = new JSONObject();
+
+        String courseID = o.getString("course_id");
+        Day day =  Day.intToDay(o.getInt("day"));
+        String startTime = o.getString("start_time");
+        String endTime = o.getString("end_time");
+        String moduleName = o.getString("module_name");
+        String roomNumber = o.getString("room_number");
+        String[] groups = parseSubGroups(o.getString("sub_groups"));
+        String teacher = o.getString("teacher");
+        String type = o.getString("type");
+
+        TimetableSession session = new TimetableSession(
+            day, startTime, endTime, moduleName, groups, teacher, roomNumber, type);
+
+        timetableSessions.add(session);
+      }
+
+      return timetableSessions;
+    }
+    catch (JSONException e) {
+      e.printStackTrace();
+    }
+    return timetableSessions;
+  }
+
+
+  private String[] parseSubGroups(String groups) {
+    return groups.split(",");
   }
 }

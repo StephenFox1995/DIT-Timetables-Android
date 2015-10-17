@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.network.TimetableSession;
+import org.stephenfox.dittimetables.timetable.Day;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
 import java.util.ArrayList;
 
 
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class TimetableWeekPageFragment extends ListFragment {
 
   String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
-  TimetableSession someSession = new TimetableSession("10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
+  TimetableSession someSession = new TimetableSession(Day.Monday, "10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
 
 
   @Nullable
@@ -30,7 +31,9 @@ public class TimetableWeekPageFragment extends ListFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
 
-    ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.timetable_week_display, container, false);
+    ViewGroup rootView = (ViewGroup)inflater.inflate(
+        R.layout.timetable_week_display, container, false);
+
 
     ArrayList<TimetableSession> s = new ArrayList<>();
     s.add(someSession);

@@ -100,4 +100,14 @@ public class TimetableSession {
   public String getSessionType() { return sessionType; }
 
 
+  @Override
+  public String toString() {
+    return "\nDay: " + getDay().toString() +
+        "\nSession: " + getSessionName() +
+        "\nSession master: " + getSessionMaster() +
+        "\nSession start: " + getStartTime() +
+        "\nSession end: " + getEndTime() +
+        "\nSession groups: " + getSessionGroups() +
+        "\nSession location: " + getSessionLocation();
+  }
 }

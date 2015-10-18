@@ -55,6 +55,7 @@ public class AvailableCoursesActivity extends ListActivity {
    * the http request.
    *
    * @param data The JSON data.
+   *
    * @return A HashMap with a key value pair of <Integer, String>
    *         The key is the course id and the value is the course title.
    */
@@ -69,6 +70,7 @@ public class AvailableCoursesActivity extends ListActivity {
    * a format recognizable by CourseListAdapter.
    *
    * @param data A HashMap
+   *
    * @return An ArrayList containing all the course titles in a
    *         format that can be given to the CourseListAdapter.
    */
@@ -102,7 +104,8 @@ public class AvailableCoursesActivity extends ListActivity {
 
   /**
    * Returns the key from using a value in a hashmap.
-   * See {@link #"http://stackoverflow.com/questions/1383797/java-hashmap-how-to-get-key-from-value"}
+   * See:
+   *  {@link #"http://stackoverflow.com/questions/1383797/java-hashmap-how-to-get-key-from-value"}
    */
   private Object getKeyFromValue(Map hm, Object value) {
     for (Object o : hm.keySet()) {

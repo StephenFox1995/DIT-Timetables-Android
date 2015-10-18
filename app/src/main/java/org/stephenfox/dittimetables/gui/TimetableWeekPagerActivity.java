@@ -13,6 +13,8 @@ import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.AsyncDownloader;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
+import org.stephenfox.dittimetables.timetable.TimetableGenerator;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 /**
  * This class manages a set of fragments see
@@ -38,10 +40,9 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
       @Override
       public void finished(String data) {
         JsonParser jsonParser = new JsonParser();
-        jsonParser.parseSessionsForWeek(data);
+        generateTimetable(jsonParser.parseSessionsForWeek(data));
       }
     });
-
 
     pager = (ViewPager)findViewById(R.id.slide);
     pageAdapter = new SliderAdapter(getSupportFragmentManager());
@@ -50,11 +51,14 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
   }
 
 
+  void generateTimetable(TimetableSession[] sessions) {
+    TimetableGenerator generator = new TimetableGenerator(sessions);
+  }
+
+
   private class SliderAdapter extends FragmentStatePagerAdapter {
 
-    public SliderAdapter(FragmentManager manager) {
-      super(manager);
-    }
+    public SliderAdapter(FragmentManager manager) { super(manager); }
 
     @Override
     public Fragment getItem(int position) {

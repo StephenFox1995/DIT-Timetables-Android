@@ -6,13 +6,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class JsonParser {
 
-  private HashMap<Integer, String> courseIdentifiersAndTitles;
 
   /**
    * Parses a JSON string for names and
@@ -23,10 +23,9 @@ public class JsonParser {
    *         of course name.
    */
   public HashMap<Integer, String> parseTitlesAndIdentifiers(String data) {
+    HashMap<Integer, String> courseIdentifiersAndTitles= new HashMap<>();
 
     try {
-      this.courseIdentifiersAndTitles = new HashMap<>();
-
       JSONObject jsonObject = new JSONObject(data);
       JSONArray jsonArray = jsonObject.getJSONArray("objects");
 
@@ -49,10 +48,11 @@ public class JsonParser {
 
   /**
    * Parses a JSON string into an array of timetables sessions.
+   *
    * @param data The string to parse.
-   * @return An arraylist of timetable sessions.
+   * @return An ArrayList of type TimetableSession.
    */
-  public ArrayList<TimetableSession> parseSessionsForWeek(String data) {
+  public TimetableSession[] parseSessionsForWeek(String data) {
 
     ArrayList<TimetableSession> timetableSessions = new ArrayList<>();
 
@@ -61,9 +61,8 @@ public class JsonParser {
       JSONArray jsonArray = jsonObject.getJSONArray("objects");
 
       for (int i = 0; i < jsonArray.length(); i++) {
-        JSONObject o = new JSONObject();
+        JSONObject o = jsonArray.getJSONObject(i);
 
-        String courseID = o.getString("course_id");
         Day day =  Day.intToDay(o.getInt("day"));
         String startTime = o.getString("start_time");
         String endTime = o.getString("end_time");
@@ -78,17 +77,13 @@ public class JsonParser {
 
         timetableSessions.add(session);
       }
-
-      return timetableSessions;
     }
     catch (JSONException e) {
       e.printStackTrace();
     }
-    return timetableSessions;
+    return (TimetableSession[])timetableSessions.toArray();
   }
 
 
-  private String[] parseSubGroups(String groups) {
-    return groups.split(",");
-  }
+  private String[] parseSubGroups(String groups) { return groups.split(","); }
 }

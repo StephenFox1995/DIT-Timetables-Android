@@ -2,7 +2,7 @@ package org.stephenfox.dittimetables.network;
 
 
 /**
- * Use this class for downloading a list of courses titles and ids
+ * Use this class for downloading a list of coursestitles and ids
  * which timetable are available for the app.
  */
 public class CourseDownloader extends HttpDownloader {

@@ -6,7 +6,7 @@ import android.os.Parcel;
 
 /**
  * This class provides information for a single session
- * for a courses timetable. For example a session could be a
+ * for a course's timetable. For example a session could be a
  * lab, lecture etc.
  */
 public class TimetableSession {

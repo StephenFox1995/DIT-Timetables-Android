@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.AsyncDownloader;
@@ -16,6 +15,7 @@ import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
+import org.stephenfox.dittimetables.timetable.TimetableWeek;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,7 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
   private ViewPager pager;
   private PagerAdapter pageAdapter;
+  private TimetableWeek timetable;
 
 
   @Override
@@ -56,9 +57,9 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
   void generateTimetable(ArrayList<TimetableSession> sessions) {
     TimetableGenerator generator = new TimetableGenerator(sessions);
-    for (int i = 0; i < 7; i++) {
-      Log.w("", generator.getTimetableDays().get(i).toString());
-    }
+    generator.generateTimetable();
+
+
   }
 
 

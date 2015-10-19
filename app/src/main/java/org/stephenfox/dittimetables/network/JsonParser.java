@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,7 +22,7 @@ public class JsonParser {
    *         of course name.
    */
   public HashMap<Integer, String> parseTitlesAndIdentifiers(String data) {
-    HashMap<Integer, String> courseIdentifiersAndTitles= new HashMap<>();
+    HashMap<Integer, String> courseIdentifiersAndTitlesHash = new HashMap<>();
 
     try {
       JSONObject jsonObject = new JSONObject(data);
@@ -35,14 +34,14 @@ public class JsonParser {
         Integer courseId = o.getInt("id");
         String courseName = o.getString("courseName");
 
-        courseIdentifiersAndTitles.put(courseId, courseName);
+        courseIdentifiersAndTitlesHash.put(courseId, courseName);
       }
     }
     catch (JSONException e) {
       e.printStackTrace();
     }
 
-    return courseIdentifiersAndTitles;
+    return courseIdentifiersAndTitlesHash;
   }
 
 

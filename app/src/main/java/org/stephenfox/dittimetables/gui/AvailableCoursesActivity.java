@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class AvailableCoursesActivity extends ListActivity {
 
-  private HashMap<Integer, String> courseIdentifiersAndNames;
+  private HashMap<Integer, String> courseIdentifiersTitlesHash;
 
 
   @Override
@@ -41,8 +41,8 @@ public class AvailableCoursesActivity extends ListActivity {
           Log.d("DITTimetables", "Course names and identifiers successfully downloaded." + data);
 
           // TODO: Never parse if data is not sufficient.
-          courseIdentifiersAndNames = beginJSONParsing(data);
-          ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersAndNames);
+          courseIdentifiersTitlesHash = beginJSONParsing(data);
+          ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersTitlesHash);
           setListAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
         }
       }
@@ -89,7 +89,8 @@ public class AvailableCoursesActivity extends ListActivity {
     TextView textView = (TextView)l.findViewById(R.id.courseTitle);
     String courseTitle = textView.getText().toString();
 
-    Integer key = (Integer)getKeyFromValue(courseIdentifiersAndNames, courseTitle);
+    Log.d("Course title", courseTitle);
+    Integer key = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
 
     Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
     timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(key));
@@ -105,6 +106,7 @@ public class AvailableCoursesActivity extends ListActivity {
 
   /**
    * Returns the key from using a value in a hashmap.
+   * Seems slightly odd but needed in this case.
    * See:
    *  {@link #"http://stackoverflow.com/questions/1383797/java-hashmap-how-to-get-key-from-value"}
    */
@@ -155,8 +157,11 @@ public class AvailableCoursesActivity extends ListActivity {
         row = inflater.inflate(R.layout.course_row, null);
       }
 
+
+
       TextView courseTitle = (TextView) row.findViewById(R.id.courseTitle);
       courseTitle.setText(courseTitles.get(position));
+
 
       return row;
     }

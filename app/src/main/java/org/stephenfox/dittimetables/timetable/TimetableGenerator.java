@@ -12,26 +12,23 @@ public class TimetableGenerator {
 
   private ArrayList<TimetableDay> timetableDays;
   private TimetableWeek timetableWeek;
+  private ArrayList<TimetableSession> sessions;
 
 
   /**
    * Instantiates a new instance with an array of sessions
    */
   public TimetableGenerator(ArrayList<TimetableSession> sessions) {
-    this.setupDays();
-    this.addSessionsToDays(sessions);
-    this.addDaysToWeek(timetableDays);
+    this.sessions = sessions;
   }
 
 
-
-  // Sets up an array of 7 days.
-  private void setupDays() {
-    this.timetableDays = new ArrayList<>(TimetableGenerator.DAYS_OF_WEEK);
-
-    for (int i = 0; i < TimetableGenerator.DAYS_OF_WEEK; i++) {
-      timetableDays.add(new TimetableDay(Day.intToDay(i)));
-    }
+  /**
+   * Generates a new Timetable Object */
+  public Timetable generateTimetable() {
+    this.addSessionsToDays(sessions);
+    this.addDaysToWeek(timetableDays);
+    return new Timetable(timetableWeek);
   }
 
 
@@ -40,6 +37,8 @@ public class TimetableGenerator {
    * adds them to the appropriate days.
    */
   private void addSessionsToDays(ArrayList<TimetableSession> sessions) {
+    this.setupDays();
+
     for (TimetableSession session : sessions) {
 
       switch (session.getDay()) {
@@ -71,17 +70,30 @@ public class TimetableGenerator {
   }
 
 
+  /**
+   * Constructs a TimetableWeek */
   private void addDaysToWeek(ArrayList<TimetableDay> days) {
-    this.timetableWeek = new TimetableWeek();
+    timetableWeek = new TimetableWeek();
 
     for (TimetableDay day : days) {
-      this.timetableWeek.addDay(day);
+      timetableWeek.addDay(day);
     }
   }
 
 
+  // Sets up an array of 7 days.
+  private void setupDays() {
+    timetableDays = new ArrayList<>(TimetableGenerator.DAYS_OF_WEEK);
+
+    for (int i = 0; i < TimetableGenerator.DAYS_OF_WEEK; i++) {
+      timetableDays.add(new TimetableDay(Day.intToDay(i)));
+    }
+  }
+
+
+
   public ArrayList<TimetableDay> getTimetableDays() {
-    return timetableDays;
+    return this.timetableDays;
   }
 
   @Override

@@ -33,7 +33,6 @@ public class AvailableCoursesActivity extends ListActivity {
     setContentView(R.layout.activity_available_courses);
 
     CourseDownloader cDownloader = new CourseDownloader();
-
     cDownloader.downloadCourseNamesAndIdentifiers(new AsyncDownloader.HttpAsyncCallback() {
       @Override
       public void finished(String data) {

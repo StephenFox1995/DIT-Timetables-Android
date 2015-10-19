@@ -24,7 +24,11 @@ public class TimetableGenerator {
 
 
   /**
-   * Generates a new Timetable Object */
+   * Generates a new Timetable object from the TimetableWeek instance
+   * that was constructed with this class.
+   *
+   * @return Timetable A Timetable for a given week.
+   */
   public Timetable generateTimetable() {
     this.addSessionsToDays(sessions);
     this.addDaysToWeek(timetableDays);

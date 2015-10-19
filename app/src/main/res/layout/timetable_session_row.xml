@@ -7,22 +7,26 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:id="@+id/timeComponent"/>
+        android:id="@+id/timeComponent"
+        android:textColor="@color/timetable_black"/>
     
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:id="@+id/sessionName"/>
+        android:id="@+id/sessionName"
+        android:textColor="@color/timetable_black"/>
     
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:id="@+id/sessionGroups"/>
+        android:id="@+id/sessionGroups"
+        android:textColor="@color/timetable_black"/>
     
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:id="@+id/sessionMaster"/>
+        android:id="@+id/sessionMaster"
+        android:textColor="@color/timetable_black"/>
 
     <TextView
         android:layout_width="wrap_content"

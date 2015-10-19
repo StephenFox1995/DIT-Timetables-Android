@@ -23,4 +23,15 @@ public class Timetable {
   }
 
 
+  public TimetableDay getTimetableDay(Day day) {
+    return timetableWeek.getDay(day);
+  }
+
+
+
+
+
+
+
+
 }

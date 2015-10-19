@@ -36,7 +36,22 @@ public class TimetableWeek {
   }
 
 
+
   public int getNumberOfDays() { return numberOfDays; }
+
+
+
+  /**
+   * Returns a Day in the week.
+   *
+   * @param day The day to return.
+   * @return The day.
+   */
+  public TimetableDay getDay(Day day) {
+    return days.get(day.toInt());
+  }
+
+
 
   @Override
   public String toString() {

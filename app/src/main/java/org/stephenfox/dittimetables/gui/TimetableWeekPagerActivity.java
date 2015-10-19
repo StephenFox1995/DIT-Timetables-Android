@@ -13,9 +13,9 @@ import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.AsyncDownloader;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
+import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
-import org.stephenfox.dittimetables.timetable.TimetableWeek;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
   private ViewPager pager;
   private PagerAdapter pageAdapter;
-  private TimetableWeek timetable;
+  private Timetable timetable;
 
 
   @Override
@@ -44,21 +44,23 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
       @Override
       public void finished(String data) {
         JsonParser jsonParser = new JsonParser();
-        generateTimetable(jsonParser.parseSessionsForWeek(data));
+        ArrayList<TimetableSession> sessions = jsonParser.parseSessionsForWeek(data);
+        generateTimetable(sessions);
+
+        pager = (ViewPager) findViewById(R.id.slide);
+        pageAdapter = new SliderAdapter(getSupportFragmentManager());
+        pager.setAdapter(pageAdapter);
       }
     });
 
-    pager = (ViewPager)findViewById(R.id.slide);
-    pageAdapter = new SliderAdapter(getSupportFragmentManager());
-    pager.setAdapter(pageAdapter);
+
 
   }
 
 
   void generateTimetable(ArrayList<TimetableSession> sessions) {
     TimetableGenerator generator = new TimetableGenerator(sessions);
-    generator.generateTimetable();
-
+    timetable = generator.generateTimetable();
 
   }
 

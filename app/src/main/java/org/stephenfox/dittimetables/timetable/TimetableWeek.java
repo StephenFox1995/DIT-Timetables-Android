@@ -48,13 +48,17 @@ public class TimetableWeek {
    * @return The day.
    */
   public TimetableDay getDay(Day day) {
-    return days.get(day.toInt());
+    return this.days.get(day.toInt());
   }
 
 
 
   @Override
   public String toString() {
-    return "Number of days:" + this.getNumberOfDays();
+    String returnString = getNumberOfDays() + "\n";
+    for (TimetableDay day : days) {
+      returnString += day.toString();
+    }
+    return returnString;
   }
 }

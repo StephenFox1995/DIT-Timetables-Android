@@ -3,14 +3,14 @@ package org.stephenfox.dittimetables.network;
 import android.os.AsyncTask;
 
 /**
- * Use to class to wrap any class that extends HttpDownloader
+ * Use to class to wrap any class that extends HttpDownloader.
  * so it performs all requests on a worker thread and not on the
  * main ui thread.
  */
 public class AsyncDownloader extends AsyncTask<String, Void, String> {
 
   private HttpDownloader httpDownloader;
-  private HttpAsyncCallback callback;
+  private HttpAsyncCallback callback;private Runnable block;
 
 
   public <T extends  HttpDownloader>AsyncDownloader(T httpDownloader) {
@@ -36,6 +36,7 @@ public class AsyncDownloader extends AsyncTask<String, Void, String> {
     execute(url);
   }
 
+
   @Override
   protected void onPostExecute(String s) {
     super.onPostExecute(s);
@@ -56,4 +57,6 @@ public class AsyncDownloader extends AsyncTask<String, Void, String> {
      */
     void finished(String data);
   }
+
+
 }

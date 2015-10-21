@@ -55,9 +55,7 @@ public class TimetableDay {
       }
       return s;
     } else {
-      return s + "\n No sessions.";
+      return s + "\n No sessions.\n";
     }
-
-
   }
 }

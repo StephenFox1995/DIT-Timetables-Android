@@ -8,17 +8,22 @@ import java.util.ArrayList;
  */
 public class TimetableGenerator {
 
+
   private static final int DAYS_OF_WEEK = 7;
 
-  private ArrayList<TimetableDay> timetableDays;
-  private TimetableWeek timetableWeek;
   private ArrayList<TimetableSession> sessions;
 
 
   /**
    * Instantiates a new instance with an array of sessions
    */
-  public TimetableGenerator(ArrayList<TimetableSession> sessions) {
+  public TimetableGenerator(ArrayList<TimetableSession> sessions)
+      throws EmptySessionsArrayException {
+    if (sessions.size() == 0) {
+      throw new
+          EmptySessionsArrayException("Cannot generate Timetable, reason: sessions array empty");
+    }
+
     this.sessions = sessions;
   }
 
@@ -30,8 +35,10 @@ public class TimetableGenerator {
    * @return Timetable A Timetable for a given week.
    */
   public Timetable generateTimetable() {
-    this.addSessionsToDays(sessions);
-    this.addDaysToWeek(timetableDays);
+    TimetableDay[] timetableDays = createDayArray();
+    addSessionsToDays(timetableDays);
+    TimetableWeek timetableWeek = createWeek(timetableDays);
+
     return new Timetable(timetableWeek);
   }
 
@@ -40,32 +47,30 @@ public class TimetableGenerator {
    * Adds all the sessions an instance was initialised with an
    * adds them to the appropriate days.
    */
-  private void addSessionsToDays(ArrayList<TimetableSession> sessions) {
-    this.setupDays();
-
+  private void addSessionsToDays(TimetableDay[] timetableDays) {
     for (TimetableSession session : sessions) {
 
       switch (session.getDay()) {
         case Monday:
-          timetableDays.get(0).addSession(session);
+          timetableDays[0].addSession(session);
           break;
         case Tuesday:
-          timetableDays.get(1).addSession(session);
+          timetableDays[1].addSession(session);
           break;
         case Wednesday:
-          timetableDays.get(2).addSession(session);
+          timetableDays[2].addSession(session);
           break;
         case Thursday:
-          timetableDays.get(3).addSession(session);
+          timetableDays[3].addSession(session);
           break;
         case Friday:
-          timetableDays.get(4).addSession(session);
+          timetableDays[4].addSession(session);
           break;
         case Saturday:
-          timetableDays.get(5).addSession(session);
+          timetableDays[5].addSession(session);
           break;
         case Sunday:
-          timetableDays.get(6).addSession(session);
+          timetableDays[6].addSession(session);
           break;
         default:
           break;
@@ -75,33 +80,32 @@ public class TimetableGenerator {
 
 
   /**
-   * Constructs a TimetableWeek */
-  private void addDaysToWeek(ArrayList<TimetableDay> days) {
-    timetableWeek = new TimetableWeek();
+   * Creates an new Timetable week object.
+   *
+   * @param days The days for the week.
+   * @return TimetableWeek The TimetableWeek object created.
+   */
+  private TimetableWeek createWeek(TimetableDay[] days) {
+    TimetableWeek timetableWeek = new TimetableWeek();
 
     for (TimetableDay day : days) {
       timetableWeek.addDay(day);
     }
+    return timetableWeek;
   }
 
 
-  // Sets up an array of 7 days.
-  private void setupDays() {
-    timetableDays = new ArrayList<>(TimetableGenerator.DAYS_OF_WEEK);
+  /**
+   * Creates an array of TimetableDay.
+   *
+   * @return A new TimetableDay[7] array.
+   * */
+  private TimetableDay[] createDayArray() {
+    TimetableDay[] timetableDays = new TimetableDay[TimetableGenerator.DAYS_OF_WEEK];
 
-    for (int i = 0; i < TimetableGenerator.DAYS_OF_WEEK; i++) {
-      timetableDays.add(new TimetableDay(Day.intToDay(i)));
+    for (int i = 0; i < timetableDays.length; i++) {
+      timetableDays[i] = new TimetableDay(Day.intToDay(i));
     }
-  }
-
-
-
-  public ArrayList<TimetableDay> getTimetableDays() {
-    return this.timetableDays;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString();
+    return timetableDays;
   }
 }

@@ -13,7 +13,6 @@ public class Timetable {
     this.timetableWeek = timetableWeek;
   }
 
-
   public void setTimetableWeek(TimetableWeek timetableWeek) {
     this.timetableWeek = timetableWeek;
   }
@@ -23,15 +22,14 @@ public class Timetable {
   }
 
 
-  public TimetableDay getTimetableDay(Day day) {
-    return timetableWeek.getDay(day);
+  public TimetableDay getTimetableDay(Day day) { return timetableWeek.getDay(day); }
+
+
+  public int getDayCount() { return timetableWeek.getNumberOfDays(); }
+
+
+  @Override
+  public String toString() {
+    return this.timetableWeek.toString();
   }
-
-
-
-
-
-
-
-
 }

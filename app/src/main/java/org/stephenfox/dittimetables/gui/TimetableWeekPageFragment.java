@@ -5,14 +5,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.timetable.Day;
+import org.stephenfox.dittimetables.timetable.TimetableDay;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
+
 import java.util.ArrayList;
 
 
@@ -22,8 +26,26 @@ import java.util.ArrayList;
  */
 public class TimetableWeekPageFragment extends ListFragment {
 
+  TimetableDay timetableDay;
+
   String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
   TimetableSession someSession = new TimetableSession(Day.Monday, "10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
+
+//  /**
+//   * Use this method to construct a new instance with a TimetableDay object.
+//   */
+//  public static TimetableWeekPageFragment newInstance(TimetableDay day) {
+//
+//    Bundle args = new Bundle();
+//
+//    TimetableWeekPageFragment fragment = new TimetableWeekPageFragment();
+//    fragment.setArguments(args);
+//    fragment.setTimetableDay(day);
+//
+//    Log.d("1234", "New instance");
+//    return fragment;
+//  }
+
 
 
   @Nullable
@@ -39,8 +61,17 @@ public class TimetableWeekPageFragment extends ListFragment {
     s.add(someSession);
 
     setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), s));
+    Log.d("1234", "New instance on create.");
     return rootView;
   }
+
+
+  private void setTimetableDay(TimetableDay timetableDay) {
+    this.timetableDay = timetableDay;
+  }
+
+
+
 
 
 

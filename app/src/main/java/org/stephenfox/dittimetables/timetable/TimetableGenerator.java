@@ -16,6 +16,9 @@ public class TimetableGenerator {
 
   /**
    * Instantiates a new instance with an array of sessions
+   *
+   * @param sessions The session which will be used to generate a timetable.
+   * @throws EmptySessionsArrayException
    */
   public TimetableGenerator(ArrayList<TimetableSession> sessions)
       throws EmptySessionsArrayException {
@@ -23,7 +26,6 @@ public class TimetableGenerator {
       throw new
           EmptySessionsArrayException("Cannot generate Timetable, reason: sessions array empty");
     }
-
     this.sessions = sessions;
   }
 
@@ -49,7 +51,6 @@ public class TimetableGenerator {
    */
   private void addSessionsToDays(TimetableDay[] timetableDays) {
     for (TimetableSession session : sessions) {
-
       switch (session.getDay()) {
         case Monday:
           timetableDays[0].addSession(session);

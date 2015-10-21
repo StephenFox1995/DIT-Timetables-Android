@@ -5,13 +5,8 @@ import java.util.ArrayList;
 
 public class TimetableWeek {
 
-
   private ArrayList<TimetableDay> days;
 
-  /**
-   * The number of days the timetable is spread over.
-   */
-  private int numberOfDays;
 
 
   /**
@@ -21,7 +16,6 @@ public class TimetableWeek {
    */
   public TimetableWeek(ArrayList<TimetableDay> days) {
     this.days = days;
-    this.numberOfDays = days.size();
   }
 
 
@@ -36,8 +30,7 @@ public class TimetableWeek {
   }
 
 
-
-  public int getNumberOfDays() { return numberOfDays; }
+  public int getNumberOfDays() { return days.size(); }
 
 
 

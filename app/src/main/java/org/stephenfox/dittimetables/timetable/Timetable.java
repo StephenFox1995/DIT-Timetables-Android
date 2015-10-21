@@ -1,6 +1,8 @@
 package org.stephenfox.dittimetables.timetable;
 
 
+import android.util.Log;
+
 /**
  * A class that manages a Timetable.
  */
@@ -11,11 +13,13 @@ public class Timetable {
 
   public Timetable(TimetableWeek timetableWeek) {
     this.timetableWeek = timetableWeek;
+    Log.d("12345:", timetableWeek.toString());
   }
 
   public void setTimetableWeek(TimetableWeek timetableWeek) {
     this.timetableWeek = timetableWeek;
   }
+
 
   public TimetableWeek getTimetableWeek() {
     return timetableWeek;

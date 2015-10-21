@@ -31,7 +31,6 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
   private ViewPager pager;
 
 
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

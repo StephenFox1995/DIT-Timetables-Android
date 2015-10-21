@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.AsyncDownloader;
@@ -46,19 +46,22 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
         try {
           ArrayList<TimetableSession> sessions = parseJson(data);
-          Timetable timetable = createTimetable(sessions);
+          Timetable timetable = createTimetable(new ArrayList<TimetableSession>(0));
 
           pager = (ViewPager) findViewById(R.id.slide);
           pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
 
         } catch (EmptySessionsArrayException e) {
-          // TODO: Make Toast to tell user course not available.
-          // Dismiss this activity.
-          Log.v("12345:", "EmptySessionArrayException.");
+
+          Toast.makeText(getApplicationContext(),
+              "No timetable available for this course", Toast.LENGTH_SHORT).show();
+
         }
       }
     });
   }
+
+
 
 
   /**

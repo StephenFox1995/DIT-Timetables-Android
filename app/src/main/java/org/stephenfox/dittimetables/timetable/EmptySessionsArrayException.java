@@ -7,3 +7,5 @@ public class EmptySessionsArrayException extends Exception {
     super(detailMessage);
   }
 }
+
+

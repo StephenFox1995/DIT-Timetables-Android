@@ -85,7 +85,7 @@ public class AvailableCoursesActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    TextView textView = (TextView)l.findViewById(R.id.courseTitle);
+    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
     String courseTitle = textView.getText().toString();
 
     Log.d("Course title", courseTitle);

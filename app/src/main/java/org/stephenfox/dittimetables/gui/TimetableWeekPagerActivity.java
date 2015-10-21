@@ -43,24 +43,34 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
     weekDownloader.downloadWeekForCourse(url, new AsyncDownloader.HttpAsyncCallback() {
       @Override
       public void finished(String data) {
-
-        try {
-          ArrayList<TimetableSession> sessions = parseJson(data);
-          Timetable timetable = createTimetable(new ArrayList<TimetableSession>(0));
-
-          pager = (ViewPager) findViewById(R.id.slide);
-          pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
-
-        } catch (EmptySessionsArrayException e) {
-
-          Toast.makeText(getApplicationContext(),
-              "No timetable available for this course", Toast.LENGTH_SHORT).show();
-
-        }
+        setup(data);
       }
     });
   }
 
+
+  /**
+   * Sets up the activity.
+   * Note: Once the http data is downloaded from { @link #onCreate(Bundle)} }
+   * this method must be invoked to set this activity up correctly.
+   *
+   * @param data The http data.
+   */
+  void setup(String data) {
+    try {
+      ArrayList<TimetableSession> sessions = parseJson(data);
+      Timetable timetable = createTimetable(sessions);
+
+      pager = (ViewPager) findViewById(R.id.slide);
+      pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
+
+    } catch (EmptySessionsArrayException e) {
+      Toast.makeText(getApplicationContext(),
+          "No timetable available for this course", Toast.LENGTH_SHORT).show();
+      this.finish();
+
+    }
+  }
 
 
 

@@ -1,8 +1,6 @@
 package org.stephenfox.dittimetables.network;
 
 import android.os.AsyncTask;
-import android.os.Looper;
-import android.util.Log;
 
 /**
  * Use to class to wrap any class that extends HttpDownloader.
@@ -21,13 +19,7 @@ public class AsyncDownloader extends AsyncTask<String, Void, String> {
 
   @Override
   protected String doInBackground(String... params) {
-    if(Looper.myLooper() == Looper.getMainLooper()) {
-      Log.w("Async:", "Were on main thread.");
-    } else {
-      Log.w("Async", "Not on the main thread.");
-    }
     return httpDownloader.getHttpData(params[0]); // Download our http data.
-
   }
 
 

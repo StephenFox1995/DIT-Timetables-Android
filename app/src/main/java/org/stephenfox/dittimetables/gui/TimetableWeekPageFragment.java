@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
-import org.stephenfox.dittimetables.timetable.TimetableSession;
-
-import java.util.ArrayList;
 
 
 /**
@@ -28,23 +23,19 @@ public class TimetableWeekPageFragment extends ListFragment {
 
   TimetableDay timetableDay;
 
-  String[] dummyGroups = {"DT228-3/D", "DT228-3/B"};
-  TimetableSession someSession = new TimetableSession(Day.Monday, "10:00", "11:00", "Mobile Software Development", dummyGroups, "Susan McKeever", "KE-4-008", "Lecture");
 
-//  /**
-//   * Use this method to construct a new instance with a TimetableDay object.
-//   */
-//  public static TimetableWeekPageFragment newInstance(TimetableDay day) {
-//
-//    Bundle args = new Bundle();
-//
-//    TimetableWeekPageFragment fragment = new TimetableWeekPageFragment();
-//    fragment.setArguments(args);
-//    fragment.setTimetableDay(day);
-//
-//    Log.d("1234", "New instance");
-//    return fragment;
-//  }
+  /**
+   * Use this method to construct a new instance with a TimetableDay object.
+   */
+  public static TimetableWeekPageFragment newInstance(TimetableDay day) {
+    Bundle args = new Bundle();
+
+    TimetableWeekPageFragment fragment = new TimetableWeekPageFragment();
+    fragment.setArguments(args);
+    fragment.setTimetableDay(day);
+
+    return fragment;
+  }
 
 
 
@@ -55,13 +46,8 @@ public class TimetableWeekPageFragment extends ListFragment {
 
     ViewGroup rootView = (ViewGroup)inflater.inflate(
         R.layout.timetable_week_display, container, false);
+    setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), timetableDay));
 
-
-    ArrayList<TimetableSession> s = new ArrayList<>();
-    s.add(someSession);
-
-    setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), s));
-    Log.d("1234", "New instance on create.");
     return rootView;
   }
 
@@ -77,12 +63,12 @@ public class TimetableWeekPageFragment extends ListFragment {
 
   class TimetableWeekListAdapter extends BaseAdapter {
 
-    private ArrayList<TimetableSession> timetableSessions;
+    private TimetableDay day;
     private LayoutInflater inflater;
 
 
-    public TimetableWeekListAdapter(Context context, ArrayList<TimetableSession> sessions) {
-      this.timetableSessions = sessions;
+    public TimetableWeekListAdapter(Context context, TimetableDay day) {
+      this.day = day;
       this.inflater =
           (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -90,13 +76,13 @@ public class TimetableWeekPageFragment extends ListFragment {
 
     @Override
     public int getCount() {
-      return timetableSessions.size();
+      return day.sessionCount();
     }
 
 
     @Override
     public Object getItem(int position) {
-      return timetableSessions;
+      return day.getSession(position);
     }
 
 
@@ -119,22 +105,22 @@ public class TimetableWeekPageFragment extends ListFragment {
       /* TODO: (stephenfox):
       * Use full time component*/
       TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
-      sessionNameTextView.setText(timetableSessions.get(position).getSessionName());
+      sessionNameTextView.setText(day.getSession(position).getSessionName());
 
       TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
-      sessionTimeComponent.setText(timetableSessions.get(position).getStartTime());
+      sessionTimeComponent.setText(day.getSession(position).getStartTime());
 
       TextView sessionGroupsTextView = (TextView)row.findViewById(R.id.sessionGroups);
-      sessionGroupsTextView.setText(timetableSessions.get(position).getSessionGroups()[0]);
+      sessionGroupsTextView.setText(day.getSession(position).getSessionGroups()[0]);
 
       TextView sessionMasterTextView = (TextView)row.findViewById(R.id.sessionMaster);
-      sessionMasterTextView.setText(timetableSessions.get(position).getSessionMaster());
+      sessionMasterTextView.setText(day.getSession(position).getSessionMaster());
 
       TextView sessionLocationTextView = (TextView)row.findViewById(R.id.sessionLocation);
-      sessionLocationTextView.setText(timetableSessions.get(position).getSessionLocation());
+      sessionLocationTextView.setText(day.getSession(position).getSessionLocation());
 
       TextView sessionTypeTextView = (TextView)row.findViewById(R.id.sessionType);
-      sessionTypeTextView.setText(timetableSessions.get(position).getSessionType());
+      sessionTypeTextView.setText(day.getSession(position).getSessionType());
 
       return row;
     }

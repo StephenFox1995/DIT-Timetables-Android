@@ -37,13 +37,26 @@ public class TimetableDay {
     this.sessions.add(session);
   }
 
-  public ArrayList<TimetableSession> getSessions() { return sessions; }
 
   public void setSessions(ArrayList<TimetableSession> sessions) { this.sessions = sessions; }
 
-  public Day getDay() { return day; }
+  public ArrayList<TimetableSession> getSessions() { return sessions; }
+
+  public TimetableSession getSession(int index) {
+    if (index > sessions.size()) {
+      return sessions.get(0);
+    } else {
+      return sessions.get(index);
+    }
+  }
+
+  public int sessionCount() { return sessions.size(); }
 
   public void setDay(Day day) { this.day = day; }
+
+  public Day getDay() { return day; }
+
+
 
 
   @Override

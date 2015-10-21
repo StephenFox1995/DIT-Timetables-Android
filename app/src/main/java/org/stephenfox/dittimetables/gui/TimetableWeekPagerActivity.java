@@ -104,15 +104,14 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
     @Override
     public Fragment getItem(int position) {
-      Log.d("12345:", "getItem called");
       Day dayForFragment = Day.intToDay(position);
-      return new TimetableWeekPageFragment();//.newInstance(this.timetable.getTimetableDay(dayForFragment));
+      return new TimetableWeekPageFragment().newInstance(this.timetable.getTimetableDay(dayForFragment));
     }
 
     @Override
     public int getCount() {
-      Log.d("12345:", "" + timetable.getDayCount());
-      return timetable.getDayCount();
+      //TODO: Don't always return 7. Default should be 5, then add more days if needed.
+      return 5;
     }
   }
 }

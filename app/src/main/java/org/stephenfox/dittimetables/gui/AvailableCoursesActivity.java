@@ -98,7 +98,6 @@ public class AvailableCoursesActivity extends ListActivity {
 
 
   private String constructURLForCourseWeek(Integer id) {
-    Log.w("URL","http://timothybarnard.org/timetables/classes.php?courseID=" + id + "&semester=1" );
     return "http://timothybarnard.org/timetables/classes.php?courseID=" + id + "&semester=1";
   }
 

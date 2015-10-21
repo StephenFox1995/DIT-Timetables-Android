@@ -109,6 +109,7 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
     private Timetable timetable;
 
+
     public SliderAdapter(FragmentManager manager, Timetable timetable) {
       super(manager);
       this.timetable = timetable;

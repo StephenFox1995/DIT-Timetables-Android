@@ -102,13 +102,14 @@ public class TimetableWeekPageFragment extends ListFragment {
       }
 
 
-      /* TODO: (stephenfox):
-      * Use full time component*/
       TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
       sessionNameTextView.setText(day.getSession(position).getSessionName());
 
       TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
-      sessionTimeComponent.setText(day.getSession(position).getStartTime());
+      String startTime = day.getSession(position).getStartTime();
+      String endTime = day.getSession(position).getEndTime();
+      String timeComponent = startTime + " - " + endTime;
+      sessionTimeComponent.setText(timeComponent);
 
       TextView sessionGroupsTextView = (TextView)row.findViewById(R.id.sessionGroups);
       sessionGroupsTextView.setText(day.getSession(position).getSessionGroups()[0]);

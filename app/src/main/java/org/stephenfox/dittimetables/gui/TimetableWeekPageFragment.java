@@ -44,13 +44,24 @@ public class TimetableWeekPageFragment extends ListFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
 
-    ViewGroup rootView = (ViewGroup)inflater.inflate(
+    View view = inflater.inflate(
         R.layout.timetable_week_display, container, false);
-    setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), timetableDay));
 
-    return rootView;
+    if (!timetableDay.containsSessions()) {
+      TextView noSessionsForDay = (TextView)view.findViewById(R.id.no_courses_for_day);
+      noSessionsForDay.setText("No classes today!");
+
+    } else {
+      setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), timetableDay));
+    }
+    return view;
   }
 
+
+
+  private void displayNoSessionsView() {
+
+  }
 
   private void setTimetableDay(TimetableDay timetableDay) {
     this.timetableDay = timetableDay;
@@ -60,6 +71,7 @@ public class TimetableWeekPageFragment extends ListFragment {
 
 
   class TimetableWeekListAdapter extends BaseAdapter {
+
 
     private TimetableDay day;
     private LayoutInflater inflater;
@@ -74,13 +86,13 @@ public class TimetableWeekPageFragment extends ListFragment {
 
     @Override
     public int getCount() {
-      return day.sessionCount();
+      return this.day.getSessionCount();
     }
 
 
     @Override
     public Object getItem(int position) {
-      return day.getSession(position);
+      return this.day.getSession(position);
     }
 
 
@@ -96,7 +108,7 @@ public class TimetableWeekPageFragment extends ListFragment {
       View row = convertView;
 
       if (row == null) {
-        row = inflater.inflate(R.layout.timetable_session_row, null);
+        row = this.inflater.inflate(R.layout.timetable_session_row, null);
       }
 
 

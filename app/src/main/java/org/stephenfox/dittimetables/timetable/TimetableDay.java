@@ -22,7 +22,9 @@ public class TimetableDay {
    *
    * @return boolean True If there is sessions associated with an instance.
    */
-  public boolean containsSessions() { return this.getSessions() != null; }
+  public boolean containsSessions() {
+    return getSessionCount() > 0 || getSessions() != null;
+  }
 
 
   /**
@@ -43,14 +45,11 @@ public class TimetableDay {
   public ArrayList<TimetableSession> getSessions() { return sessions; }
 
   public TimetableSession getSession(int index) {
-    if (index > sessions.size()) {
-      return sessions.get(0);
-    } else {
-      return sessions.get(index);
-    }
+    return sessions.get(index);
   }
 
-  public int sessionCount() {
+
+  public int getSessionCount() {
     if (sessions == null) {
       return 0;
     } else {
@@ -61,7 +60,6 @@ public class TimetableDay {
   public void setDay(Day day) { this.day = day; }
 
   public Day getDay() { return day; }
-
 
 
 

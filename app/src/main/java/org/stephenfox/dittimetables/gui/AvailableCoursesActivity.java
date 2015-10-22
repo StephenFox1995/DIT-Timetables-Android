@@ -156,8 +156,6 @@ public class AvailableCoursesActivity extends ListActivity {
         row = inflater.inflate(R.layout.course_row, null);
       }
 
-
-
       TextView courseTitle = (TextView) row.findViewById(R.id.courseTitle);
       courseTitle.setText(courseTitles.get(position));
 

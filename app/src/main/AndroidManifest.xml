@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".gui.TimetableWeekPagerActivity" />
+        <activity android:name=".gui.TimetableWeekPagerActivity" android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
     </application>
 

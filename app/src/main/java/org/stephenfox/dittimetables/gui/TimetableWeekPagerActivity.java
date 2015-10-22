@@ -51,7 +51,7 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
 
   /**
    * Sets up the activity.
-   * Note: Once the http data is downloaded from { @link #onCreate(Bundle)} }
+   * Note: Once the http data is downloaded from {@link #onCreate(Bundle)}
    * this method must be invoked to set this activity up correctly.
    *
    * @param data The http data.
@@ -99,9 +99,7 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
   private Timetable createTimetable(ArrayList<TimetableSession> sessions)
       throws EmptySessionsArrayException {
     TimetableGenerator generator = new TimetableGenerator(sessions);
-    Timetable timetable = generator.generateTimetable();
-
-    return timetable;
+    return generator.generateTimetable();
   }
 
 

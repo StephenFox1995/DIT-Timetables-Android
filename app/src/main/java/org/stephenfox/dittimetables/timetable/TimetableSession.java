@@ -102,12 +102,17 @@ public class TimetableSession {
 
   @Override
   public String toString() {
+    String sessionGroups = "";
+    for (String groups : getSessionGroups()) {
+      sessionGroups += groups;
+    }
+
     return "\nDay: " + getDay().toString() +
         "\nSession: " + getSessionName() +
         "\nSession master: " + getSessionMaster() +
         "\nSession start: " + getStartTime() +
         "\nSession end: " + getEndTime() +
-        "\nSession groups: " + getSessionGroups() +
+        "\nSession groups: " + sessionGroups +
         "\nSession location: " + getSessionLocation();
   }
 }

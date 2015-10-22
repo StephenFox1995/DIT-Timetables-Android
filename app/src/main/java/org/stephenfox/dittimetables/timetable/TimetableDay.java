@@ -22,7 +22,7 @@ public class TimetableDay {
    *
    * @return boolean True If there is sessions associated with an instance.
    */
-  public boolean containsSessions() { return this.getSessions() != null; };
+  public boolean containsSessions() { return this.getSessions() != null; }
 
 
   /**
@@ -50,7 +50,13 @@ public class TimetableDay {
     }
   }
 
-  public int sessionCount() { return sessions.size(); }
+  public int sessionCount() {
+    if (sessions == null) {
+      return 0;
+    } else {
+      return sessions.size();
+    }
+  }
 
   public void setDay(Day day) { this.day = day; }
 

@@ -49,6 +49,7 @@ public class AvailableCoursesActivity extends ListActivity {
   }
 
 
+
   /**
    * Begins the parsing of the Json data retrieved from
    * the http request.

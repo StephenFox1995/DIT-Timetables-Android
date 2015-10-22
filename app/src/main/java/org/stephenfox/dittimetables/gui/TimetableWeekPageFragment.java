@@ -59,8 +59,6 @@ public class TimetableWeekPageFragment extends ListFragment {
 
 
 
-
-
   class TimetableWeekListAdapter extends BaseAdapter {
 
     private TimetableDay day;

@@ -3,6 +3,7 @@
     package="org.stephenfox.dittimetables" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -19,7 +20,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".gui.TimetableWeekPagerActivity" android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".gui.TimetableWeekPagerActivity"
+                  android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
     </application>
 

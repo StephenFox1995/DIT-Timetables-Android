@@ -16,6 +16,7 @@ import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.AsyncDownloader;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.JsonParser;
+import org.stephenfox.dittimetables.network.NetworkManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,19 @@ public class AvailableCoursesActivity extends ListActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_available_courses);
 
+    if (NetworkManager.hasInternetConnection(this)) {
+      beginDownload();
+    } else {
+      TextView noConnection = (TextView)findViewById(R.id.no_connection);
+      noConnection.setText("Could not connect to network!");
+      // TODO: Add callback method to be notified if we get connection.
+    }
+  }
+
+
+
+
+  private void beginDownload() {
     CourseDownloader cDownloader = new CourseDownloader();
     cDownloader.downloadCourseNamesAndIdentifiers(new AsyncDownloader.HttpAsyncCallback() {
       @Override
@@ -47,7 +61,6 @@ public class AvailableCoursesActivity extends ListActivity {
       }
     });
   }
-
 
 
   /**

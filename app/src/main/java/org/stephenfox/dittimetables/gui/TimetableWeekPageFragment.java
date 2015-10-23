@@ -43,14 +43,12 @@ public class TimetableWeekPageFragment extends ListFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-
     View view = inflater.inflate(
         R.layout.timetable_week_display, container, false);
 
     if (!timetableDay.containsSessions()) {
       TextView noSessionsForDay = (TextView)view.findViewById(R.id.no_courses_for_day);
-      noSessionsForDay.setText("No classes today!");
-
+      noSessionsForDay.setText("No classes " + timetableDay.getDay().toString() + "!");
     } else {
       setListAdapter(new TimetableWeekListAdapter(getActivity().getApplicationContext(), timetableDay));
     }

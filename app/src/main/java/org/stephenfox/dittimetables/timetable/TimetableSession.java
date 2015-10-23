@@ -1,9 +1,6 @@
 package org.stephenfox.dittimetables.timetable;
 
 
-import android.os.Parcel;
-
-
 /**
  * This class provides information for a single session
  * for a course's timetable. For example a session could be a
@@ -25,20 +22,13 @@ public class TimetableSession {
     this.sessionType = sessionType;
   }
 
-  private TimetableSession(Parcel source) {
-    this.startTime = source.readString();
-    this.endTime = source.readString();
-    this.sessionName = source.readString();
-    this.sessionGroups = source.createStringArray();
-    this.sessionMaster = source.readString();
-    this.sessionLocation = source.readString();
-    this.sessionType = source.readString();
-  }
 
   /**
    * The day for which this session will be held
    */
   private Day day;
+
+
   /**
    * The start time for a session.
    * Must be in the following format xx:xx e.g. 10:00

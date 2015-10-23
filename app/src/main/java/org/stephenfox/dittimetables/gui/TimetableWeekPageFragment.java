@@ -116,6 +116,7 @@ public class TimetableWeekPageFragment extends ListFragment {
       int colorForRow = colourForSessionStatus(determineSessionStatus(day.getSession(position)));
 
       View sessionStatus = row.findViewById(R.id.session_status);
+      sessionStatus.setBackgroundColor(colorForRow);
 
       TextView sessionNameTextView = (TextView)row.findViewById(R.id.session_name);
       sessionNameTextView.setText(day.getSession(position).getSessionName());
@@ -144,8 +145,12 @@ public class TimetableWeekPageFragment extends ListFragment {
      */
     private SessionStatus determineSessionStatus(TimetableSession session) {
       String sEndTime = stringWithReplacedIndex(session.getEndTime(), '.', 2);
+      String sStartTime = stringWithReplacedIndex(session.getStartTime(), '.', 2);
       String sCurrentTime = stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
 
+
+      Float fakeTime = 12.00f;
+      float startTime = Float.parseFloat(sStartTime);
       float endTime = Float.parseFloat(sEndTime);
       float currentTime = Float.parseFloat(sCurrentTime);
 
@@ -153,14 +158,14 @@ public class TimetableWeekPageFragment extends ListFragment {
       if (!timetableDay.equalsIgnoreCase(Time.getCurrentDay())) {
         return SessionStatus.InvalidDay;
       }
-      else if(endTime < currentTime) {
+      else if (startTime <= fakeTime && endTime > fakeTime) {
+        return SessionStatus.Active;
+      }
+      else if (fakeTime > endTime) {
         return SessionStatus.Finished;
       }
-      else if (endTime > currentTime) {
-        return SessionStatus.Later;
-      }
       else {
-        return SessionStatus.Active;
+        return SessionStatus.Later;
       }
     }
 
@@ -171,7 +176,7 @@ public class TimetableWeekPageFragment extends ListFragment {
         case Finished:
           return ContextCompat.getColor(getContext(), R.color.timetable_row_red);
         case Later:
-          return ContextCompat.getColor(getContext(), R.color.timetable_row_green);
+          return ContextCompat.getColor(getContext(), R.color.timetable_row_gray);
         case InvalidDay:
           return ContextCompat.getColor(getContext(), R.color.timetable_row_gray);
         default:

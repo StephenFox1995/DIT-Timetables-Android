@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 
 /**
@@ -38,7 +41,6 @@ public class TimetableWeekPageFragment extends ListFragment {
   }
 
 
-
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,19 +58,21 @@ public class TimetableWeekPageFragment extends ListFragment {
   }
 
 
-
-  private void displayNoSessionsView() {
-
-  }
-
   private void setTimetableDay(TimetableDay timetableDay) {
     this.timetableDay = timetableDay;
   }
 
 
 
+  public enum SessionStatus {
+    Finished,
+    Active,
+    Later,
+    InvalidDay
+  }
 
-  class TimetableWeekListAdapter extends BaseAdapter {
+
+  private class TimetableWeekListAdapter extends BaseAdapter {
 
 
     private TimetableDay day;
@@ -109,22 +113,78 @@ public class TimetableWeekPageFragment extends ListFragment {
         row = this.inflater.inflate(R.layout.timetable_session_row, null);
       }
 
+      int colorForRow = colourForSessionStatus(determineSessionStatus(day.getSession(position)));
+
       View sessionStatus = row.findViewById(R.id.session_status);
 
       TextView sessionNameTextView = (TextView)row.findViewById(R.id.session_name);
       sessionNameTextView.setText(day.getSession(position).getSessionName());
+      sessionNameTextView.setTextColor(colorForRow);
 
       TextView sessionTimeComponent = (TextView)row.findViewById(R.id.time_component);
       String startTime = day.getSession(position).getStartTime();
       String endTime = day.getSession(position).getEndTime();
       String timeComponent = startTime + " - " + endTime;
       sessionTimeComponent.setText(timeComponent);
+      sessionTimeComponent.setTextColor(colorForRow);
 
       TextView sessionLocationTextView = (TextView)row.findViewById(R.id.sessionLocation);
       sessionLocationTextView.setText(day.getSession(position).getSessionLocation());
-
+      sessionLocationTextView.setTextColor(colorForRow);
 
       return row;
     }
+
+
+    /**
+     * Determines the Status of a session. i.e If its finished, has to start etc.
+     * Note: The day for the session must match the actual day of the week
+     * in reality.
+     * @return SessionStatus The status for a given session.
+     */
+    private SessionStatus determineSessionStatus(TimetableSession session) {
+      String sEndTime = stringWithReplacedIndex(session.getEndTime(), '.', 2);
+      String sCurrentTime = stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
+
+      float endTime = Float.parseFloat(sEndTime);
+      float currentTime = Float.parseFloat(sCurrentTime);
+
+      String timetableDay = this.day.getDay().toString();
+      if (!timetableDay.equalsIgnoreCase(Time.getCurrentDay())) {
+        return SessionStatus.InvalidDay;
+      }
+      else if(endTime < currentTime) {
+        return SessionStatus.Finished;
+      }
+      else if (endTime > currentTime) {
+        return SessionStatus.Later;
+      }
+      else {
+        return SessionStatus.Active;
+      }
+    }
+
+    private int colourForSessionStatus(SessionStatus status) {
+      switch (status) {
+        case Active:
+          return ContextCompat.getColor(getContext(), R.color.timetable_row_green);
+        case Finished:
+          return ContextCompat.getColor(getContext(), R.color.timetable_row_red);
+        case Later:
+          return ContextCompat.getColor(getContext(), R.color.timetable_row_green);
+        case InvalidDay:
+          return ContextCompat.getColor(getContext(), R.color.timetable_row_gray);
+        default:
+          return 0;
+      }
+    }
+
+
+    private String stringWithReplacedIndex(String s, char c, int index) {
+      StringBuilder stringBuilder = new StringBuilder(s);
+      stringBuilder.setCharAt(index, c);
+      return stringBuilder.toString();
+    }
   }
+
 }

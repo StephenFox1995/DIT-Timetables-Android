@@ -109,27 +109,20 @@ public class TimetableWeekPageFragment extends ListFragment {
         row = this.inflater.inflate(R.layout.timetable_session_row, null);
       }
 
+      View sessionStatus = row.findViewById(R.id.session_status);
 
-      TextView sessionNameTextView = (TextView)row.findViewById(R.id.sessionName);
+      TextView sessionNameTextView = (TextView)row.findViewById(R.id.session_name);
       sessionNameTextView.setText(day.getSession(position).getSessionName());
 
-      TextView sessionTimeComponent = (TextView)row.findViewById(R.id.timeComponent);
+      TextView sessionTimeComponent = (TextView)row.findViewById(R.id.time_component);
       String startTime = day.getSession(position).getStartTime();
       String endTime = day.getSession(position).getEndTime();
       String timeComponent = startTime + " - " + endTime;
       sessionTimeComponent.setText(timeComponent);
 
-      TextView sessionGroupsTextView = (TextView)row.findViewById(R.id.sessionGroups);
-      sessionGroupsTextView.setText(day.getSession(position).getSessionGroups()[0]);
-
-      TextView sessionMasterTextView = (TextView)row.findViewById(R.id.sessionMaster);
-      sessionMasterTextView.setText(day.getSession(position).getSessionMaster());
-
       TextView sessionLocationTextView = (TextView)row.findViewById(R.id.sessionLocation);
       sessionLocationTextView.setText(day.getSession(position).getSessionLocation());
 
-      TextView sessionTypeTextView = (TextView)row.findViewById(R.id.sessionType);
-      sessionTypeTextView.setText(day.getSession(position).getSessionType());
 
       return row;
     }

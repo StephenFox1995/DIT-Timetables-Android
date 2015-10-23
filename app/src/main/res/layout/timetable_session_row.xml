@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:id="@+id/timetable_session_row"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/timeComponent"
-        android:textColor="@color/timetable_black"/>
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/sessionName"
-        android:textColor="@color/timetable_black"/>
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/sessionGroups"
-        android:textColor="@color/timetable_black"/>
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/sessionMaster"
-        android:textColor="@color/timetable_black"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="40dp"
+        android:layout_height="fill_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/sessionLocation"/>
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/sessionType"/>
+        <View
+            android:id="@+id/session_status"
+            android:layout_width="6dp"
+            android:layout_height="fill_parent"
+            android:background="@color/timetable_row_green" />
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/time_component"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:textColor="@color/timetable_row_gray"/>
+
+        <TextView
+            android:id="@+id/session_name"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textSize="20sp"
+            android:textColor="@color/timetable_row_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:id="@+id/sessionLocation"
+            android:textColor="@color/timetable_row_gray"/>
+    </LinearLayout>
 </LinearLayout>

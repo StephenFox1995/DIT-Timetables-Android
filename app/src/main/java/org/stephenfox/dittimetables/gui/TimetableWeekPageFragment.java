@@ -148,20 +148,19 @@ public class TimetableWeekPageFragment extends ListFragment {
       String sStartTime = stringWithReplacedIndex(session.getStartTime(), '.', 2);
       String sCurrentTime = stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
 
-
-      Float fakeTime = 12.00f;
       float startTime = Float.parseFloat(sStartTime);
       float endTime = Float.parseFloat(sEndTime);
       float currentTime = Float.parseFloat(sCurrentTime);
 
       String timetableDay = this.day.getDay().toString();
+
       if (!timetableDay.equalsIgnoreCase(Time.getCurrentDay())) {
         return SessionStatus.InvalidDay;
       }
-      else if (startTime <= fakeTime && endTime > fakeTime) {
+      else if (startTime <= currentTime && endTime > currentTime) {
         return SessionStatus.Active;
       }
-      else if (fakeTime > endTime) {
+      else if (currentTime > endTime) {
         return SessionStatus.Finished;
       }
       else {

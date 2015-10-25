@@ -18,14 +18,15 @@ public class SessionDetailsFragment extends Fragment {
   private TimetableSession timetableSession;
 
 
-
+  /**
+   * Use this method to construct a new instance.
+   */
   public static SessionDetailsFragment newInstance(TimetableSession session) {
     SessionDetailsFragment fragment = new SessionDetailsFragment();
     fragment.setArguments(new Bundle());
     fragment.setTimetableSession(session);
     return fragment;
   }
-
 
 
 

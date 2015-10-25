@@ -67,12 +67,15 @@ public class TimetableWeekPageFragment extends ListFragment {
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
+    addFragmentToViewHierarchy(this.timetableDay.getSession(position));
+  }
+
+
+  private void addFragmentToViewHierarchy(TimetableSession session) {
     FragmentManager fragmentManager = getFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-    SessionDetailsFragment sessionDetailsFragment = new SessionDetailsFragment();
-
-    sessionDetailsFragment.setSessionName("Mobild Software Development");
+    SessionDetailsFragment sessionDetailsFragment = SessionDetailsFragment.newInstance(session);
 
     fragmentTransaction.add(R.id.session_detail_fragment, sessionDetailsFragment);
     fragmentTransaction.commit();

@@ -4,12 +4,15 @@ package org.stephenfox.dittimetables.gui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
@@ -23,6 +26,8 @@ import org.stephenfox.dittimetables.timetable.TimetableSession;
  * and the sessions belonging to that day.
  */
 public class TimetableWeekPageFragment extends ListFragment {
+
+  private static final String TAG = TimetableWeekPageFragment.class.getSimpleName();
 
   TimetableDay timetableDay;
 
@@ -39,6 +44,7 @@ public class TimetableWeekPageFragment extends ListFragment {
 
     return fragment;
   }
+
 
 
   @Nullable
@@ -58,6 +64,21 @@ public class TimetableWeekPageFragment extends ListFragment {
   }
 
 
+  @Override
+  public void onListItemClick(ListView l, View v, int position, long id) {
+    super.onListItemClick(l, v, position, id);
+    FragmentManager fragmentManager = getFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+    SessionDetailsFragment sessionDetailsFragment = new SessionDetailsFragment();
+
+    sessionDetailsFragment.setSessionName("Mobild Software Development");
+
+    fragmentTransaction.add(R.id.session_detail_fragment, sessionDetailsFragment);
+    fragmentTransaction.commit();
+  }
+
+
   private void setTimetableDay(TimetableDay timetableDay) {
     this.timetableDay = timetableDay;
   }
@@ -73,7 +94,6 @@ public class TimetableWeekPageFragment extends ListFragment {
 
 
   private class TimetableWeekListAdapter extends BaseAdapter {
-
 
     private TimetableDay day;
     private LayoutInflater inflater;

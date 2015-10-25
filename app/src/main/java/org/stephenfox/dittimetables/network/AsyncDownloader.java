@@ -10,10 +10,11 @@ import android.os.AsyncTask;
 public class AsyncDownloader extends AsyncTask<String, Void, String> {
 
   private HttpDownloader httpDownloader;
-  private HttpAsyncCallback callback;private Runnable block;
+  private HttpAsyncCallback callback;
 
 
-  public <T extends  HttpDownloader>AsyncDownloader(T httpDownloader) {
+
+  public AsyncDownloader(HttpDownloader httpDownloader) {
     this.httpDownloader = httpDownloader;
   }
 

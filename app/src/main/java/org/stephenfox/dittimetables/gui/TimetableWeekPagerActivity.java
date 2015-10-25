@@ -3,10 +3,10 @@ package org.stephenfox.dittimetables.gui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * {@link org.stephenfox.dittimetables.gui.TimetableWeekPageFragment}
  * for details on each fragment.
  */
-public class TimetableWeekPagerActivity extends FragmentActivity {
+public class TimetableWeekPagerActivity extends AppCompatActivity {
 
   private ViewPager pager;
 
@@ -68,7 +68,6 @@ public class TimetableWeekPagerActivity extends FragmentActivity {
       Toast.makeText(getApplicationContext(),
           "No timetable available for this course", Toast.LENGTH_SHORT).show();
       this.finish();
-
     }
   }
 

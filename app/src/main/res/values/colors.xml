@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
     <color name="timetable_row_gray">#747474</color>
     <color name="timetable_row_red">#FE6868</color>
     <color name="timetable_row_green">#76AC3B</color>
+    
+    <color name="session_details_view_blue">#4A90E2</color>
 </resources>

@@ -17,4 +17,9 @@
         android:textSize="20sp"
         android:id="@+id/no_courses_for_day"/>
 
+    <fragment android:name="org.stephenfox.dittimetables.gui.SessionDetailsFragment"
+              android:id="@+id/session_detail_fragment"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
+
 </RelativeLayout>

@@ -45,6 +45,8 @@ public class TimetableWeekPageFragment extends ListFragment {
     return fragment;
   }
 
+  public TimetableWeekPageFragment() {}
+
 
 
   @Nullable
@@ -191,6 +193,7 @@ public class TimetableWeekPageFragment extends ListFragment {
       }
     }
 
+
     private int colourForSessionStatus(SessionStatus status) {
       switch (status) {
         case Active:
@@ -205,7 +208,6 @@ public class TimetableWeekPageFragment extends ListFragment {
           return 0;
       }
     }
-
 
     private String stringWithReplacedIndex(String s, char c, int index) {
       StringBuilder stringBuilder = new StringBuilder(s);

@@ -4,8 +4,6 @@ package org.stephenfox.dittimetables.gui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -69,19 +67,19 @@ public class TimetableWeekPageFragment extends ListFragment {
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
-    addFragmentToViewHierarchy(this.timetableDay.getSession(position));
+    //addFragmentToViewHierarchy(this.timetableDay.getSession(position));
   }
 
 
-  private void addFragmentToViewHierarchy(TimetableSession session) {
-    FragmentManager fragmentManager = getFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-    SessionDetailsFragment sessionDetailsFragment = SessionDetailsFragment.newInstance(session);
-
-    fragmentTransaction.add(R.id.session_detail_fragment, sessionDetailsFragment);
-    fragmentTransaction.commit();
-  }
+//  private void addFragmentToViewHierarchy(TimetableSession session) {
+//    FragmentManager fragmentManager = getFragmentManager();
+//    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//    SessionDetailsFragment sessionDetailsFragment = SessionDetailsFragment.newInstance(session);
+//
+//    fragmentTransaction.add(R.id.session_detail_fragment, sessionDetailsFragment);
+//    fragmentTransaction.commit();
+//  }
 
 
   private void setTimetableDay(TimetableDay timetableDay) {

@@ -62,8 +62,6 @@ public class SessionDetailsFragment extends Fragment {
 
   }
 
-
-
   public void setTimetableSession(TimetableSession session) {
     this.timetableSession = session;
   }

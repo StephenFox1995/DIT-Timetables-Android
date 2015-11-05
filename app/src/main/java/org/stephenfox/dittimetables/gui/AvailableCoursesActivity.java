@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.database.TimetableSchema;
 import org.stephenfox.dittimetables.network.AsyncDownloader;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.JsonParser;
@@ -32,6 +33,10 @@ public class AvailableCoursesActivity extends ListActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_available_courses);
+
+    Log.d("dbtest", TimetableSchema.Timetable.CREATE_TABLE);
+    Log.d("dbtest", TimetableSchema.TimetableWeek.CREATE_TABLE);
+    Log.d("dbtest", TimetableSchema.TimetableDay.CREATE_TABLE);
 
     if (NetworkManager.hasInternetConnection(this)) {
       beginDownload();

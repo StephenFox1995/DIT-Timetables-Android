@@ -38,6 +38,7 @@ public class AvailableCoursesActivity extends ListActivity {
     Log.d("dbtest", TimetableSchema.TimetableWeek.CREATE_TABLE);
     Log.d("dbtest", TimetableSchema.TimetableDay.CREATE_TABLE);
     Log.d("dbtest", TimetableSchema.TimetableSession.CREATE_TABLE);
+    Log.d("dbtest", TimetableSchema.SessionGroup.CREATE_TABLE);
 
     if (NetworkManager.hasInternetConnection(this)) {
       beginDownload();

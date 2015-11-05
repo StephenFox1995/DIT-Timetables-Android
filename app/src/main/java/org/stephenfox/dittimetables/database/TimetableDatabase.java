@@ -39,9 +39,6 @@ public class TimetableDatabase {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
-
-
   }
 
 }

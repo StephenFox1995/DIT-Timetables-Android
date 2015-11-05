@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.database.TimetableSchema;
-import org.stephenfox.dittimetables.network.AsyncDownloader;
+import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.NetworkManager;
@@ -54,7 +54,7 @@ public class AvailableCoursesActivity extends ListActivity {
 
   private void beginDownload() {
     CourseDownloader cDownloader = new CourseDownloader();
-    cDownloader.downloadCourseNamesAndIdentifiers(new AsyncDownloader.HttpAsyncCallback() {
+    cDownloader.downloadCourseNamesAndIdentifiers(new CustomAsyncTask.AsyncCallback<String>() {
       @Override
       public void finished(String data) {
         if (data != null) {

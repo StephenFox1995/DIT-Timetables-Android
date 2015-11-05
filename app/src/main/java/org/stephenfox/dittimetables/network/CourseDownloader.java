@@ -7,7 +7,6 @@ package org.stephenfox.dittimetables.network;
  */
 public class CourseDownloader extends HttpDownloader {
 
-
   /**
    * The URL which hold all information on each course.
    */
@@ -21,8 +20,16 @@ public class CourseDownloader extends HttpDownloader {
    * @param callback This object/callback will be messaged when the
    *                 course name and identifiers have been downloaded.
    */
-  public void downloadCourseNamesAndIdentifiers(AsyncDownloader.HttpAsyncCallback callback) {
-    AsyncDownloader asyncDownloader = new AsyncDownloader(this);
-    asyncDownloader.download(CourseDownloader.coursesURL, callback);
+  public void downloadCourseNamesAndIdentifiers(CustomAsyncTask.AsyncCallback callback) {
+    CustomAsyncTask<String, Void, String> customAsyncTask = new CustomAsyncTask<>();
+
+    customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutable<String>() {
+      @Override
+      public String executeAsync() {
+        return getHttpData(coursesURL);
+      }
+    }, callback);
   }
+
+
 }

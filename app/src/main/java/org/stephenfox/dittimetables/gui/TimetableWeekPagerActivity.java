@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.network.AsyncDownloader;
+import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.timetable.Day;
@@ -40,7 +40,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     String url = d.getStringExtra("url");
 
     WeekDownloader weekDownloader = new WeekDownloader();
-    weekDownloader.downloadWeekForCourse(url, new AsyncDownloader.HttpAsyncCallback() {
+    weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback<String>() {
       @Override
       public void finished(String data) {
         setup(data);

@@ -79,5 +79,4 @@ public class TimetableSchema {
         + TimetableSession.TABLE_NAME + "(" + TimetableSession.KEY_TIMETABLE_SESSION_ID + ")"
         + ")";
   }
-
 }

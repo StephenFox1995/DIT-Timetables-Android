@@ -12,6 +12,7 @@ import java.net.URL;
 
 public class HttpDownloader {
 
+
   /**
    * Retrieves data from a url.
    *

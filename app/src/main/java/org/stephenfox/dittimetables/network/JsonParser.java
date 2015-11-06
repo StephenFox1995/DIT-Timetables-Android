@@ -85,4 +85,23 @@ public class JsonParser {
 
 
   private String[] parseSubGroups(String groups) { return groups.split(","); }
+
+
+  public String parseCourseID(String data) {
+    String courseID = "";
+
+    try {
+      JSONObject jsonObject = new JSONObject(data);
+      JSONArray jsonArray = jsonObject.getJSONArray("objects");
+
+      for (int i = 0; i < 1; i++) {
+        JSONObject o = jsonArray.getJSONObject(i);
+
+        courseID = o.getString("course_ID");
+      }
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    return courseID;
+  }
 }

@@ -11,8 +11,6 @@ import org.stephenfox.dittimetables.timetable.Timetable;
 
 public class TimetableDatabase {
 
-  public static final String DATABASE_NAME = "timetable.db";
-
 
   private DatabaseTimetableHelper dbHelper;
   private Context context;
@@ -41,27 +39,31 @@ public class TimetableDatabase {
   }
 
   public void addTimetable(Timetable timetable) {
-
+    DatabaseTransactionHelper transactionHelper = new DatabaseTransactionHelper(this);
+    transactionHelper.insertTimetable(timetable);
   }
 
 
+  public SQLiteDatabase getSqLiteDatabase() {
+    return this.sqLiteDatabase;
+  }
 
   private static class DatabaseTimetableHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
 
     public DatabaseTimetableHelper(Context context) {
-      super(context, DATABASE_NAME, null, DATABASE_VERSION);
+      super(context, TimetableSchema.DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-      Log.d("Database", "Database created!");
-      db.execSQL(TimetableSchema.Timetable.CREATE_TABLE
-          + TimetableSchema.TimetableWeek.CREATE_TABLE
-          + TimetableSchema.TimetableDay.CREATE_TABLE
-          + TimetableSchema.TimetableSession.CREATE_TABLE
-          + TimetableSchema.SessionGroup.CREATE_TABLE);
+      Log.d("Database", "Oncreate called");
+      db.execSQL(TimetableSchema.Timetable.CREATE_TABLE);
+      db.execSQL(TimetableSchema.TimetableWeek.CREATE_TABLE);
+      db.execSQL(TimetableSchema.TimetableDay.CREATE_TABLE);
+      db.execSQL(TimetableSchema.TimetableSession.CREATE_TABLE);
+      db.execSQL(TimetableSchema.SessionGroup.CREATE_TABLE);
     }
 
     @Override

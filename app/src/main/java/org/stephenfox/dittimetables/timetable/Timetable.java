@@ -9,6 +9,7 @@ import android.util.Log;
 public class Timetable {
 
   private TimetableWeek timetableWeek;
+  private String courseID;
 
 
   public Timetable(TimetableWeek timetableWeek) {
@@ -20,6 +21,9 @@ public class Timetable {
     this.timetableWeek = timetableWeek;
   }
 
+  public void setCourseID(String courseID) {
+    this.courseID = courseID;
+  }
 
   public TimetableWeek getTimetableWeek() {
     return timetableWeek;
@@ -31,6 +35,9 @@ public class Timetable {
 
   public int getDayCount() { return timetableWeek.getNumberOfDays(); }
 
+  public String getCourseID() {
+    return courseID;
+  }
 
   @Override
   public String toString() {

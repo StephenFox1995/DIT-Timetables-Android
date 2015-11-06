@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
@@ -61,12 +62,14 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     try {
       ArrayList<TimetableSession> sessions = parseJson(data);
       Timetable timetable = createTimetable(sessions);
+      timetable.setCourseID(getCourseIDForTimetable(data));
 
       pager = (ViewPager) findViewById(R.id.slide);
       pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
 
       TimetableDatabase database = new TimetableDatabase(this);
       database.open();
+      database.addTimetable(timetable);
 
 
     } catch (EmptySessionsArrayException e) {
@@ -88,6 +91,12 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
   private ArrayList<TimetableSession> parseJson(String data) {
     JsonParser jsonParser = new JsonParser();
     return jsonParser.parseSessionsForWeek(data);
+  }
+
+  private String getCourseIDForTimetable(String data) {
+    JsonParser jsonParser = new JsonParser();
+    Log.d("ID", jsonParser.parseCourseID(data));
+    return jsonParser.parseCourseID(data);
   }
 
 

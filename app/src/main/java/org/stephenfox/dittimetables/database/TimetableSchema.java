@@ -3,6 +3,7 @@ package org.stephenfox.dittimetables.database;
 
 public class TimetableSchema {
 
+  public static final String DATABASE_NAME = "timetable.db";
   private TimetableSchema() {}
 
 
@@ -68,7 +69,7 @@ public class TimetableSchema {
   public static final class SessionGroup {
     public static final String TABLE_NAME = "SessionGroup";
     public static final String KEY_SESSION_GROUP = "_id";
-    public static final String COL_GROUP = "group";
+    public static final String COL_GROUP = "group_name";
     public static final String COL_SESSION_ID = "session_id";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME

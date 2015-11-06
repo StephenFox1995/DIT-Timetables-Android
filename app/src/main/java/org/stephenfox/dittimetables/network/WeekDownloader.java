@@ -7,7 +7,6 @@ package org.stephenfox.dittimetables.network;
 public class WeekDownloader extends HttpDownloader {
 
 
-  //TODO: UPDATE COMMENTS
   /**
    * Downloads all the timetable information for a
    * course for the week.
@@ -21,7 +20,7 @@ public class WeekDownloader extends HttpDownloader {
    *                 that was spawned to fetched the http data.
    */
   public void downloadWeekForCourse(final String url, CustomAsyncTask.AsyncCallback callback) {
-    CustomAsyncTask<String, Void, String> asyncTask = new CustomAsyncTask<>();
+    CustomAsyncTask asyncTask = new CustomAsyncTask();
 
     asyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutable<String>() {
       @Override

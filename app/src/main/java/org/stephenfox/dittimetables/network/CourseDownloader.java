@@ -21,7 +21,7 @@ public class CourseDownloader extends HttpDownloader {
    *                 course name and identifiers have been downloaded.
    */
   public void downloadCourseNamesAndIdentifiers(CustomAsyncTask.AsyncCallback callback) {
-    CustomAsyncTask<String, Void, String> customAsyncTask = new CustomAsyncTask<>();
+    CustomAsyncTask customAsyncTask = new CustomAsyncTask();
 
     customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutable<String>() {
       @Override

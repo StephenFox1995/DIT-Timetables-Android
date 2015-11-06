@@ -3,7 +3,7 @@ package org.stephenfox.dittimetables.network;
 import android.os.AsyncTask;
 
 
-public class CustomAsyncTask<Params, Progress, Result> extends AsyncTask {
+public class CustomAsyncTask extends AsyncTask {
 
   private AsyncCallback callback;
   private AsyncExecutable executable;

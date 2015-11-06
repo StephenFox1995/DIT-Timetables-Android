@@ -23,7 +23,7 @@ public class CourseDownloader extends HttpDownloader {
   public void downloadCourseNamesAndIdentifiers(CustomAsyncTask.AsyncCallback callback) {
     CustomAsyncTask customAsyncTask = new CustomAsyncTask();
 
-    customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutable<String>() {
+    customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutableForCallback<String>() {
       @Override
       public String executeAsync() {
         return getHttpData(coursesURL);

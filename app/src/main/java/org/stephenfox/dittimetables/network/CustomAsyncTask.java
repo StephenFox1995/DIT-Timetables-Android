@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 public class CustomAsyncTask extends AsyncTask {
 
   private AsyncCallback callback;
+  private AsyncExecutableForCallback executableWithCallback;
   private AsyncExecutable executable;
   private boolean shouldMessageCallback = false;
 
@@ -17,10 +18,11 @@ public class CustomAsyncTask extends AsyncTask {
    * Use this method to execute code on a background thread.
    *
    * This method provides the capability to execute code by
-   * passing a #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncExecutable }
+   * passing a
+   *  #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncExecutableForCallback }
    * reference, which is the code that will be called on the background thread.
    *
-   * A callback, is then called when the executable code has finished. If there's no need
+   * A callback, is then called when the executableWithCallback code has finished. If there's no need
    * for a callback then use
    * #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncCallback }
    *
@@ -32,8 +34,8 @@ public class CustomAsyncTask extends AsyncTask {
    *
    **/
   public void
-  doCallbackTask(AsyncExecutable executable, AsyncCallback callback) {
-    this.executable = executable;
+  doCallbackTask(AsyncExecutableForCallback executable, AsyncCallback callback) {
+    this.executableWithCallback = executable;
     this.callback = callback;
     this.shouldMessageCallback = true;
     execute();
@@ -55,16 +57,19 @@ public class CustomAsyncTask extends AsyncTask {
 
   @Override
   protected Object doInBackground(Object[] params) {
-    return executable.executeAsync();
+    if (shouldMessageCallback) {
+      return executableWithCallback.executeAsync();
+    } else {
+      return null;
+    }
   }
 
 
   @Override
   protected void onPostExecute(Object o) {
-    if (shouldMessageCallback) {
-      callback.finished(o);
-    }
+    callback.finished(o);
   }
+
 
 
   /**
@@ -80,16 +85,30 @@ public class CustomAsyncTask extends AsyncTask {
 
   }
 
+
   /**
-   * Use this interface to perform work on a background worker thread.
+   * Use this interface to perform work on a background worker thread that will then
+   * pass the result via a callback
    */
-  public interface AsyncExecutable<T> {
+  public interface AsyncExecutableForCallback<T> {
     /**
-     * This method is called when code is to be execute on a background worker thread.
-     * @return T Generally one, would want to return data that has resulted from
+     * This method is called to execute code on a background worker thread.
+     * @return T To return data that has resulted from
      *           the work done on the background thread so it can be passed via a
      *           #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncCallback }.
+     *           For example if one wanted to get some data from a http request to a server on the
+     *           background thread, they could return the result of that, which will be passed via
+     *           a callback.
      */
-    T executeAsync();
+    public T executeAsync();
   }
+
+
+  public interface AsyncExecutable {
+    /**
+     * This method is called to execute code on a background thread
+     */
+    public void execute();
+  }
+
 }

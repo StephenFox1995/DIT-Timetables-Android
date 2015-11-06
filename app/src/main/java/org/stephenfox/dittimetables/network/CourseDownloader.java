@@ -20,15 +20,28 @@ public class CourseDownloader extends HttpDownloader {
    * @param callback This object/callback will be messaged when the
    *                 course name and identifiers have been downloaded.
    */
-  public void downloadCourseNamesAndIdentifiers(CustomAsyncTask.AsyncCallback callback) {
+  public <T extends String> void
+  downloadCourseNamesAndIdentifiers(CustomAsyncTask.AsyncCallback callback) {
     CustomAsyncTask customAsyncTask = new CustomAsyncTask();
 
-    customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutableForCallback<String>() {
+    customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutableForCallback() {
       @Override
       public String executeAsync() {
         return getHttpData(coursesURL);
       }
     }, callback);
+
+
+
+
+
+    CustomAsyncTask asyncTask = new CustomAsyncTask();
+    asyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
+      @Override
+      public void execute() {
+        getHttpData(coursesURL);
+      }
+    });
   }
 
 

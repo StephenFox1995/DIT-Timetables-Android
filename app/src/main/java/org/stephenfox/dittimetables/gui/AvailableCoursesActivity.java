@@ -54,14 +54,14 @@ public class AvailableCoursesActivity extends ListActivity {
 
   private void beginDownload() {
     CourseDownloader cDownloader = new CourseDownloader();
-    cDownloader.downloadCourseNamesAndIdentifiers(new CustomAsyncTask.AsyncCallback<String>() {
+    cDownloader.downloadCourseNamesAndIdentifiers(new CustomAsyncTask.AsyncCallback() {
       @Override
-      public void finished(String data) {
+      public void finished(Object data) {
         if (data != null) {
-          Log.d("DITTimetables", "Course names and identifiers successfully downloaded." + data);
+          String courses = (String)data;
 
           // TODO: Never parse if data is not sufficient.
-          courseIdentifiersTitlesHash = beginJSONParsing(data);
+          courseIdentifiersTitlesHash = beginJSONParsing(courses);
           ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersTitlesHash);
           setListAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
         }

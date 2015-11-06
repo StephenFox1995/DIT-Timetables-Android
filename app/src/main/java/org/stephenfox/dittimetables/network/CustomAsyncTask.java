@@ -55,6 +55,7 @@ public class CustomAsyncTask extends AsyncTask {
     execute();
   }
 
+
   @Override
   protected Object doInBackground(Object[] params) {
     if (shouldMessageCallback) {
@@ -78,12 +79,12 @@ public class CustomAsyncTask extends AsyncTask {
    * Use this interface to perform
    * asynchronous callbacks.
    */
-  public interface AsyncCallback<T> {
+  public interface AsyncCallback {
     /**
      * Called when a work done on a background worker thread has finished.
      * @param data The data to be passed via a callback.
      */
-    void finished(T data);
+    void finished(Object data);
 
   }
 
@@ -92,17 +93,18 @@ public class CustomAsyncTask extends AsyncTask {
    * Use this interface to perform work on a background worker thread that will then
    * pass the result via a callback
    */
-  public interface AsyncExecutableForCallback<T> {
+  public interface AsyncExecutableForCallback {
     /**
      * This method is called to execute code on a background worker thread.
-     * @return T To return data that has resulted from
+     * @return Object
+     *     To return data that has resulted from
      *           the work done on the background thread so it can be passed via a
      *           #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncCallback }.
      *           For example if one wanted to get some data from a http request to a server on the
      *           background thread, they could return the result of that, which will be passed via
      *           a callback.
      */
-    public T executeAsync();
+    Object executeAsync();
   }
 
 
@@ -110,7 +112,7 @@ public class CustomAsyncTask extends AsyncTask {
     /**
      * This method is called to execute code on a background thread
      */
-    public void execute();
+    void execute();
   }
 
 }

@@ -6,7 +6,6 @@ package org.stephenfox.dittimetables.network;
  */
 public class WeekDownloader extends HttpDownloader {
 
-
   /**
    * Downloads all the timetable information for a
    * course for the week.

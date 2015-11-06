@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
@@ -63,6 +64,10 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
 
       pager = (ViewPager) findViewById(R.id.slide);
       pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
+
+      TimetableDatabase database = new TimetableDatabase(this);
+      database.open();
+
 
     } catch (EmptySessionsArrayException e) {
       Toast.makeText(getApplicationContext(),

@@ -23,7 +23,7 @@ public class HttpDownloader {
    * @return Returns a string of the data fetched from
    *         the http request.
    */
-  public String getHttpData(String urlString) {
+  protected String getHttpData(String urlString) {
     String dataString = null;
 
     try {

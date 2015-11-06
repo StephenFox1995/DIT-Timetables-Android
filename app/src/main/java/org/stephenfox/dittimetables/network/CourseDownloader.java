@@ -30,19 +30,5 @@ public class CourseDownloader extends HttpDownloader {
         return getHttpData(coursesURL);
       }
     }, callback);
-
-
-
-
-
-    CustomAsyncTask asyncTask = new CustomAsyncTask();
-    asyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
-      @Override
-      public void execute() {
-        getHttpData(coursesURL);
-      }
-    });
   }
-
-
 }

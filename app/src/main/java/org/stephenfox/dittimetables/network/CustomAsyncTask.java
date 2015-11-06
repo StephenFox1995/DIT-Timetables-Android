@@ -96,8 +96,7 @@ public class CustomAsyncTask extends AsyncTask {
   public interface AsyncExecutableForCallback {
     /**
      * This method is called to execute code on a background worker thread.
-     * @return Object
-     *     To return data that has resulted from
+     * @return Object To return data that has resulted from
      *           the work done on the background thread so it can be passed via a
      *           #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncCallback }.
      *           For example if one wanted to get some data from a http request to a server on the

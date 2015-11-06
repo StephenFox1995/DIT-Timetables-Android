@@ -40,10 +40,10 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     String url = d.getStringExtra("url");
 
     WeekDownloader weekDownloader = new WeekDownloader();
-    weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback<String>() {
+    weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
       @Override
-      public void finished(String data) {
-        setup(data);
+      public void finished(Object data) {
+        setup((String)data);
       }
     });
   }

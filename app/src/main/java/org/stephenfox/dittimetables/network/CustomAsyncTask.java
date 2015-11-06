@@ -60,16 +60,18 @@ public class CustomAsyncTask extends AsyncTask {
     if (shouldMessageCallback) {
       return executableWithCallback.executeAsync();
     } else {
-      return null;
+      executable.execute();
     }
+    return null;
   }
 
 
   @Override
   protected void onPostExecute(Object o) {
-    callback.finished(o);
+    if (shouldMessageCallback) {
+      callback.finished(o);
+    }
   }
-
 
 
   /**

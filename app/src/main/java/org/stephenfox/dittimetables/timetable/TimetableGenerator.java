@@ -1,8 +1,6 @@
 package org.stephenfox.dittimetables.timetable;
 
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /**
@@ -114,7 +112,14 @@ public class TimetableGenerator {
 
 
   /**
-   * Checks to see if there are any empty days with in the week an*/
+   * Checks to see if there are any empty days with in the week and
+   * removes those days that have no sessions.
+   *
+   * @param days The days to check.
+   *
+   * @return TimetableDay[] A new array of days, only including the
+   *                        days that have sessions.
+   */
   private TimetableDay[] checkAndRemoveEmptyDays(TimetableDay[] days) {
     ArrayList<TimetableDay> _days = new ArrayList<>();
 
@@ -123,7 +128,6 @@ public class TimetableGenerator {
         _days.add(day);
       }
     }
-    Log.d("checkandremove", "" + _days.size());
     return _days.toArray(new TimetableDay[_days.size()]);
   }
 }

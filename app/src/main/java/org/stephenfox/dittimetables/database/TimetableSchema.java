@@ -12,7 +12,7 @@ public class TimetableSchema {
     public static final String KEY_TIMETABLE_ID = "_id";
 
     public static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-        "(" + KEY_TIMETABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT );";
+        "(" + KEY_TIMETABLE_ID + " INTEGER PRIMARY KEY NOT NULL );";
   }
 
 

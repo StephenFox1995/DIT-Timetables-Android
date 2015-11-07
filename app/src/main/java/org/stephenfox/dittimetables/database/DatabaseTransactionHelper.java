@@ -24,13 +24,15 @@ public class DatabaseTransactionHelper {
    */
   public void insertTimetable(Timetable timetable) {
     this.timetable = timetable;
+    insertIntoTimetable();
   }
 
 
   private void insertIntoTimetable() {
     ContentValues contentValues = new ContentValues();
-    sqLiteDatabase.insert(TimetableSchema.Timetable.TABLE_NAME, null, null);
+    contentValues.put(TimetableSchema.Timetable.KEY_TIMETABLE_ID, timetable.getCourseID());
 
+    sqLiteDatabase.insert(TimetableSchema.Timetable.TABLE_NAME, null, contentValues);
     Log.d("DB", "inserted");
   }
 }

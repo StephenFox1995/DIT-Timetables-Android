@@ -60,6 +60,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
    */
   void setup(String data) {
     try {
+
       ArrayList<TimetableSession> sessions = parseJson(data);
       Timetable timetable = createTimetable(sessions);
       timetable.setCourseID(getCourseIDForTimetable(data));

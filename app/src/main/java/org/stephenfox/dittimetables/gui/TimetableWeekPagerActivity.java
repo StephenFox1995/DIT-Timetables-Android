@@ -136,8 +136,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
 
     @Override
     public int getCount() {
-      //TODO: Don't always return 7. Default should be 5, then add more days if needed.
-      return 5;
+      return timetable.getTimetableWeek().getNumberOfDays();
     }
   }
 }

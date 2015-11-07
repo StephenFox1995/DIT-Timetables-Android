@@ -49,16 +49,21 @@ public class TimetableSchema {
   public static final class TimetableSession {
     public static final String TABLE_NAME = "TimetableSession";
     public static final String KEY_TIMETABLE_SESSION_ID = "_id";
+    public static final String COL_TIMETABLE_DAY_ID = "timetable_session_timetable_day";
+    public static final String COL_SESSION_MASTER = "session_master";
+    public static final String COL_SESSION_NAME = "session_name";
     public static final String COL_SESSION_START_TIME = "start_time";
     public static final String COL_SESSION_END_TIME = "end_time";
     public static final String COL_SESSION_LOCATION = "location";
     public static final String COL_SESSION_TYPE = "type";
-    public static final String COL_TIMETABLE_DAY_ID = "timetable_session_timetable_day";
+
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
         + "(" + KEY_TIMETABLE_SESSION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        + COL_SESSION_NAME + " TEXT, "
         + COL_SESSION_START_TIME + " TEXT, "
         + COL_SESSION_END_TIME + " TEXT, "
+        + COL_SESSION_MASTER + " TEXT, "
         + COL_SESSION_LOCATION + " TEXT, "
         + COL_SESSION_TYPE + " TEXT, "
         + COL_TIMETABLE_DAY_ID + " INTEGER, "

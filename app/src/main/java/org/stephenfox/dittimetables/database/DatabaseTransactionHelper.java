@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class DatabaseTransactionHelper {
     insertIntoTimetable();
     insertIntoTimetableWeek();
     insertIntoTimetableDay();
+    insertSessions();
   }
 
 
@@ -65,6 +67,36 @@ public class DatabaseTransactionHelper {
       contentValues.put(TimetableSchema.TimetableDay.COL_DAY_NAME, dayNames[i]);
       currentTimetableDayIDs.add(
           sqLiteDatabase.insert(TimetableSchema.TimetableDay.TABLE_NAME, null, contentValues));
+    }
+  }
+
+
+  private void insertSessions() {
+    TimetableDay[] days = timetable.getTimetableWeek().getDays();
+    ContentValues contentValues;
+    int i = 0;
+
+    for (TimetableDay day : days) {
+      for (TimetableSession session : day.getSessions()) {
+        contentValues = new ContentValues();
+
+        contentValues.put(TimetableSchema.TimetableSession.COL_TIMETABLE_DAY_ID,
+            currentTimetableDayIDs.get(i));
+        contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_NAME,
+            session.getSessionName());
+        contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_START_TIME,
+            session.getStartTime());
+        contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_END_TIME,
+            session.getEndTime());
+        contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_MASTER,
+            session.getSessionMaster());
+        contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_LOCATION,
+            session.getSessionLocation());
+        contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_TYPE,
+            session.getSessionType());
+        sqLiteDatabase.insert(TimetableSchema.TimetableSession.TABLE_NAME, null, contentValues);
+      }
+      i++;
     }
   }
 }

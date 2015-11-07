@@ -26,7 +26,7 @@ public class TimetableDay {
    * @return boolean True If there is sessions associated with an instance.
    */
   public boolean containsSessions() {
-    return getSessionCount() > 0 || getSessions() != null;
+    return getSessionCount() > 0 || sessions != null;
   }
 
 
@@ -43,9 +43,13 @@ public class TimetableDay {
   }
 
 
-  public void setSessions(ArrayList<TimetableSession> sessions) { this.sessions = sessions; }
+  public void setSessions(ArrayList<TimetableSession> sessions) {
+    this.sessions = sessions;
+  }
 
-  public ArrayList<TimetableSession> getSessions() { return sessions; }
+  public TimetableSession[] getSessions() {
+    return sessions.toArray(new TimetableSession[sessions.size()]);
+  }
 
   public TimetableSession getSession(int index) {
     return sessions.get(index);

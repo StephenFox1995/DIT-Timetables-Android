@@ -49,6 +49,10 @@ public class TimetableWeek {
   public int getNumberOfDays() { return days.size(); }
 
 
+  public TimetableDay[] getDays() {
+    return days.toArray(new TimetableDay[days.size()]);
+  }
+
 
   /**
    * Returns a Day in the week.

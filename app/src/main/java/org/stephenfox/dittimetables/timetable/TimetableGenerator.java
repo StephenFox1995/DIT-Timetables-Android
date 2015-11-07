@@ -1,6 +1,8 @@
 package org.stephenfox.dittimetables.timetable;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -8,8 +10,6 @@ import java.util.ArrayList;
  */
 public class TimetableGenerator {
 
-
-  private static final int DAYS_OF_WEEK = 7;
 
   private ArrayList<TimetableSession> sessions;
 
@@ -39,7 +39,9 @@ public class TimetableGenerator {
   public Timetable generateTimetable() {
     TimetableDay[] timetableDays = createDayArray();
     addSessionsToDays(timetableDays);
-    TimetableWeek timetableWeek = createWeek(timetableDays);
+
+    TimetableDay[] days = checkAndRemoveEmptyDays(timetableDays);
+    TimetableWeek timetableWeek = createWeek(days);
 
     return new Timetable(timetableWeek);
   }
@@ -99,10 +101,10 @@ public class TimetableGenerator {
   /**
    * Creates an array of TimetableDay.
    *
-   * @return A new TimetableDay[7] array.
-   * */
+   * @return A new TimetableDay array of the appropriate size.
+   */
   private TimetableDay[] createDayArray() {
-    TimetableDay[] timetableDays = new TimetableDay[numberOfDaysToGenerate()];
+    TimetableDay[] timetableDays = new TimetableDay[7];
 
     for (int i = 0; i < timetableDays.length; i++) {
       timetableDays[i] = new TimetableDay(Day.intToDay(i));
@@ -112,16 +114,16 @@ public class TimetableGenerator {
 
 
   /**
-   * Determines the number of days to be generated.
-   * If a day has no sessions, then there's no point in
-   * including that day in the timetable.
-   *
-   * @return The number of days needed to create the timetable.
-   * */
-  private int numberOfDaysToGenerate() {
-    
+   * Checks to see if there are any empty days with in the week an*/
+  private TimetableDay[] checkAndRemoveEmptyDays(TimetableDay[] days) {
+    ArrayList<TimetableDay> _days = new ArrayList<>();
+
+    for (TimetableDay day : days) {
+      if (day.containsSessions()) {
+        _days.add(day);
+      }
+    }
+    Log.d("checkandremove", "" + _days.size());
+    return _days.toArray(new TimetableDay[_days.size()]);
   }
-
-
-
 }

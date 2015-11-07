@@ -1,7 +1,7 @@
 package org.stephenfox.dittimetables.timetable;
 
-
 import java.util.ArrayList;
+
 
 public class TimetableDay {
 
@@ -67,6 +67,7 @@ public class TimetableDay {
   public String getDayName() {
     return dayName;
   }
+
 
   @Override
   public String toString() {

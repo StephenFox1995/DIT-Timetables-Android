@@ -7,9 +7,12 @@ public class TimetableDay {
 
   private ArrayList<TimetableSession> sessions;
   private Day day;
+  private String dayName; // String representation of the day.
+
 
   public  TimetableDay(Day day) {
     this.day = day;
+    this.dayName = day.toString();
   }
 
   public TimetableDay(ArrayList<TimetableSession> sessions) {
@@ -61,7 +64,9 @@ public class TimetableDay {
 
   public Day getDay() { return day; }
 
-
+  public String getDayName() {
+    return dayName;
+  }
 
   @Override
   public String toString() {

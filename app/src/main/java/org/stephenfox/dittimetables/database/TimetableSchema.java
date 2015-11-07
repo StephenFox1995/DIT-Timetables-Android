@@ -34,10 +34,12 @@ public class TimetableSchema {
     public static final String TABLE_NAME = "TimetableDay";
     public static final String KEY_TIMETABLE_DAY_ID = "_id";
     public static final String COL_TIMETABLE_WEEK_ID = "timetable_day_timetable_week";
+    public static final String COL_DAY_NAME = "day_name";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
         + "(" + KEY_TIMETABLE_DAY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
         + COL_TIMETABLE_WEEK_ID + " INTEGER, "
+        + COL_DAY_NAME + " TEXT,"
         + "FOREIGN KEY (" + COL_TIMETABLE_WEEK_ID + ") REFERENCES "
         + TimetableWeek.TABLE_NAME + "(" + TimetableWeek.KEY_TIMETABLE_WEEK_ID + ")"
         + ");";

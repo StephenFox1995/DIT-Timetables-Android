@@ -102,11 +102,26 @@ public class TimetableGenerator {
    * @return A new TimetableDay[7] array.
    * */
   private TimetableDay[] createDayArray() {
-    TimetableDay[] timetableDays = new TimetableDay[TimetableGenerator.DAYS_OF_WEEK];
+    TimetableDay[] timetableDays = new TimetableDay[numberOfDaysToGenerate()];
 
     for (int i = 0; i < timetableDays.length; i++) {
       timetableDays[i] = new TimetableDay(Day.intToDay(i));
     }
     return timetableDays;
   }
+
+
+  /**
+   * Determines the number of days to be generated.
+   * If a day has no sessions, then there's no point in
+   * including that day in the timetable.
+   *
+   * @return The number of days needed to create the timetable.
+   * */
+  private int numberOfDaysToGenerate() {
+    
+  }
+
+
+
 }

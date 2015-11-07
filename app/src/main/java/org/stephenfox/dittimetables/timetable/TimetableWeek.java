@@ -8,7 +8,6 @@ public class TimetableWeek {
   private ArrayList<TimetableDay> days;
 
 
-
   /**
    * Instantiates a new instance with an array of timetable days
    *
@@ -20,6 +19,23 @@ public class TimetableWeek {
 
 
   public TimetableWeek() {}
+
+  /**
+   * Returns the names of all the days that have sessions.
+   * If a day does not have any sessions then it will not be included in the array.
+   *
+   * @return The names of the days that contain session
+   */
+  public String[] getDayNames() {
+    ArrayList<String> dayNames = new ArrayList<>();
+
+    for (int i = 0; i < getNumberOfDays(); i++) {
+      if (days.get(i).containsSessions()) {
+        dayNames.add(days.get(i).getDayName());
+      }
+    }
+    return dayNames.toArray(new String[dayNames.size()]);
+  }
 
 
   public void addDay(TimetableDay day) {

@@ -58,7 +58,6 @@ public class TimetableDatabase {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-      Log.d("Database", "Oncreate called");
       db.execSQL(TimetableSchema.Timetable.CREATE_TABLE);
       db.execSQL(TimetableSchema.TimetableWeek.CREATE_TABLE);
       db.execSQL(TimetableSchema.TimetableDay.CREATE_TABLE);

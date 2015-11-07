@@ -75,15 +75,15 @@ public class TimetableSchema {
 
   public static final class SessionGroup {
     public static final String TABLE_NAME = "SessionGroup";
-    public static final String KEY_SESSION_GROUP = "_id";
-    public static final String COL_GROUP = "group_name";
-    public static final String COL_SESSION_ID = "session_id";
+    public static final String KEY_SESSION_GROUP_ID = "_id";
+    public static final String COL_GROUP_NAME = "group_name";
+    public static final String COL_TIMETABLE_SESSION_ID = "session_group_timetable_session_id";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
-        + "(" + KEY_SESSION_GROUP + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-        + COL_GROUP + " TEXT, "
-        + COL_SESSION_ID + " INTEGER, "
-        + "FOREIGN KEY (" + COL_SESSION_ID + ") REFERENCES "
+        + "(" + KEY_SESSION_GROUP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        + COL_GROUP_NAME + " TEXT, "
+        + COL_TIMETABLE_SESSION_ID + " INTEGER, "
+        + "FOREIGN KEY (" + COL_TIMETABLE_SESSION_ID + ") REFERENCES "
         + TimetableSession.TABLE_NAME + "(" + TimetableSession.KEY_TIMETABLE_SESSION_ID + ")"
         + ")";
   }

@@ -23,7 +23,10 @@ public class TimetableDatabase {
   }
 
 
-  // TODO(stephen fox): Don't call getReadableDatabase on MAIN UI THREAD
+  /**
+   * Opens the database for read/write.
+   * @note Do no call on the main UI Thread as this may take some time to open.
+   */
   public void open() {
     try {
       this.dbHelper = new DatabaseTimetableHelper(context);

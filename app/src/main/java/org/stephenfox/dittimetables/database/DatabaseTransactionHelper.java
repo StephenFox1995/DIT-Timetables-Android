@@ -2,6 +2,7 @@ package org.stephenfox.dittimetables.database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.Timetable;
@@ -19,6 +20,7 @@ public class DatabaseTransactionHelper {
 
   private long currentTimetableWeekID;
   ArrayList<Long> currentTimetableDayIDs;
+  ArrayList<Long> currentTimetableSessionIDs;
 
 
   public DatabaseTransactionHelper(TimetableDatabase timetableDatabase) {
@@ -36,6 +38,8 @@ public class DatabaseTransactionHelper {
     insertIntoTimetableWeek();
     insertIntoTimetableDay();
     insertSessions();
+    insertSessionGroups();
+    Log.d("Database", "Database completed");
   }
 
 
@@ -73,7 +77,9 @@ public class DatabaseTransactionHelper {
 
   private void insertSessions() {
     TimetableDay[] days = timetable.getTimetableWeek().getDays();
+    currentTimetableSessionIDs = new ArrayList<>();
     ContentValues contentValues;
+
     int i = 0;
 
     for (TimetableDay day : days) {
@@ -94,9 +100,32 @@ public class DatabaseTransactionHelper {
             session.getSessionLocation());
         contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_TYPE,
             session.getSessionType());
-        sqLiteDatabase.insert(TimetableSchema.TimetableSession.TABLE_NAME, null, contentValues);
+        currentTimetableSessionIDs.add(
+            sqLiteDatabase.insert(TimetableSchema.TimetableSession.TABLE_NAME, null, contentValues));
       }
       i++;
+    }
+  }
+
+
+  private void insertSessionGroups() {
+    TimetableDay[] days = timetable.getTimetableWeek().getDays();
+    ArrayList<TimetableSession> sessions = new ArrayList<>();
+
+    ContentValues contentValues;
+    int i = 0;
+
+    for (TimetableDay day : days) {
+      for (TimetableSession session : day.getSessions()) {
+        for (String group : session.getSessionGroups()) {
+          contentValues = new ContentValues();
+          contentValues.put(TimetableSchema.SessionGroup.COL_GROUP_NAME, group);
+          contentValues.put(TimetableSchema.SessionGroup.COL_TIMETABLE_SESSION_ID,
+              currentTimetableSessionIDs.get(i));
+          sqLiteDatabase.insert(TimetableSchema.SessionGroup.TABLE_NAME, null, contentValues);
+        }
+        i++;
+      }
     }
   }
 }

@@ -62,17 +62,21 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     try {
 
       ArrayList<TimetableSession> sessions = parseJson(data);
-      Timetable timetable = createTimetable(sessions);
+      final Timetable timetable = createTimetable(sessions);
       timetable.setCourseID(getCourseIDForTimetable(data));
 
       pager = (ViewPager) findViewById(R.id.slide);
       pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
 
-      TimetableDatabase database = new TimetableDatabase(this);
-      database.open();
-      database.addTimetable(timetable);
-
-
+      CustomAsyncTask customAsyncTask = new CustomAsyncTask();
+      customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
+        @Override
+        public void execute() {
+          TimetableDatabase database = new TimetableDatabase(getApplicationContext());
+          database.open();
+          database.addTimetable(timetable);
+        }
+      });
     } catch (EmptySessionsArrayException e) {
       Toast.makeText(getApplicationContext(),
           "No timetable available for this course", Toast.LENGTH_SHORT).show();

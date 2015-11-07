@@ -2,9 +2,10 @@ package org.stephenfox.dittimetables.database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
+import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.Timetable;
+import org.stephenfox.dittimetables.timetable.TimetableDay;
 
 import java.util.ArrayList;
 
@@ -55,17 +56,15 @@ public class DatabaseTransactionHelper {
     String[] dayNames = timetable.getTimetableWeek().getDayNames();
     currentTimetableDayIDs = new ArrayList<>(numberOfDays);
 
-    Log.d("number of days", "" + numberOfDays);
-    Log.d("dayNames size", "" + dayNames.length);
 
-//    for (int i = 0; i < numberOfDays; i++) {
-//      TimetableDay day = timetable.getTimetableDay(Day.intToDay(i));
-//
-//      ContentValues contentValues = new ContentValues();
-//      contentValues.put(TimetableSchema.TimetableDay.COL_TIMETABLE_WEEK_ID, currentTimetableWeekID);
-//      contentValues.put(TimetableSchema.TimetableDay.COL_DAY_NAME, dayNames[i]);
-//      currentTimetableDayIDs.add(
-//          sqLiteDatabase.insert(TimetableSchema.TimetableDay.TABLE_NAME, null, contentValues));
-//    }
+    for (int i = 0; i < numberOfDays; i++) {
+      TimetableDay day = timetable.getTimetableDay(Day.intToDay(i));
+
+      ContentValues contentValues = new ContentValues();
+      contentValues.put(TimetableSchema.TimetableDay.COL_TIMETABLE_WEEK_ID, currentTimetableWeekID);
+      contentValues.put(TimetableSchema.TimetableDay.COL_DAY_NAME, dayNames[i]);
+      currentTimetableDayIDs.add(
+          sqLiteDatabase.insert(TimetableSchema.TimetableDay.TABLE_NAME, null, contentValues));
+    }
   }
 }

@@ -1,10 +1,11 @@
 package org.stephenfox.dittimetables.gui;
 
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.database.TimetableSchema;
-import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.CourseDownloader;
+import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.NetworkManager;
 
@@ -34,12 +34,6 @@ public class AvailableCoursesActivity extends ListActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_available_courses);
 
-    Log.d("dbtest", TimetableSchema.Timetable.CREATE_TABLE);
-    Log.d("dbtest", TimetableSchema.TimetableWeek.CREATE_TABLE);
-    Log.d("dbtest", TimetableSchema.TimetableDay.CREATE_TABLE);
-    Log.d("dbtest", TimetableSchema.TimetableSession.CREATE_TABLE);
-    Log.d("dbtest", TimetableSchema.SessionGroup.CREATE_TABLE);
-
     if (NetworkManager.hasInternetConnection(this)) {
       beginDownload();
     } else {
@@ -51,14 +45,13 @@ public class AvailableCoursesActivity extends ListActivity {
 
 
 
-
   private void beginDownload() {
     CourseDownloader cDownloader = new CourseDownloader();
     cDownloader.downloadCourseNamesAndIdentifiers(new CustomAsyncTask.AsyncCallback() {
       @Override
       public void finished(Object data) {
         if (data != null) {
-          String courses = (String)data;
+          String courses = (String) data;
 
           // TODO: Never parse if data is not sufficient.
           courseIdentifiersTitlesHash = beginJSONParsing(courses);
@@ -106,16 +99,27 @@ public class AvailableCoursesActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
-    String courseTitle = textView.getText().toString();
+//    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
+//    String courseTitle = textView.getText().toString();
+//
+//    Log.d("Course title", courseTitle);
+//    Integer key = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+//
+//    Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
+//    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(key));
+//    startActivity(timetableWeekActivityIntent);
+}
 
-    Log.d("Course title", courseTitle);
-    Integer key = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+    private void addFragmentToViewHierarchy() {
+      FragmentManager fragmentManager = getFragmentManager();
+      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-    Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
-    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(key));
-    startActivity(timetableWeekActivityIntent);
-  }
+      SaveCourseFragment fragment = SaveCourseFragment.newInstance();
+
+      fragmentTransaction.add(R.id.save_course_fragment, fragment);
+      fragmentTransaction.commit();
+    }
+
 
 
   private String constructURLForCourseWeek(Integer id) {

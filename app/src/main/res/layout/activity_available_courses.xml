@@ -17,4 +17,11 @@
         android:layout_width="fill_parent"
         android:layout_height="30dp"
         />
+
+    <fragment android:name="org.stephenfox.dittimetables.gui.SaveCourseFragment"
+              android:id="@+id/save_course_fragment"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+    </fragment>
 </RelativeLayout>

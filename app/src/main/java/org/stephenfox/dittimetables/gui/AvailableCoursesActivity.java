@@ -6,9 +6,11 @@ import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +30,6 @@ public class AvailableCoursesActivity extends ListActivity {
 
   private HashMap<Integer, String> courseIdentifiersTitlesHash;
 
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -44,6 +45,27 @@ public class AvailableCoursesActivity extends ListActivity {
   }
 
 
+  /**
+   * Sets up the relevant action listeners that
+   * are needed when the course ids and titles are downloaded.
+   * i.e long press to save a course.
+   */
+  void addRelevantActionListeners() {
+    this.getListView().setLongClickable(true);
+    this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+      @Override
+      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+        TextView textView = (TextView)view.findViewById(R.id.courseTitle);
+        String courseTitle = textView.getText().toString();
+        Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+        addSaveCourseFragmentToViewHierarchy(courseID);
+        return true;
+      }
+    });
+  }
+
 
   private void beginDownload() {
     CourseDownloader cDownloader = new CourseDownloader();
@@ -51,8 +73,8 @@ public class AvailableCoursesActivity extends ListActivity {
       @Override
       public void finished(Object data) {
         if (data != null) {
+          addRelevantActionListeners();
           String courses = (String) data;
-
           // TODO: Never parse if data is not sufficient.
           courseIdentifiersTitlesHash = beginJSONParsing(courses);
           ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersTitlesHash);
@@ -97,28 +119,35 @@ public class AvailableCoursesActivity extends ListActivity {
   }
 
 
+
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
 //    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
 //    String courseTitle = textView.getText().toString();
 //
 //    Log.d("Course title", courseTitle);
-//    Integer key = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+//    Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
 //
 //    Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
-//    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(key));
+//    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(courseID));
 //    startActivity(timetableWeekActivityIntent);
 }
 
-    private void addFragmentToViewHierarchy() {
-      FragmentManager fragmentManager = getFragmentManager();
-      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-      SaveCourseFragment fragment = SaveCourseFragment.newInstance();
+  private void addSaveCourseFragmentToViewHierarchy(int courseCode) {
+    Log.d("ya", "WE GOT IT!");
+    FragmentManager fragmentManager = getFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-      fragmentTransaction.add(R.id.save_course_fragment, fragment);
-      fragmentTransaction.commit();
-    }
+    SaveCourseFragment fragment = SaveCourseFragment.newInstance();
+    fragmentTransaction.add(R.id.save_course_placeholder, fragment);
+
+
+    //Button saveCourseButton = (Button)findViewById(R.id.save_course_button);
+    //Button cancelCourseButton = (Button)findViewById(R.id.cancel_button);
+    fragmentTransaction.commit();
+
+  }
 
 
 

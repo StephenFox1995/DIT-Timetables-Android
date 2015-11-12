@@ -2,9 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:background="@color/white"
+              android:layout_height="match_parent"
+              android:layout_weight="40">
 
-    <LinearLayout android:id="@+id/header"
+
+        <LinearLayout android:id="@+id/header"
                   android:orientation="horizontal"
                   android:background="@color/session_details_view_blue"
                   android:layout_height="wrap_content"
@@ -14,7 +17,8 @@
             android:layout_height="fill_parent"
             android:src="@drawable/save_icon"/>
     </LinearLayout>
-    
+
+
     <LinearLayout
         android:id="@+id/body"
         android:layout_width="fill_parent"
@@ -24,13 +28,42 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Save course to phone"/>
+            android:text="Save course to phone"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Click SAVE to save this course to your phone."/>
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Tip: Saving a course to your phone means you no longer have to wait for it to load."/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:textColor="@color/session_details_view_blue"/>
+
+            <Button
+                android:id="@+id/save_course_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SAVE"
+                android:textColor="@color/session_details_view_blue"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

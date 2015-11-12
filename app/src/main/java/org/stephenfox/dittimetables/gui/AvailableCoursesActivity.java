@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,9 +58,9 @@ public class AvailableCoursesActivity extends ListActivity {
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-        TextView textView = (TextView)view.findViewById(R.id.courseTitle);
+        TextView textView = (TextView) view.findViewById(R.id.courseTitle);
         String courseTitle = textView.getText().toString();
-        Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+        Integer courseID = (Integer) getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
         addSaveCourseFragmentToViewHierarchy(courseID);
         return true;
       }
@@ -122,31 +123,25 @@ public class AvailableCoursesActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-//    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
-//    String courseTitle = textView.getText().toString();
-//
-//    Log.d("Course title", courseTitle);
-//    Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
-//
-//    Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
-//    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(courseID));
-//    startActivity(timetableWeekActivityIntent);
-}
+    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
+    String courseTitle = textView.getText().toString();
+
+    Log.d("Course title", courseTitle);
+    Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+    Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
+    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(courseID));
+    startActivity(timetableWeekActivityIntent);
+  }
 
 
-  private void addSaveCourseFragmentToViewHierarchy(int courseCode) {
-    Log.d("ya", "WE GOT IT!");
+  private void addSaveCourseFragmentToViewHierarchy(int courseID) {
     FragmentManager fragmentManager = getFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
     SaveCourseFragment fragment = SaveCourseFragment.newInstance();
+    fragment.setUrlForCourseToSave(constructURLForCourseWeek(courseID));
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);
-
-
-    //Button saveCourseButton = (Button)findViewById(R.id.save_course_button);
-    //Button cancelCourseButton = (Button)findViewById(R.id.cancel_button);
     fragmentTransaction.commit();
-
   }
 
 

@@ -4,17 +4,29 @@ package org.stephenfox.dittimetables.gui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.database.TimetableDatabase;
+import org.stephenfox.dittimetables.network.CustomAsyncTask;
+import org.stephenfox.dittimetables.network.JsonParser;
+import org.stephenfox.dittimetables.network.WeekDownloader;
+import org.stephenfox.dittimetables.timetable.EmptySessionsArrayException;
+import org.stephenfox.dittimetables.timetable.Timetable;
+import org.stephenfox.dittimetables.timetable.TimetableGenerator;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
+
+import java.util.ArrayList;
 
 public class SaveCourseFragment extends Fragment {
 
   private Button saveCourseButton;
   private Button cancelActionButton;
+  private String urlForCourseToSave;
 
   public static SaveCourseFragment newInstance() {
     SaveCourseFragment fragment = new SaveCourseFragment();
@@ -32,19 +44,84 @@ public class SaveCourseFragment extends Fragment {
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
+    cancelActionButton = (Button)getActivity().findViewById(R.id.cancel_button);
+    saveCourseButton = (Button)getActivity().findViewById(R.id.save_course_button);
+
+    cancelActionButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+        Log.d("clicked", "hghghgh");
+      }
+    });
+
+    saveCourseButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        WeekDownloader weekDownloader = new WeekDownloader();
+        weekDownloader.downloadWeekForCourse(urlForCourseToSave, new CustomAsyncTask.AsyncCallback() {
+          @Override
+          public void finished(Object data) {
+            if (data == null) {
+              // TODO: Tell user couldn't save.
+              return;
+            }
+
+            Timetable timetable = generateTimetableForDatabase((String)data);
+            beginDatabaseTransaction(timetable);
+          }
+        });
+      }
+    });
   }
 
-  public Button getCancelActionButton() {
-    if (this.cancelActionButton == null) {
-      //this.cancelActionButton = (Button)getActivity().findViewById(R.id.cancel_button);
+
+
+  /**
+   * Parses a string into a timetable
+   *
+   * @param data The data used to generate the timetable.
+   * @return Timetable The newly generate Timetable object.
+   */
+  private Timetable generateTimetableForDatabase(String data) {
+    JsonParser jsonParser = new JsonParser();
+    ArrayList<TimetableSession> sessions = jsonParser.parseSessionsForTimetable((String)data);
+    Timetable timetable = null;
+
+    try {
+      TimetableGenerator generator = new TimetableGenerator(sessions);
+      timetable = generator.generateTimetable();
+      Log.d("timetable", timetable.toString());
+    } catch (EmptySessionsArrayException e) {
+      // TODO: Notify user of error.
+      e.printStackTrace();
     }
-    return cancelActionButton;
+    return timetable;
   }
 
-  public Button getSaveCourseButton() {
-    if (saveCourseButton == null) {
-      //this.saveCourseButton = (Button)getActivity().findViewById(R.id.save_course_button);
-    }
-    return saveCourseButton;
+
+  /**
+   * Attempts to insert the timetable to the database.
+   *
+   * @param timetable The timetable to insert into the database.
+   **/
+  private void beginDatabaseTransaction(final Timetable timetable) {
+    CustomAsyncTask customAsyncTask = new CustomAsyncTask();
+    customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
+      @Override
+      public Object execute() {
+        TimetableDatabase database = new TimetableDatabase(getActivity().getApplicationContext());
+        database.open();
+        database.addTimetable(timetable);
+        database.close();
+        return null;
+      }
+    });
   }
+
+
+  public void setUrlForCourseToSave(String urlForCourseToSave) {
+    this.urlForCourseToSave = urlForCourseToSave;
+  }
+
 }

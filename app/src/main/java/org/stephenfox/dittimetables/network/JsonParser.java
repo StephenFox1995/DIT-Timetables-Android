@@ -51,7 +51,7 @@ public class JsonParser {
    * @param data The string to parse.
    * @return An ArrayList of type TimetableSession.
    */
-  public ArrayList<TimetableSession> parseSessionsForWeek(String data) {
+  public ArrayList<TimetableSession> parseSessionsForTimetable(String data) {
 
     ArrayList<TimetableSession> timetableSessions = new ArrayList<>();
 

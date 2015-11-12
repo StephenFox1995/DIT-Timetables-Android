@@ -71,10 +71,11 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
       CustomAsyncTask customAsyncTask = new CustomAsyncTask();
       customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
         @Override
-        public void execute() {
+        public Object execute() {
           TimetableDatabase database = new TimetableDatabase(getApplicationContext());
           database.open();
           database.addTimetable(timetable);
+          return null;
         }
       });
     } catch (EmptySessionsArrayException e) {
@@ -95,7 +96,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
    */
   private ArrayList<TimetableSession> parseJson(String data) {
     JsonParser jsonParser = new JsonParser();
-    return jsonParser.parseSessionsForWeek(data);
+    return jsonParser.parseSessionsForTimetable(data);
   }
 
   private String getCourseIDForTimetable(String data) {

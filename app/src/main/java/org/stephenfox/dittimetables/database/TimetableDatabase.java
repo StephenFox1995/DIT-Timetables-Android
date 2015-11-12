@@ -46,7 +46,6 @@ public class TimetableDatabase {
     transactionHelper.insertTimetable(timetable);
   }
 
-
   public SQLiteDatabase getSqLiteDatabase() {
     return this.sqLiteDatabase;
   }

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.database.DatabaseTransactionStatus;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
@@ -77,7 +78,6 @@ public class SaveCourseFragment extends Fragment {
   }
 
 
-
   /**
    * Parses a string into a timetable
    *
@@ -108,13 +108,24 @@ public class SaveCourseFragment extends Fragment {
    **/
   private void beginDatabaseTransaction(final Timetable timetable) {
     CustomAsyncTask customAsyncTask = new CustomAsyncTask();
-    customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
+
+    customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutableForCallback() {
       @Override
-      public void  execute() {
+      public Object executeAsync() {
         TimetableDatabase database = new TimetableDatabase(getActivity().getApplicationContext());
         database.open();
-        database.addTimetable(timetable);
+        DatabaseTransactionStatus status = database.addTimetable(timetable);
         database.close();
+        return status;
+      }
+    }, new CustomAsyncTask.AsyncCallback() {
+      @Override
+      public void finished(Object data) {
+        if (data == DatabaseTransactionStatus.Success) {
+          Toast.makeText(getActivity().getApplicationContext(),
+              "Timetable successfully save to device!", Toast.LENGTH_SHORT).show();
+          getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+        }
       }
     });
   }

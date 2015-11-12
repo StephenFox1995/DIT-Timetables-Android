@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
@@ -51,7 +52,6 @@ public class SaveCourseFragment extends Fragment {
       @Override
       public void onClick(View v) {
         getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-        Log.d("clicked", "hghghgh");
       }
     });
 
@@ -63,12 +63,13 @@ public class SaveCourseFragment extends Fragment {
           @Override
           public void finished(Object data) {
             if (data == null) {
-              // TODO: Tell user couldn't save.
-              return;
+              Toast.makeText(getActivity().getApplicationContext(),
+                  "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
+              getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+            } else {
+              Timetable timetable = generateTimetableForDatabase((String)data);
+              beginDatabaseTransaction(timetable);
             }
-
-            Timetable timetable = generateTimetableForDatabase((String)data);
-            beginDatabaseTransaction(timetable);
           }
         });
       }
@@ -109,12 +110,11 @@ public class SaveCourseFragment extends Fragment {
     CustomAsyncTask customAsyncTask = new CustomAsyncTask();
     customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
       @Override
-      public Object execute() {
+      public void  execute() {
         TimetableDatabase database = new TimetableDatabase(getActivity().getApplicationContext());
         database.open();
         database.addTimetable(timetable);
         database.close();
-        return null;
       }
     });
   }

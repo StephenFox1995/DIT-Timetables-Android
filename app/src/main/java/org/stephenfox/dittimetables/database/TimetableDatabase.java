@@ -41,9 +41,10 @@ public class TimetableDatabase {
     dbHelper.close();
   }
 
-  public void addTimetable(Timetable timetable) {
+  public DatabaseTransactionStatus addTimetable(Timetable timetable) {
     DatabaseTransactionHelper transactionHelper = new DatabaseTransactionHelper(this);
     transactionHelper.insertTimetable(timetable);
+    return DatabaseTransactionStatus.Success;
   }
 
   public SQLiteDatabase getSqLiteDatabase() {

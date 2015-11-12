@@ -71,11 +71,10 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
       CustomAsyncTask customAsyncTask = new CustomAsyncTask();
       customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
         @Override
-        public Object execute() {
+        public void execute() {
           TimetableDatabase database = new TimetableDatabase(getApplicationContext());
           database.open();
           database.addTimetable(timetable);
-          return null;
         }
       });
     } catch (EmptySessionsArrayException e) {

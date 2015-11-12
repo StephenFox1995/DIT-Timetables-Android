@@ -56,8 +56,6 @@ public class AvailableCoursesActivity extends ListActivity {
     this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-
         TextView textView = (TextView) view.findViewById(R.id.courseTitle);
         String courseTitle = textView.getText().toString();
         Integer courseID = (Integer) getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);

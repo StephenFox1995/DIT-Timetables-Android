@@ -61,7 +61,8 @@ public class CustomAsyncTask extends AsyncTask {
     if (shouldMessageCallback) {
       return executableWithCallback.executeAsync();
     } else {
-      return executable.execute();
+      executable.execute();
+      return null;
     }
   }
 
@@ -110,7 +111,7 @@ public class CustomAsyncTask extends AsyncTask {
     /**
      * This method is called to execute code on a background thread
      */
-    Object execute();
+    void execute();
   }
 
 }

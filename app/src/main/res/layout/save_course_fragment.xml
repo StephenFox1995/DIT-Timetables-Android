@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:background="@color/white"
               android:layout_centerInParent="true"
+              android:layout_gravity="center"
+              android:gravity="center"
               android:layout_height="300dp">
 
 
@@ -23,8 +26,9 @@
 
 
     <LinearLayout
+        android:paddingTop="30dp"
         android:id="@+id/body"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_weight="0.7">
@@ -33,22 +37,26 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Save course to phone"
-            android:layout_gravity="center"
+            android:gravity="center"
             android:textSize="20sp"
             android:textColor="@color/black"/>
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:text="Click SAVE to save this course to your phone."/>
 
         <TextView
+            android:paddingTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
             android:text="Tip: Saving a course to your phone means you no longer have to wait for it to load."/>
 
         <LinearLayout
+            android:paddingTop="30dp"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
@@ -73,5 +81,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

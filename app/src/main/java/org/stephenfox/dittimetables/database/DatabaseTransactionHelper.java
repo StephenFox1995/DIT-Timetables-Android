@@ -32,7 +32,7 @@ public class DatabaseTransactionHelper {
   /**
    * Inserts a Timetable into the database.
    */
-  public void insertTimetable(Timetable timetable) {
+  public DatabaseTransactionStatus insertTimetable(Timetable timetable) {
     this.timetable = timetable;
     insertIntoTimetable();
     insertIntoTimetableWeek();
@@ -40,6 +40,7 @@ public class DatabaseTransactionHelper {
     insertSessions();
     insertSessionGroups();
     Log.d("Database", "Database completed");
+    return DatabaseTransactionStatus.Success;
   }
 
 

@@ -4,7 +4,6 @@ package org.stephenfox.dittimetables.gui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
-import org.stephenfox.dittimetables.timetable.EmptySessionsArrayException;
+import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
@@ -68,8 +67,16 @@ public class SaveCourseFragment extends Fragment {
                   "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
               getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
             } else {
-              Timetable timetable = generateTimetableForDatabase((String)data);
-              beginDatabaseTransaction(timetable);
+
+              try {
+                Timetable timetable = generateTimetableForDatabase((String)data);
+                beginDatabaseTransaction(timetable);
+              }
+              catch (InvalidTimetableDataException e) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                    "Timetable not available for course.", Toast.LENGTH_SHORT).show();
+                getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+              }
             }
           }
         });
@@ -84,31 +91,26 @@ public class SaveCourseFragment extends Fragment {
    * @param data The data used to generate the timetable.
    * @return Timetable The newly generate Timetable object.
    */
-  private Timetable generateTimetableForDatabase(String data) {
+  private Timetable generateTimetableForDatabase(String data) throws InvalidTimetableDataException {
     JsonParser jsonParser = new JsonParser();
-    ArrayList<TimetableSession> sessions = jsonParser.parseSessionsForTimetable((String)data);
-    Timetable timetable = null;
+    ArrayList<TimetableSession> sessions = jsonParser.parseSessionsForTimetable(data);
+    Timetable timetable;
 
-    try {
-      TimetableGenerator generator = new TimetableGenerator(sessions);
-      timetable = generator.generateTimetable();
-      Log.d("timetable", timetable.toString());
-    } catch (EmptySessionsArrayException e) {
-      // TODO: Notify user of error.
-      e.printStackTrace();
-    }
+    TimetableGenerator generator = new TimetableGenerator(sessions);
+    timetable = generator.generateTimetable();
     return timetable;
   }
 
 
   /**
    * Attempts to insert the timetable to the database.
+   * This method will notify the user via a Toast if the
+   * insertion was successful.
    *
    * @param timetable The timetable to insert into the database.
    **/
   private void beginDatabaseTransaction(final Timetable timetable) {
     CustomAsyncTask customAsyncTask = new CustomAsyncTask();
-
     customAsyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutableForCallback() {
       @Override
       public Object executeAsync() {
@@ -134,5 +136,4 @@ public class SaveCourseFragment extends Fragment {
   public void setUrlForCourseToSave(String urlForCourseToSave) {
     this.urlForCourseToSave = urlForCourseToSave;
   }
-
 }

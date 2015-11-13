@@ -11,12 +11,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.timetable.Day;
-import org.stephenfox.dittimetables.timetable.EmptySessionsArrayException;
+import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
@@ -60,24 +59,14 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
    */
   void setup(String data) {
     try {
-
       ArrayList<TimetableSession> sessions = parseJson(data);
-      final Timetable timetable = createTimetable(sessions);
+      Timetable timetable = createTimetable(sessions);
       timetable.setCourseID(getCourseIDForTimetable(data));
 
       pager = (ViewPager) findViewById(R.id.slide);
       pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
 
-      CustomAsyncTask customAsyncTask = new CustomAsyncTask();
-      customAsyncTask.doTask(new CustomAsyncTask.AsyncExecutable() {
-        @Override
-        public void execute() {
-          TimetableDatabase database = new TimetableDatabase(getApplicationContext());
-          database.open();
-          database.addTimetable(timetable);
-        }
-      });
-    } catch (EmptySessionsArrayException e) {
+    } catch (InvalidTimetableDataException e) {
       Toast.makeText(getApplicationContext(),
           "No timetable available for this course", Toast.LENGTH_SHORT).show();
       this.finish();
@@ -115,7 +104,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
    * @throws EmptySessionsArrayException
    */
   private Timetable createTimetable(ArrayList<TimetableSession> sessions)
-      throws EmptySessionsArrayException {
+      throws InvalidTimetableDataException {
     TimetableGenerator generator = new TimetableGenerator(sessions);
     return generator.generateTimetable();
   }

@@ -16,13 +16,13 @@ public class TimetableGenerator {
    * Instantiates a new instance with an array of sessions
    *
    * @param sessions The session which will be used to generate a timetable.
-   * @throws EmptySessionsArrayException
+   * @throws InvalidTimetableDataException
    */
   public TimetableGenerator(ArrayList<TimetableSession> sessions)
-      throws EmptySessionsArrayException {
+      throws InvalidTimetableDataException {
     if (sessions.size() == 0) {
       throw new
-          EmptySessionsArrayException("Cannot generate Timetable, reason: sessions array empty");
+        InvalidTimetableDataException("Cannot generate Timetable, reason: sessions array empty");
     }
     this.sessions = sessions;
   }
@@ -43,6 +43,7 @@ public class TimetableGenerator {
 
     return new Timetable(timetableWeek);
   }
+
 
 
   /**

@@ -17,6 +17,8 @@ public class Timetable {
     Log.d("12345:", timetableWeek.toString());
   }
 
+
+
   public void setTimetableWeek(TimetableWeek timetableWeek) {
     this.timetableWeek = timetableWeek;
   }
@@ -29,9 +31,7 @@ public class Timetable {
     return timetableWeek;
   }
 
-
   public TimetableDay getTimetableDay(Day day) { return timetableWeek.getDay(day); }
-
 
   public int getDayCount() { return timetableWeek.getNumberOfDays(); }
 

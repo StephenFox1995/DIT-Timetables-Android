@@ -7,7 +7,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +123,6 @@ public class AvailableCoursesActivity extends ListActivity {
     TextView textView = (TextView)v.findViewById(R.id.courseTitle);
     String courseTitle = textView.getText().toString();
 
-    Log.d("Course title", courseTitle);
     Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
     Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
     timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(courseID));

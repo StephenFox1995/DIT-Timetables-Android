@@ -155,6 +155,7 @@ public class DatabaseTransactionHelper {
         long result =
             sqLiteDatabase.insert(TimetableSchema.TimetableSession.TABLE_NAME, null, contentValues);
         currentTimetableSessionIDs.add(result);
+        results.add(result);
       }
       i++;
     }
@@ -164,7 +165,6 @@ public class DatabaseTransactionHelper {
 
   private boolean insertSessionGroups() {
     TimetableDay[] days = timetable.getTimetableWeek().getDays();
-    ArrayList<TimetableSession> sessions = new ArrayList<>();
 
     ContentValues contentValues;
     ArrayList<Long> results = new ArrayList<>();

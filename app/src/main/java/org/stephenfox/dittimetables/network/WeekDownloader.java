@@ -20,7 +20,6 @@ public class WeekDownloader extends HttpDownloader {
    */
   public void downloadWeekForCourse(final String url, CustomAsyncTask.AsyncCallback callback) {
     CustomAsyncTask asyncTask = new CustomAsyncTask();
-
     asyncTask.doCallbackTask(new CustomAsyncTask.AsyncExecutableForCallback() {
       @Override
       public String executeAsync() {

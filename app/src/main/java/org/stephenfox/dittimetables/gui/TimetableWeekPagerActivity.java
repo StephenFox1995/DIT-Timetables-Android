@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
@@ -89,7 +88,6 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
 
   private String getCourseIDForTimetable(String data) {
     JsonParser jsonParser = new JsonParser();
-    Log.d("ID", jsonParser.parseCourseID(data));
     return jsonParser.parseCourseID(data);
   }
 
@@ -101,7 +99,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
    *                 to create the Timetable.
    *
    * @return A new Timetable instance
-   * @throws EmptySessionsArrayException
+   * @throws InvalidTimetableDataException
    */
   private Timetable createTimetable(ArrayList<TimetableSession> sessions)
       throws InvalidTimetableDataException {

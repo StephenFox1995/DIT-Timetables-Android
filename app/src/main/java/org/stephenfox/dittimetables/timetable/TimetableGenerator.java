@@ -22,7 +22,7 @@ public class TimetableGenerator {
       throws InvalidTimetableDataException {
     if (sessions.size() == 0) {
       throw new
-        InvalidTimetableDataException("Cannot generate Timetable, reason: sessions array empty");
+        InvalidTimetableDataException("Cannot generate Timetable, reason: invalid data.");
     }
     this.sessions = sessions;
   }
@@ -123,7 +123,6 @@ public class TimetableGenerator {
    */
   private TimetableDay[] checkAndRemoveEmptyDays(TimetableDay[] days) {
     ArrayList<TimetableDay> _days = new ArrayList<>();
-
     for (TimetableDay day : days) {
       if (day.containsSessions()) {
         _days.add(day);

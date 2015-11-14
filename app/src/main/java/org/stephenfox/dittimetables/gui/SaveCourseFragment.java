@@ -23,7 +23,7 @@ import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 import java.util.ArrayList;
 
-public class SaveCourseFragment extends Fragment {
+public class SaveCourseFragment extends Fragment implements View.OnClickListener {
 
   private Button saveCourseButton;
   private Button cancelActionButton;
@@ -54,35 +54,35 @@ public class SaveCourseFragment extends Fragment {
         getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
       }
     });
+    saveCourseButton.setOnClickListener(this);
+  }
 
-    saveCourseButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        WeekDownloader weekDownloader = new WeekDownloader();
-        weekDownloader.downloadWeekForCourse(urlForCourseToSave, new CustomAsyncTask.AsyncCallback() {
-          @Override
-          public void finished(Object data) {
-            if (data == null) {
+
+  @Override
+  public void onClick(View v) {
+      WeekDownloader weekDownloader = new WeekDownloader();
+      weekDownloader.downloadWeekForCourse(urlForCourseToSave, new CustomAsyncTask.AsyncCallback() {
+        @Override
+        public void finished(Object data) {
+          if (data == null) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
+            getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+          } else {
+
+            try {
+              Timetable timetable = generateTimetableForDatabase((String)data);
+              beginDatabaseTransaction(timetable);
+            }
+            catch (InvalidTimetableDataException e) {
               Toast.makeText(getActivity().getApplicationContext(),
-                  "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
+                  "Timetable not available for course.", Toast.LENGTH_SHORT).show();
               getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-            } else {
-
-              try {
-                Timetable timetable = generateTimetableForDatabase((String)data);
-                beginDatabaseTransaction(timetable);
-              }
-              catch (InvalidTimetableDataException e) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                    "Timetable not available for course.", Toast.LENGTH_SHORT).show();
-                getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-              }
             }
           }
-        });
-      }
-    });
-  }
+        }
+      });
+    }
 
 
   /**
@@ -90,6 +90,9 @@ public class SaveCourseFragment extends Fragment {
    *
    * @param data The data used to generate the timetable.
    * @return Timetable The newly generate Timetable object.
+   *
+   * @throws InvalidTimetableDataException this exception will be thrown if the
+   *         the data used to generate the timetable is invalid.
    */
   private Timetable generateTimetableForDatabase(String data) throws InvalidTimetableDataException {
     JsonParser jsonParser = new JsonParser();
@@ -100,6 +103,7 @@ public class SaveCourseFragment extends Fragment {
     timetable = generator.generateTimetable();
     return timetable;
   }
+
 
 
   /**

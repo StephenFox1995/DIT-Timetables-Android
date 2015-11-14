@@ -41,11 +41,19 @@ public class TimetableDatabase {
     dbHelper.close();
   }
 
+
+  /**
+   * Attempts to insert a #{@link Timetable} object into the database.
+   *
+   * @param timetable  The timetable to insert into the database.
+   * @return A status of .Failed or .Success upon success or failure of the transaction.
+   **/
   public DatabaseTransactionStatus addTimetable(Timetable timetable) {
     DatabaseTransactionHelper transactionHelper = new DatabaseTransactionHelper(this);
-    transactionHelper.insertTimetable(timetable);
-    return DatabaseTransactionStatus.Success;
+    DatabaseTransactionStatus status = transactionHelper.insertTimetable(timetable);
+    return status;
   }
+
 
   public SQLiteDatabase getSqLiteDatabase() {
     return this.sqLiteDatabase;

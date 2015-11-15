@@ -3,7 +3,6 @@ package org.stephenfox.dittimetables.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
@@ -28,7 +27,7 @@ public class DatabaseSelectionHelper {
         "TimetableSession.end_time, " +
         "TimetableSession.session_master, " +
         "TimetableSession.location, " +
-        "TimetableSession.session_name," +
+        "TimetableSession.session_name, " +
         "TimetableSession.type, " +
         "TimetableSession.location, " +
         "SessionGroup.group_name " +
@@ -50,12 +49,13 @@ public class DatabaseSelectionHelper {
           String sessionMaster = cursor.getString(cursor.getColumnIndex("session_master"));
           String location = cursor.getString(cursor.getColumnIndex("location"));
           String type = cursor.getString(cursor.getColumnIndex("type"));
+          String sessionGroup = cursor.getString(cursor.getColumnIndex("session_group"));
 
           TimetableSession session = new TimetableSession(d,
               startTime,
               endTime,
               sessionName,
-              new String[]{"a,b "},
+              new String[]{sessionGroup},
               sessionMaster,
               location,
               type);
@@ -93,7 +93,7 @@ public class DatabaseSelectionHelper {
 
   /**
    * Use this method to see if another timetable can be added to the database as the app
-   * only allows for one timetbale to be saved in the database at a time.
+   * only allows for one timetable to be saved in the database at a time.
    *
    * @return True if no timetable is already saved to the user's device.
    *         False if not allowed add timetable
@@ -119,11 +119,6 @@ public class DatabaseSelectionHelper {
    */
   public boolean timetableAlreadyExists(String courseCode) {
     String selection = "SELECT * FROM Timetable WHERE Timetable.course_code = ?";
-    if (sqLiteDatabase == null) {
-      Log.d("SF", "SQLitedb is null");
-    } else {
-      Log.d("SF", "SQLiteDB is not null");
-    }
     Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{courseCode});
 
     if (cursor.getCount() != 0) {
@@ -133,6 +128,28 @@ public class DatabaseSelectionHelper {
       cursor.close();
       return false;
     }
+  }
+
+  /**
+   * Returns all the possible groups from a timetable.
+   * @return All the groups for a timetable.
+   * */
+  public String[] selectAllGroups() {
+    String selection = "SELECT DISTINCT SessionGroup.group_name " +
+        "FROM SessionGroup " +
+        "JOIN TimetableSession ON SessionGroup.session_group_timetable_session_id = TimetableSession._id " +
+        "WHERE SessionGroup.group_name != \"\"";
+    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{});
+
+    String[] groups = new String[cursor.getCount()];
+
+    if (cursor.getCount() != 0) {
+      for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+        groups[cursor.getPosition()] = cursor.getString(cursor.getColumnIndex("group_name"));
+      }
+    }
+    cursor.close();
+    return groups;
   }
 
 }

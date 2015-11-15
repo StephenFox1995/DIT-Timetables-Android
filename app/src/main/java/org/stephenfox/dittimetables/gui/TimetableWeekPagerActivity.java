@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
@@ -58,6 +60,12 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
   void setup(Timetable timetable) {
     pager = (ViewPager) findViewById(R.id.slide);
     pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
+
+    TimetableDatabase database = new TimetableDatabase(this);
+    String[] groups = database.getGroups();
+    for(String s : groups) {
+      Log.d("SF", s);
+    }
   }
 
 

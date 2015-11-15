@@ -83,6 +83,15 @@ public class TimetableDatabase {
   }
 
 
+  public String[] getGroups() {
+    open();
+    DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
+    String[] groups = selectionHelper.selectAllGroups();
+    close();
+    return groups;
+  }
+
+
 
   public SQLiteDatabase getSqLiteDatabase() {
     return this.sqLiteDatabase;

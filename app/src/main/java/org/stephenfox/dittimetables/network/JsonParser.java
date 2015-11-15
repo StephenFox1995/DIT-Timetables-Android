@@ -96,7 +96,6 @@ public class JsonParser {
 
       for (int i = 0; i < 1; i++) {
         JSONObject o = jsonArray.getJSONObject(i);
-
         courseID = o.getString("course_ID");
       }
     } catch (JSONException e) {

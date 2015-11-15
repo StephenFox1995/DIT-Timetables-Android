@@ -29,6 +29,9 @@ public class DatabaseTransactionHelper {
 
   /**
    * Inserts a Timetable into the database.
+   *
+   * @param timetable The timetable to insert to the database.
+   * @return A status of .Failed or .Success upon success or failure of the transaction
    */
   public DatabaseTransactionStatus insertTimetable(Timetable timetable) {
     this.timetable = timetable;
@@ -90,14 +93,14 @@ public class DatabaseTransactionHelper {
 
   private boolean insertIntoTimetable() {
     ContentValues contentValues = new ContentValues();
-    contentValues.put(TimetableSchema.Timetable.KEY_TIMETABLE_ID, timetable.getCourseID());
+    contentValues.put(TimetableSchema.Timetable.KEY_TIMETABLE_ID, timetable.getCourseCode());
     long result = sqLiteDatabase.insert(TimetableSchema.Timetable.TABLE_NAME, null, contentValues);
     return insertionStatus(result);
   }
 
   private boolean insertIntoTimetableWeek() {
     ContentValues contentValues = new ContentValues();
-    contentValues.put(TimetableSchema.TimetableWeek.COL_TIMETABLE_ID, timetable.getCourseID());
+    contentValues.put(TimetableSchema.TimetableWeek.COL_TIMETABLE_ID, timetable.getCourseCode());
     currentTimetableWeekID =
         sqLiteDatabase.insert(TimetableSchema.TimetableWeek.TABLE_NAME, null, contentValues);
     return insertionStatus(currentTimetableWeekID);

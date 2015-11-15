@@ -50,9 +50,16 @@ public class TimetableDatabase {
    **/
   public DatabaseTransactionStatus addTimetable(Timetable timetable) {
     DatabaseTransactionHelper transactionHelper = new DatabaseTransactionHelper(this);
-    DatabaseTransactionStatus status = transactionHelper.insertTimetable(timetable);
-    return status;
+    return transactionHelper.insertTimetable(timetable);
+
   }
+
+
+  public boolean timetableExists(String courseCode) {
+    DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
+    return selectionHelper.timetableAlreadyExists(courseCode);
+  }
+
 
 
   public SQLiteDatabase getSqLiteDatabase() {

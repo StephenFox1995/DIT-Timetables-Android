@@ -20,20 +20,25 @@ import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
+import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 
 import java.util.ArrayList;
 
 public class SaveCourseFragment extends Fragment implements View.OnClickListener {
 
-  private Button saveCourseButton;
-  private Button cancelActionButton;
-  private String urlForCourseToSave;
+  private String courseID;
+  private String courseCode;
 
-  public static SaveCourseFragment newInstance() {
+  public static SaveCourseFragment newInstance(String courseID, String courseCode) {
     SaveCourseFragment fragment = new SaveCourseFragment();
-    fragment.setArguments(new Bundle());
+    Bundle args = new Bundle();
+    args.putString("courseID", courseID);
+    args.putString("courseCode", courseCode);
+    fragment.setArguments(args);
+
     return fragment;
   }
+
 
   @Nullable
   @Override
@@ -45,8 +50,12 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    cancelActionButton = (Button)getActivity().findViewById(R.id.cancel_button);
-    saveCourseButton = (Button)getActivity().findViewById(R.id.save_course_button);
+    Bundle args = new Bundle();
+    this.courseID = args.getString("courseID");
+    this.courseCode = args.getString("courseCode");
+
+    Button cancelActionButton = (Button) getActivity().findViewById(R.id.cancel_button);
+    Button saveCourseButton = (Button) getActivity().findViewById(R.id.save_course_button);
 
     cancelActionButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -60,29 +69,30 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
 
   @Override
   public void onClick(View v) {
-      WeekDownloader weekDownloader = new WeekDownloader();
-      weekDownloader.downloadWeekForCourse(urlForCourseToSave, new CustomAsyncTask.AsyncCallback() {
-        @Override
-        public void finished(Object data) {
-          if (data == null) {
-            Toast.makeText(getActivity().getApplicationContext(),
-                "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
-            getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-          } else {
+    String url = TimetableSourceRetriever.constructURLToDownloadTimetable(Integer.parseInt(courseID));
 
-            try {
-              Timetable timetable = generateTimetableForDatabase((String)data);
-              beginDatabaseTransaction(timetable);
-            }
-            catch (InvalidTimetableDataException e) {
-              Toast.makeText(getActivity().getApplicationContext(),
-                  "Timetable not available for course.", Toast.LENGTH_SHORT).show();
-              getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-            }
+    WeekDownloader weekDownloader = new WeekDownloader();
+    weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
+      @Override
+      public void finished(Object data) {
+        if (data == null) {
+          Toast.makeText(getActivity().getApplicationContext(),
+              "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
+          getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+        } else {
+          try {
+            Timetable timetable = generateTimetableForDatabase((String)data);
+            beginDatabaseTransaction(timetable);
+          }
+          catch (InvalidTimetableDataException e) {
+            Toast.makeText(getActivity().getApplicationContext(),
+                "Timetable not available for course.", Toast.LENGTH_SHORT).show();
+            getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
           }
         }
-      });
-    }
+      }
+    });
+  }
 
 
   /**
@@ -100,7 +110,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
     Timetable timetable;
 
     TimetableGenerator generator = new TimetableGenerator(sessions);
-    timetable = generator.generateTimetable();
+    timetable = generator.generateTimetable(courseCode);
     return timetable;
   }
 
@@ -130,14 +140,12 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
         if (data == DatabaseTransactionStatus.Success) {
           Toast.makeText(getActivity().getApplicationContext(),
               "Timetable successfully save to device!", Toast.LENGTH_SHORT).show();
-          getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+        } else {
+          Toast.makeText(getActivity().getApplicationContext(),
+              "There was an error saving, please try again.", Toast.LENGTH_SHORT).show();
         }
+        getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
       }
     });
-  }
-
-
-  public void setUrlForCourseToSave(String urlForCourseToSave) {
-    this.urlForCourseToSave = urlForCourseToSave;
   }
 }

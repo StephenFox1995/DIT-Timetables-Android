@@ -28,20 +28,24 @@ public class TimetableGenerator {
   }
 
 
+  public TimetableGenerator(TimetableAdapter timetableAdapter) {
+
+  }
+
   /**
    * Generates a new Timetable object from the TimetableWeek instance
    * that was constructed with this class.
    *
    * @return Timetable A Timetable for a given week.
    */
-  public Timetable generateTimetable() {
+  public Timetable generateTimetable(String courseCode) {
     TimetableDay[] timetableDays = createDayArray();
     addSessionsToDays(timetableDays);
 
     TimetableDay[] days = checkAndRemoveEmptyDays(timetableDays);
     TimetableWeek timetableWeek = createWeek(days);
 
-    return new Timetable(timetableWeek);
+    return new Timetable(timetableWeek, courseCode);
   }
 
 

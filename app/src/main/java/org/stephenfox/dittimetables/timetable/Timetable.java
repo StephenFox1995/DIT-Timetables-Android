@@ -1,20 +1,18 @@
 package org.stephenfox.dittimetables.timetable;
 
 
-import android.util.Log;
-
 /**
  * A class that manages a Timetable.
  */
 public class Timetable {
 
   private TimetableWeek timetableWeek;
-  private String courseID;
+  private String courseCode;
 
 
-  public Timetable(TimetableWeek timetableWeek) {
+  public Timetable(TimetableWeek timetableWeek, String courseCode) {
     this.timetableWeek = timetableWeek;
-    Log.d("12345:", timetableWeek.toString());
+    this.courseCode = courseCode;
   }
 
 
@@ -23,8 +21,8 @@ public class Timetable {
     this.timetableWeek = timetableWeek;
   }
 
-  public void setCourseID(String courseID) {
-    this.courseID = courseID;
+  public void setCourseCode(String courseCode) {
+    this.courseCode = courseCode;
   }
 
   public TimetableWeek getTimetableWeek() {
@@ -35,8 +33,8 @@ public class Timetable {
 
   public int getDayCount() { return timetableWeek.getNumberOfDays(); }
 
-  public String getCourseID() {
-    return courseID;
+  public String getCourseCode() {
+    return courseCode;
   }
 
   @Override

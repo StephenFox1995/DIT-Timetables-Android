@@ -30,4 +30,19 @@ public class DatabaseSelectionHelper {
         "WHERE TimetableDay.day_name = ?;";
     Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{day.toString()});
   }
+
+
+  public boolean timetableAlreadyExists(String courseCode) {
+    String selection = "SELECT * FROM Timetable \n" +
+        "WHERE Timetable._id = ?;";
+    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[] {courseCode});
+
+    if (cursor != null) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
 }

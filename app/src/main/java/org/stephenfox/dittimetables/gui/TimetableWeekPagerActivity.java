@@ -7,17 +7,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
-import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
-import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
+import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 
 import java.util.ArrayList;
 
@@ -34,42 +33,42 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_screen_slide);
+    setContentView(R.layout.timetable_week_pager_activity);
 
     Intent d = getIntent();
-    String url = d.getStringExtra("url");
-
-    WeekDownloader weekDownloader = new WeekDownloader();
-    weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
-      @Override
-      public void finished(Object data) {
-        setup((String)data);
-      }
-    });
-  }
+    String courseCode = d.getStringExtra("courseCode");
+    String courseID = d.getStringExtra("courseID");
+    Log.d("SFTA", "courseID: " + courseID);
+    Log.d("SFTA", "courseCode: " + courseCode);
 
 
-  /**
-   * Sets up the activity.
-   * Note: Once the http data is downloaded from {@link #onCreate(Bundle)}
-   * this method must be invoked to set this activity up correctly.
-   *
-   * @param data The http data.
-   */
-  void setup(String data) {
+    TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
     try {
-      ArrayList<TimetableSession> sessions = parseJson(data);
-      Timetable timetable = createTimetable(sessions);
-      timetable.setCourseID(getCourseIDForTimetable(data));
-
-      pager = (ViewPager) findViewById(R.id.slide);
-      pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
-
-    } catch (InvalidTimetableDataException e) {
+      sourceRetriever.fetchTimetable(courseCode, courseID,
+          new TimetableSourceRetriever.TimetableRetrieverCallback() {
+        @Override
+        public void timetableRetrieved(Timetable timetable) {
+          setup(timetable);
+        }
+      });
+    }
+    catch (InvalidTimetableDataException e) {
       Toast.makeText(getApplicationContext(),
           "No timetable available for this course", Toast.LENGTH_SHORT).show();
       this.finish();
     }
+
+  }
+
+
+  /**
+   * Sets up the activity, with the appropriate timetable.
+   *
+   * @param timetable The timetable to set up the activity with.
+   */
+  void setup(Timetable timetable) {
+    pager = (ViewPager) findViewById(R.id.slide);
+    pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
   }
 
 
@@ -86,26 +85,6 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     return jsonParser.parseSessionsForTimetable(data);
   }
 
-  private String getCourseIDForTimetable(String data) {
-    JsonParser jsonParser = new JsonParser();
-    return jsonParser.parseCourseID(data);
-  }
-
-
-  /**
-   * Helper method to create a Timetable.
-   *
-   * @param sessions An array of TimetableSession's for which
-   *                 to create the Timetable.
-   *
-   * @return A new Timetable instance
-   * @throws InvalidTimetableDataException
-   */
-  private Timetable createTimetable(ArrayList<TimetableSession> sessions)
-      throws InvalidTimetableDataException {
-    TimetableGenerator generator = new TimetableGenerator(sessions);
-    return generator.generateTimetable();
-  }
 
 
   private class SliderAdapter extends FragmentStatePagerAdapter {

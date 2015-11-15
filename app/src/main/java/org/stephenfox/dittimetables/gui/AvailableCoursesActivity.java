@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class AvailableCoursesActivity extends ListActivity {
 
-  private HashMap<Integer, String> courseIdentifiersTitlesHash;
+  private HashMap<Integer, String> courseIdentifiersToCourseCodesHash;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,9 @@ public class AvailableCoursesActivity extends ListActivity {
     this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView textView = (TextView) view.findViewById(R.id.courseTitle);
+        TextView textView = (TextView) view.findViewById(R.id.courseCode);
         String courseTitle = textView.getText().toString();
-        Integer courseID = (Integer) getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+        Integer courseID = (Integer) getKeyFromValue(courseIdentifiersToCourseCodesHash, courseTitle);
         addSaveCourseFragmentToViewHierarchy(courseID);
         return true;
       }
@@ -74,8 +74,8 @@ public class AvailableCoursesActivity extends ListActivity {
           addRelevantActionListeners();
           String courses = (String) data;
           // TODO: Never parse if data is not sufficient.
-          courseIdentifiersTitlesHash = beginJSONParsing(courses);
-          ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersTitlesHash);
+          courseIdentifiersToCourseCodesHash = beginJSONParsing(courses);
+          ArrayList<String> courseTitles = formatDataForAdapter(courseIdentifiersToCourseCodesHash);
           setListAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
         }
       }
@@ -90,7 +90,7 @@ public class AvailableCoursesActivity extends ListActivity {
    * @param data The JSON data.
    *
    * @return A HashMap with a key value pair of <Integer, String>
-   *         The key is the course id and the value is the course title.
+   *         The key is the course id and the value is the course code.
    */
   private HashMap<Integer, String> beginJSONParsing(String data) {
     JsonParser jsonParser = new JsonParser();
@@ -108,24 +108,27 @@ public class AvailableCoursesActivity extends ListActivity {
    *         format that can be given to the CourseListAdapter.
    */
   private ArrayList<String> formatDataForAdapter(HashMap<Integer, String> data) {
-    ArrayList<String> courseNames = new ArrayList<>();
+    ArrayList<String> courseCodes = new ArrayList<>();
 
     for (Integer key : data.keySet()) {
-      courseNames.add(data.get(key));
+      courseCodes.add(data.get(key));
     }
-    return courseNames;
+    return courseCodes;
   }
 
 
 
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    TextView textView = (TextView)v.findViewById(R.id.courseTitle);
-    String courseTitle = textView.getText().toString();
+    TextView courseCodeTextView = (TextView)v.findViewById(R.id.courseCode);
+    String courseCode = courseCodeTextView.getText().toString();
 
-    Integer courseID = (Integer)getKeyFromValue(courseIdentifiersTitlesHash, courseTitle);
+    Integer courseID = (Integer)getKeyFromValue(courseIdentifiersToCourseCodesHash, courseCode);
+
     Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
-    timetableWeekActivityIntent.putExtra("url", constructURLForCourseWeek(courseID));
+    timetableWeekActivityIntent.putExtra("courseCode", courseCode);
+    timetableWeekActivityIntent.putExtra("courseID", Integer.toString(courseID));
+
     startActivity(timetableWeekActivityIntent);
   }
 
@@ -134,17 +137,15 @@ public class AvailableCoursesActivity extends ListActivity {
     FragmentManager fragmentManager = getFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-    SaveCourseFragment fragment = SaveCourseFragment.newInstance();
-    fragment.setUrlForCourseToSave(constructURLForCourseWeek(courseID));
+    String _courseID = Integer.toString(courseID);
+    String courseCode = courseIdentifiersToCourseCodesHash.get(courseID);
+    SaveCourseFragment fragment = SaveCourseFragment.newInstance(_courseID, courseCode);
+
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);
     fragmentTransaction.commit();
   }
 
 
-
-  private String constructURLForCourseWeek(Integer id) {
-    return "http://timothybarnard.org/timetables/classes.php?courseID=" + id + "&semester=1";
-  }
 
 
   /**
@@ -200,7 +201,7 @@ public class AvailableCoursesActivity extends ListActivity {
         row = inflater.inflate(R.layout.course_row, null);
       }
 
-      TextView courseTitle = (TextView) row.findViewById(R.id.courseTitle);
+      TextView courseTitle = (TextView) row.findViewById(R.id.courseCode);
       courseTitle.setText(courseTitles.get(position));
 
 

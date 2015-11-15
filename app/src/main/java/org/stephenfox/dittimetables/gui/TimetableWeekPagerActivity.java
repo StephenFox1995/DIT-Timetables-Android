@@ -7,13 +7,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.timetable.Day;
-import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
@@ -38,26 +36,21 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     Intent d = getIntent();
     String courseCode = d.getStringExtra("courseCode");
     String courseID = d.getStringExtra("courseID");
-    Log.d("SFTA", "courseID: " + courseID);
-    Log.d("SFTA", "courseCode: " + courseCode);
-
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
-    try {
-      sourceRetriever.fetchTimetable(courseCode, courseID,
-          new TimetableSourceRetriever.TimetableRetrieverCallback() {
-        @Override
-        public void timetableRetrieved(Timetable timetable) {
-          setup(timetable);
-        }
-      });
-    }
-    catch (InvalidTimetableDataException e) {
-      Toast.makeText(getApplicationContext(),
-          "No timetable available for this course", Toast.LENGTH_SHORT).show();
-      this.finish();
-    }
-
+    sourceRetriever.fetchTimetable(courseCode, courseID,
+        new TimetableSourceRetriever.TimetableRetrieverCallback() {
+          @Override
+          public void timetableRetrieved(Timetable timetable) {
+            if (timetable != null) {
+              setup(timetable);
+            } else {
+              Toast.makeText(getApplicationContext(),
+                  "No timetable available for this course", Toast.LENGTH_SHORT).show();
+              TimetableWeekPagerActivity.this.finish();
+            }
+          }
+        });
   }
 
 

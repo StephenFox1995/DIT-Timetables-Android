@@ -1,7 +1,6 @@
 package org.stephenfox.dittimetables.timetable;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
@@ -37,8 +36,8 @@ public class TimetableSourceRetriever {
    *                                       fetched from the server and their is insufficient data to
    *                                       constrict the timetable.
    **/
-  public void fetchTimetable(String courseCode, String courseID, TimetableRetrieverCallback callback)
-      throws InvalidTimetableDataException {
+  public void
+  fetchTimetable(String courseCode, String courseID, TimetableRetrieverCallback callback) {
 
     this.courseCode = courseCode;
     this.courseID = courseID;
@@ -51,7 +50,6 @@ public class TimetableSourceRetriever {
       // Generate a timetable from database.
     //} else {
       String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
-      Log.d("SF", "URL: " + url);
       fetchTimetableFromServer(url, callback);
    // }
   }

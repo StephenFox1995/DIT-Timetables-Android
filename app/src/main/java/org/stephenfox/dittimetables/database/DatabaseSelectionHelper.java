@@ -3,6 +3,7 @@ package org.stephenfox.dittimetables.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
@@ -20,8 +21,7 @@ public class DatabaseSelectionHelper {
   }
 
 
-  public TimetableSession[] selectSessions() {
-
+  public TimetableSession[] selectSessions(String courseCode) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
     String selection = "SELECT TimetableSession.session_name, " +
         "TimetableSession.start_time, " +
@@ -36,7 +36,7 @@ public class DatabaseSelectionHelper {
         "JOIN SessionGroup ON TimetableSession._id = SessionGroup.session_group_timetable_session_id " +
         "WHERE TimetableSession.timetable_session_timetable_day = ?";
 
-    for (int i = 0; i < numberOfDaysForTimetable("DT228/3"); i ++) {
+    for (int i = 0; i < numberOfDaysForTimetable(courseCode); i ++) {
       Day d = Day.intToDay(i);
       String day = d.toString();
 
@@ -67,6 +67,7 @@ public class DatabaseSelectionHelper {
     return sessions.toArray(new TimetableSession[sessions.size()]);
   }
 
+
   /**
    * A helper method to find the number of days a timetable is spread over.
    */
@@ -88,6 +89,27 @@ public class DatabaseSelectionHelper {
       return 0;
     }
   }
+  
+
+  /**
+   * Use this method to see if another timetable can be added to the database as the app
+   * only allows for one timetbale to be saved in the database at a time.
+   *
+   * @return True if no timetable is already saved to the user's device.
+   *         False if not allowed add timetable
+   */
+  public boolean canAddTimetableToDatabase() {
+    String selection = "SELECT COUNT(*) FROM Timetable";
+    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{});
+    int value = 0;
+    if (cursor.getCount() != 0) {
+      cursor.moveToFirst();
+      value = cursor.getInt(cursor.getColumnIndex("COUNT(*)"));
+      cursor.close();
+    }
+    return !(value > 0);
+  }
+
 
   /**
    * Use this to find out if a timetable for a course already exists in the database.
@@ -97,6 +119,11 @@ public class DatabaseSelectionHelper {
    */
   public boolean timetableAlreadyExists(String courseCode) {
     String selection = "SELECT * FROM Timetable WHERE Timetable.course_code = ?";
+    if (sqLiteDatabase == null) {
+      Log.d("SF", "SQLitedb is null");
+    } else {
+      Log.d("SF", "SQLiteDB is not null");
+    }
     Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{courseCode});
 
     if (cursor.getCount() != 0) {

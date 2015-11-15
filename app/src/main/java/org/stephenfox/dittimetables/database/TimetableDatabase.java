@@ -19,6 +19,7 @@ public class TimetableDatabase {
 
 
 
+
   public TimetableDatabase(Context context) {
     this.context = context;
   }
@@ -56,7 +57,7 @@ public class TimetableDatabase {
 
 
   public boolean timetableExists(String courseCode) {
-    open(); // TODO: Find out why this is needed.
+    open();
     DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
     boolean exists = selectionHelper.timetableAlreadyExists(courseCode);
     close();
@@ -64,10 +65,19 @@ public class TimetableDatabase {
   }
 
 
-  public TimetableSession[] getSessions() {
+  public boolean canAddTimetableToDatabase() {
+    open();
+    DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
+    boolean allowed = selectionHelper.canAddTimetableToDatabase();
+    close();
+    return allowed;
+  }
+
+
+  public TimetableSession[] getSessions(String courseCode) {
     open();// TODO: Remove need for new DatabaseSelectionHelper all the time
     DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
-    TimetableSession[] sessions = selectionHelper.selectSessions();
+    TimetableSession[] sessions = selectionHelper.selectSessions(courseCode);
     close();
     return sessions;
   }

@@ -57,7 +57,7 @@ public class TimetableSourceRetriever {
    * This will message the callback, when fetched.
    */
   private void fetchTimetableFromDatabase() {
-    TimetableSession[] sessions = database.getSessions();
+    TimetableSession[] sessions = database.getSessions(courseCode);
     try {
       TimetableGenerator generator = new TimetableGenerator(sessions);
       callback.timetableRetrieved(generator.generateTimetable(courseCode));

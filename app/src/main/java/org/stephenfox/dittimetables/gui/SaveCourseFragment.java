@@ -4,7 +4,6 @@ package org.stephenfox.dittimetables.gui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +68,16 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
 
   @Override
   public void onClick(View v) {
+    TimetableDatabase database = new TimetableDatabase(getActivity().getApplicationContext());
+
+    if (!database.canAddTimetableToDatabase()) {
+      Toast.makeText(getActivity().getApplicationContext(),
+          "You already have a timetable saved!", Toast.LENGTH_SHORT).show();
+      getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+      return;
+    }
+
     String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
-    Log.d("SF", url);
     WeekDownloader weekDownloader = new WeekDownloader();
     weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
       @Override

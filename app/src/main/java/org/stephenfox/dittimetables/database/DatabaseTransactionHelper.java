@@ -93,7 +93,7 @@ public class DatabaseTransactionHelper {
 
   private boolean insertIntoTimetable() {
     ContentValues contentValues = new ContentValues();
-    contentValues.put(TimetableSchema.Timetable.KEY_TIMETABLE_ID, timetable.getCourseCode());
+    contentValues.put(TimetableSchema.Timetable.KEY_TIMETABLE_COURSE_CODE, timetable.getCourseCode());
     long result = sqLiteDatabase.insert(TimetableSchema.Timetable.TABLE_NAME, null, contentValues);
     return insertionStatus(result);
   }

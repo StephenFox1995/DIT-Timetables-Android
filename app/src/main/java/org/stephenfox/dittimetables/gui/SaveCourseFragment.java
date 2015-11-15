@@ -4,6 +4,7 @@ package org.stephenfox.dittimetables.gui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,10 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    Bundle args = new Bundle();
+    Bundle args = getArguments();
     this.courseID = args.getString("courseID");
     this.courseCode = args.getString("courseCode");
+
 
     Button cancelActionButton = (Button) getActivity().findViewById(R.id.cancel_button);
     Button saveCourseButton = (Button) getActivity().findViewById(R.id.save_course_button);
@@ -70,7 +72,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
   @Override
   public void onClick(View v) {
     String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
-
+    Log.d("SF", url);
     WeekDownloader weekDownloader = new WeekDownloader();
     weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
       @Override
@@ -82,10 +84,9 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
         }
         else {
           try {
-            Timetable timetable = generateTimetableForDatabase((String)data);
+            Timetable timetable = generateTimetableForDatabase((String) data);
             beginDatabaseTransaction(timetable);
-          }
-          catch (InvalidTimetableDataException e) {
+          } catch (InvalidTimetableDataException e) {
             Toast.makeText(getActivity().getApplicationContext(),
                 "Timetable not available for course.", Toast.LENGTH_SHORT).show();
             getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
@@ -108,11 +109,9 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
   private Timetable generateTimetableForDatabase(String data) throws InvalidTimetableDataException {
     JsonParser jsonParser = new JsonParser();
     ArrayList<TimetableSession> sessions = jsonParser.parseSessionsForTimetable(data);
-    Timetable timetable;
-
     TimetableGenerator generator = new TimetableGenerator(sessions);
-    timetable = generator.generateTimetable(courseCode);
-    return timetable;
+
+    return generator.generateTimetable(courseCode);
   }
 
 
@@ -141,7 +140,8 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
         if (data == DatabaseTransactionStatus.Success) {
           Toast.makeText(getActivity().getApplicationContext(),
               "Timetable successfully save to device!", Toast.LENGTH_SHORT).show();
-        } else {
+        }
+        else {
           Toast.makeText(getActivity().getApplicationContext(),
               "There was an error saving, please try again.", Toast.LENGTH_SHORT).show();
         }

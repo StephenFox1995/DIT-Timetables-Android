@@ -3,6 +3,7 @@ package org.stephenfox.dittimetables.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Day;
 
@@ -33,15 +34,18 @@ public class DatabaseSelectionHelper {
 
 
   public boolean timetableAlreadyExists(String courseCode) {
+    timetableDatabase.open();
+    if (timetableDatabase == null) {
+      Log.d("SF", "timetable database is null.");
+    }
     String selection = "SELECT * FROM Timetable \n" +
         "WHERE Timetable._id = ?;";
     Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[] {courseCode});
 
-    if (cursor != null) {
-      return true;
-    } else {
-      return false;
-    }
+    if (cursor == null && cursor.getCount() == 0)
+      Log.d("SF", "Cursor was null");
+
+     return true;
 
   }
 

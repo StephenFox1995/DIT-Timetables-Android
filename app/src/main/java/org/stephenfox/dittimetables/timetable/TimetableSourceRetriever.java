@@ -1,6 +1,7 @@
 package org.stephenfox.dittimetables.timetable;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
@@ -42,12 +43,14 @@ public class TimetableSourceRetriever {
     this.courseID = courseID;
 
     TimetableDatabase database = new TimetableDatabase(context);
-    //if (database.timetableExists(courseCode)) {
+    if (database.timetableExists(courseCode)) {
       // Generate a timetable from database.
-    //} else {
+      Log.d("SF", "Course already exists in the database");
+    } else {
+      Log.d("SF", "We need to go download the course");
       String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
       fetchTimetableFromServer(url, callback);
-   // }
+    }
   }
 
 

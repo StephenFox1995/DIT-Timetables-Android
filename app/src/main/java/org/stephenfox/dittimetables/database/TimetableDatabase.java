@@ -32,7 +32,7 @@ public class TimetableDatabase {
       this.dbHelper = new DatabaseTimetableHelper(context);
       sqLiteDatabase = dbHelper.getReadableDatabase();
     } catch (SQLiteException e) {
-      Log.e("SQLLiteException", "Error opening database.");
+      Log.e("SQLLiteException", "An error occurred with the database.");
     }
   }
 

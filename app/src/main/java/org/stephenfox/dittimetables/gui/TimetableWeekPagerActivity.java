@@ -10,13 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.Timetable;
-import org.stephenfox.dittimetables.timetable.TimetableSession;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
-
-import java.util.ArrayList;
 
 /**
  * This class manages a set of fragments see
@@ -62,20 +58,6 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
   void setup(Timetable timetable) {
     pager = (ViewPager) findViewById(R.id.slide);
     pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
-  }
-
-
-
-  /**
-   * A helper method to parse the Json data.
-   *
-   * @param data The json data, in String object.
-   *
-   * @return ArrayList of TimetableSessions
-   */
-  private ArrayList<TimetableSession> parseJson(String data) {
-    JsonParser jsonParser = new JsonParser();
-    return jsonParser.parseSessionsForTimetable(data);
   }
 
 

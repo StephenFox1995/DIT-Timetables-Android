@@ -17,7 +17,7 @@ public class DatabaseTransactionHelper {
   SQLiteDatabase sqLiteDatabase;
 
   private long currentTimetableWeekID;
-  ArrayList<Long> currentTimetableDayIDs;
+  ArrayList<String> currentTimetableDayNames;
   ArrayList<Long> currentTimetableSessionIDs;
 
 
@@ -110,7 +110,7 @@ public class DatabaseTransactionHelper {
   private boolean insertIntoTimetableDay() {
     int numberOfDays = timetable.getTimetableWeek().getNumberOfDays();
     String[] dayNames = timetable.getTimetableWeek().getDayNames();
-    currentTimetableDayIDs = new ArrayList<>(numberOfDays);
+    currentTimetableDayNames = new ArrayList<>(numberOfDays);
 
     ArrayList<Long> results = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class DatabaseTransactionHelper {
 
       long result =
           sqLiteDatabase.insert(TimetableSchema.TimetableDay.TABLE_NAME, null, contentValues);
-      currentTimetableDayIDs.add(result);
+      currentTimetableDayNames.add(dayNames[i]);
       results.add(result);
     }
     return insertionStatus(results.toArray(new Long[results.size()]));
@@ -141,7 +141,7 @@ public class DatabaseTransactionHelper {
         contentValues = new ContentValues();
 
         contentValues.put(TimetableSchema.TimetableSession.COL_TIMETABLE_DAY_ID,
-            currentTimetableDayIDs.get(i));
+            currentTimetableDayNames.get(i));
         contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_NAME,
             session.getSessionName());
         contentValues.put(TimetableSchema.TimetableSession.COL_SESSION_START_TIME,

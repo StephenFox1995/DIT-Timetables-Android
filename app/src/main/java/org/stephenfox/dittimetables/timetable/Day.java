@@ -10,6 +10,20 @@ public enum Day {
   Sunday;
 
 
+
+  public static Day stringToDay(String day) {
+    switch (day) {
+      case "Monday": return Monday;
+      case "Tuesday": return Tuesday;
+      case "Wednesday": return Wednesday;
+      case "Thursday": return Thursday;
+      case "Friday": return Thursday;
+      case "Saturday": return Saturday;
+      case "Sunday": return Sunday;
+      default: return null;
+    }
+  }
+
   public static Day intToDay(int i) {
     switch (i) {
       case 0: return Monday;

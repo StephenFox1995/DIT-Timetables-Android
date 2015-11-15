@@ -23,8 +23,6 @@ import org.stephenfox.dittimetables.timetable.TimetableGenerator;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 
-import java.util.ArrayList;
-
 public class SaveCourseFragment extends Fragment implements View.OnClickListener {
 
   private String courseID;
@@ -108,7 +106,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
    */
   private Timetable generateTimetableForDatabase(String data) throws InvalidTimetableDataException {
     JsonParser jsonParser = new JsonParser();
-    ArrayList<TimetableSession> sessions = jsonParser.parseSessionsForTimetable(data);
+    TimetableSession[] sessions = jsonParser.parseSessionsForTimetable(data);
     TimetableGenerator generator = new TimetableGenerator(sessions);
 
     return generator.generateTimetable(courseCode);

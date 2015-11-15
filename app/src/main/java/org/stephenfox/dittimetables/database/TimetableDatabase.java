@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Timetable;
+import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 
 public class TimetableDatabase {
@@ -25,7 +26,7 @@ public class TimetableDatabase {
 
   /**
    * Opens the database for read/write.
-   * @note Do no call on the main UI Thread as this may take some time to open.
+   * @note Do not call on the main UI Thread as this may take some time to open.
    */
   public void open() {
     try {
@@ -51,14 +52,24 @@ public class TimetableDatabase {
   public DatabaseTransactionStatus addTimetable(Timetable timetable) {
     DatabaseTransactionHelper transactionHelper = new DatabaseTransactionHelper(this);
     return transactionHelper.insertTimetable(timetable);
-
   }
 
 
   public boolean timetableExists(String courseCode) {
     open(); // TODO: Find out why this is needed.
     DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
-    return selectionHelper.timetableAlreadyExists(courseCode);
+    boolean exists = selectionHelper.timetableAlreadyExists(courseCode);
+    close();
+    return exists;
+  }
+
+
+  public TimetableSession[] getSessions() {
+    open();// TODO: Remove need for new DatabaseSelectionHelper all the time
+    DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
+    TimetableSession[] sessions = selectionHelper.selectSessions();
+    close();
+    return sessions;
   }
 
 

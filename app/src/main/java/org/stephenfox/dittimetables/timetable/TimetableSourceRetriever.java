@@ -1,14 +1,11 @@
 package org.stephenfox.dittimetables.timetable;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
-
-import java.util.ArrayList;
 
 /**
  * Use this class to determine the source/ location
@@ -19,6 +16,8 @@ public class TimetableSourceRetriever {
   Context context;
   String courseCode;
   String courseID;
+  TimetableRetrieverCallback callback;
+  TimetableDatabase database;
 
   public TimetableSourceRetriever(Context context) {
     this.context = context;
@@ -38,31 +37,43 @@ public class TimetableSourceRetriever {
    **/
   public void
   fetchTimetable(String courseCode, String courseID, TimetableRetrieverCallback callback) {
-
     this.courseCode = courseCode;
     this.courseID = courseID;
+    this.callback = callback;
 
-    TimetableDatabase database = new TimetableDatabase(context);
+    database = new TimetableDatabase(context);
+
     if (database.timetableExists(courseCode)) {
-      // Generate a timetable from database.
-      Log.d("SF", "Course already exists in the database");
-    }
-    else {
-      Log.d("SF", "We need to go download the course");
+      fetchTimetableFromDatabase();
+    } else {
       String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
-      fetchTimetableFromServer(url, callback);
+      fetchTimetableFromServer(url);
+    }
+  }
+
+
+  /**
+   * A helper method to fetch a timetable from the database.
+   * This will message the callback, when fetched.
+   */
+  private void fetchTimetableFromDatabase() {
+    TimetableSession[] sessions = database.getSessions();
+    try {
+      TimetableGenerator generator = new TimetableGenerator(sessions);
+      callback.timetableRetrieved(generator.generateTimetable(courseCode));
+    } catch (InvalidTimetableDataException e) {
+      callback.timetableRetrieved(null);
     }
   }
 
 
   /**
    * A helper method to fetch timetable data from the server. When found or, possibly not found the
-   * callback will be message.
+   * callback will be messaged.
    *
    * @param url The url to download the timetable from the server.
-   * @param callback The callback to message when the timetable has been downloaded.
-   * */
-  private void fetchTimetableFromServer(String url, final TimetableRetrieverCallback callback) {
+   */
+  private void fetchTimetableFromServer(String url) {
     WeekDownloader weekDownloader = new WeekDownloader();
     weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
       @Override
@@ -91,7 +102,7 @@ public class TimetableSourceRetriever {
   }
 
 
-  private ArrayList<TimetableSession> parseJSON(String JSONData) {
+  private TimetableSession[] parseJSON(String JSONData) {
     JsonParser parser = new JsonParser();
     return parser.parseSessionsForTimetable(JSONData);
   }

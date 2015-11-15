@@ -22,11 +22,11 @@ public class TimetableSession {
     this.sessionType = sessionType;
   }
 
-
   /**
    * The day for which this session will be held
    */
   private Day day;
+
 
 
   /**

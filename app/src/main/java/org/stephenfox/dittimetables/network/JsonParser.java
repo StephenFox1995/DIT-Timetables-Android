@@ -51,7 +51,7 @@ public class JsonParser {
    * @param data The string to parse.
    * @return An ArrayList of type TimetableSession.
    */
-  public ArrayList<TimetableSession> parseSessionsForTimetable(String data) {
+  public TimetableSession[] parseSessionsForTimetable(String data) {
 
     ArrayList<TimetableSession> timetableSessions = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class JsonParser {
     catch (JSONException e) {
       e.printStackTrace();
     }
-    return timetableSessions;
+    return timetableSessions.toArray(new TimetableSession[timetableSessions.size()]);
   }
 
 

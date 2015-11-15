@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class TimetableGenerator {
 
 
-  private ArrayList<TimetableSession> sessions;
+  private TimetableSession[] sessions;
 
 
   /**
@@ -18,9 +18,9 @@ public class TimetableGenerator {
    * @param sessions The session which will be used to generate a timetable.
    * @throws InvalidTimetableDataException
    */
-  public TimetableGenerator(ArrayList<TimetableSession> sessions)
+  public TimetableGenerator(TimetableSession[] sessions)
       throws InvalidTimetableDataException {
-    if (sessions.size() == 0) {
+    if (sessions.length == 0) {
       throw new
         InvalidTimetableDataException("Cannot generate Timetable, reason: invalid data.");
     }
@@ -36,6 +36,7 @@ public class TimetableGenerator {
    * Generates a new Timetable object from the TimetableWeek instance
    * that was constructed with this class.
    *
+   * @param courseCode The courseCode of the timetable.
    * @return Timetable A Timetable for a given week.
    */
   public Timetable generateTimetable(String courseCode) {

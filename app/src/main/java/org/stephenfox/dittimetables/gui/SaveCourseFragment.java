@@ -69,7 +69,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
 
   @Override
   public void onClick(View v) {
-    String url = TimetableSourceRetriever.constructURLToDownloadTimetable(Integer.parseInt(courseID));
+    String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
 
     WeekDownloader weekDownloader = new WeekDownloader();
     weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
@@ -79,7 +79,8 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
           Toast.makeText(getActivity().getApplicationContext(),
               "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
           getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-        } else {
+        }
+        else {
           try {
             Timetable timetable = generateTimetableForDatabase((String)data);
             beginDatabaseTransaction(timetable);

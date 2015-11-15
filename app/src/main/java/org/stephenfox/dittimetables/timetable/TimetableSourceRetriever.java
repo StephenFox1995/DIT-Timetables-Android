@@ -18,7 +18,6 @@ public class TimetableSourceRetriever {
   Context context;
   String courseCode;
   String courseID;
-  TimetableRetrieverCallback callback;
 
   public TimetableSourceRetriever(Context context) {
     this.context = context;
@@ -31,19 +30,16 @@ public class TimetableSourceRetriever {
    *
    * @param courseCode The course code of the timetable to fetch for e.g. DT228/3 etc.
    * @param courseID The id of the course on the server if needs be that it must be fetched there.
-   *
-   * @throws InvalidTimetableDataException This exception will be thrown if, when a timetable must be
-   *                                       fetched from the server and their is insufficient data to
-   *                                       constrict the timetable.
+   * @param callback This will be called when the timetable has been found either from the server or
+   *                 the database. A null value will be passed in the event a timetable cannot
+   *                 be created, i.e there's insufficient information for it most likely when coming
+   *                 from the server.
    **/
   public void
   fetchTimetable(String courseCode, String courseID, TimetableRetrieverCallback callback) {
 
     this.courseCode = courseCode;
     this.courseID = courseID;
-    // Query database for that course.
-    // if in database return it.
-    // Otherwise fetch from server.
 
     TimetableDatabase database = new TimetableDatabase(context);
     //if (database.timetableExists(courseCode)) {
@@ -55,6 +51,13 @@ public class TimetableSourceRetriever {
   }
 
 
+  /**
+   * A helper method to fetch timetable data from the server. When found or, possibly not found the
+   * callback will be message.
+   *
+   * @param url The url to download the timetable from the server.
+   * @param callback The callback to message when the timetable has been downloaded.
+   * */
   private void fetchTimetableFromServer(String url, final TimetableRetrieverCallback callback) {
     WeekDownloader weekDownloader = new WeekDownloader();
     weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
@@ -67,21 +70,27 @@ public class TimetableSourceRetriever {
   }
 
 
+  /**
+   * Creates a Timetable object from json data from the server.
+   *
+   * @param data The json data.
+   * @return A new timetable instance if the json data was sufficient to create the timetable
+   *         otherwise, null value will be passed.
+   **/
   private Timetable createTimetableFromNetworkData(String data) {
     try {
       TimetableGenerator generator = new TimetableGenerator(parseJSON(data));
       return generator.generateTimetable(courseCode);
     } catch (InvalidTimetableDataException e) {
-
+      return null;
     }
-    return null;
   }
+
 
   private ArrayList<TimetableSession> parseJSON(String JSONData) {
     JsonParser parser = new JsonParser();
     return parser.parseSessionsForTimetable(JSONData);
   }
-
 
 
   public static String constructURLToDownloadTimetable(int id) {

@@ -47,7 +47,7 @@ public class AvailableCoursesActivity extends ListActivity {
 
   /**
    * Sets up the relevant action listeners that
-   * are needed when the course ids and titles are downloaded.
+   * are needed when the course ids and codes are downloaded.
    * i.e long press to save a course.
    */
   void addRelevantActionListeners() {
@@ -56,8 +56,8 @@ public class AvailableCoursesActivity extends ListActivity {
       @Override
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         TextView textView = (TextView) view.findViewById(R.id.courseCode);
-        String courseTitle = textView.getText().toString();
-        Integer courseID = (Integer) getKeyFromValue(courseIdentifiersToCourseCodesHash, courseTitle);
+        String courseCode = textView.getText().toString();
+        Integer courseID = (Integer) getKeyFromValue(courseIdentifiersToCourseCodesHash, courseCode);
         addSaveCourseFragmentToViewHierarchy(courseID);
         return true;
       }

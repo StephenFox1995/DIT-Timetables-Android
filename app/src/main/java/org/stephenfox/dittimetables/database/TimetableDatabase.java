@@ -56,6 +56,7 @@ public class TimetableDatabase {
 
 
   public boolean timetableExists(String courseCode) {
+    open(); // TODO: Find out why this is needed.
     DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
     return selectionHelper.timetableAlreadyExists(courseCode);
   }

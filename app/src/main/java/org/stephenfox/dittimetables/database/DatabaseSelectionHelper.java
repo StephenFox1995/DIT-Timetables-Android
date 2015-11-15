@@ -3,7 +3,6 @@ package org.stephenfox.dittimetables.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Day;
 
@@ -28,25 +27,22 @@ public class DatabaseSelectionHelper {
   public void selectSessionDetails(Day day) {
     String selection = "SELECT * FROM TimetableSession \n" +
         "JOIN TimetableDay ON TimetableSession.timetable_session_timetable_day = TimetableDay._id\n" +
-        "WHERE TimetableDay.day_name = ?;";
+        "WHERE TimetableDay.day_name = ?";
     Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{day.toString()});
   }
 
 
   public boolean timetableAlreadyExists(String courseCode) {
-    timetableDatabase.open();
-    if (timetableDatabase == null) {
-      Log.d("SF", "timetable database is null.");
+    String selection = "SELECT * FROM Timetable WHERE Timetable.course_code = ?";
+    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{courseCode});
+
+    if (cursor.getCount() != 0) {
+      cursor.close();
+      return true;
+    } else {
+      cursor.close();
+      return false;
     }
-    String selection = "SELECT * FROM Timetable \n" +
-        "WHERE Timetable._id = ?;";
-    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[] {courseCode});
-
-    if (cursor == null && cursor.getCount() == 0)
-      Log.d("SF", "Cursor was null");
-
-     return true;
-
   }
 
 }

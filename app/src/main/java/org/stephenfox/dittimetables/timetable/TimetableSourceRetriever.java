@@ -46,7 +46,8 @@ public class TimetableSourceRetriever {
     if (database.timetableExists(courseCode)) {
       // Generate a timetable from database.
       Log.d("SF", "Course already exists in the database");
-    } else {
+    }
+    else {
       Log.d("SF", "We need to go download the course");
       String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
       fetchTimetableFromServer(url, callback);

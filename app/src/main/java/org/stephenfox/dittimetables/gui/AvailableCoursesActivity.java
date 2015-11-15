@@ -7,7 +7,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.database.TimetableSchema;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
@@ -36,8 +34,6 @@ public class AvailableCoursesActivity extends ListActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_available_courses);
-
-    Log.d("SF", "Scheam" + TimetableSchema.Timetable.CREATE_TABLE);
 
     if (NetworkManager.hasInternetConnection(this)) {
       beginDownload();

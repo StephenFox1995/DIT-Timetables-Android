@@ -75,9 +75,17 @@ public class TimetableDatabase {
 
 
   public TimetableSession[] getSessions(String courseCode) {
-    open();// TODO: Remove need for new DatabaseSelectionHelper all the time
+    open();
     DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
     TimetableSession[] sessions = selectionHelper.selectSessions(courseCode);
+    close();
+    return sessions;
+  }
+
+  public TimetableSession[] getSessionForGroup(String courseCode, String group) {
+    open();
+    DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);
+    TimetableSession[] sessions = selectionHelper.selectSessionForGroup(courseCode, group);
     close();
     return sessions;
   }

@@ -1,6 +1,7 @@
 package org.stephenfox.dittimetables.timetable;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
@@ -57,7 +58,17 @@ public class TimetableSourceRetriever {
    * This will message the callback, when fetched.
    */
   private void fetchTimetableFromDatabase() {
-    TimetableSession[] sessions = database.getSessions(courseCode);
+    TimetableSession[] sessions;
+    SharedPreferences preferences =
+        context.getSharedPreferences("sPreferences", Context.MODE_PRIVATE);
+    String courseGroup = preferences.getString("chosenGroup", null);
+
+    if (courseGroup != null) {
+       sessions = database.getSessionForGroup(courseCode, courseGroup);
+    } else {
+      sessions = database.getSessions(courseCode);
+    }
+
     try {
       TimetableGenerator generator = new TimetableGenerator(sessions);
       callback.timetableRetrieved(generator.generateTimetable(courseCode));

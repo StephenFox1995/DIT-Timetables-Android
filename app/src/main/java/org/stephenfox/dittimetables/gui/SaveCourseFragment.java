@@ -154,7 +154,6 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
               "There was an error saving, please try again.", Toast.LENGTH_SHORT).show();
           getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
         }
-
       }
     });
   }

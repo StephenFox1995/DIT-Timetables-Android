@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class DatabaseSelectionHelper {
 
-  String SELECT_ALL_SESSIONS = "SELECT TimetableSession.session_name, " +
+  private final String SELECT_ALL_SESSIONS = "SELECT TimetableSession.session_name, " +
       "TimetableSession.start_time, " +
       "TimetableSession.end_time, " +
       "TimetableSession.session_master, " +
@@ -24,15 +24,20 @@ public class DatabaseSelectionHelper {
       "JOIN SessionGroup ON TimetableSession._id = SessionGroup.session_group_timetable_session_id " +
       "WHERE TimetableSession.timetable_session_timetable_day = ?";
 
-  String SELECT_NUMBER_OF_DAYS = "SELECT COUNT(*) FROM TimetableDay " +
+  private final String SELECT_NUMBER_OF_DAYS = "SELECT COUNT(*) FROM TimetableDay " +
       "JOIN TimetableWeek ON TimetableDay.timetable_day_timetable_week = TimetableWeek._id " +
       "JOIN Timetable ON TimetableWeek.timetable_week_timetable_course_code = Timetable.course_code " +
       "WHERE Timetable.course_code = ?";
 
-  String SELECT_ALL_GROUPS = "SELECT DISTINCT SessionGroup.group_name " +
+  private final String SELECT_ALL_GROUPS = "SELECT DISTINCT SessionGroup.group_name " +
       "FROM SessionGroup " +
       "JOIN TimetableSession ON SessionGroup.session_group_timetable_session_id = TimetableSession._id " +
       "WHERE SessionGroup.group_name != \"\"";
+
+  private final String SELECT_ALL_SESSIONS_FOR_GROUP = "SELECT * FROM TimetableSession " +
+      "JOIN SessionGroup ON TimetableSession._id = SessionGroup.session_group_timetable_session_id " +
+      "WHERE TimetableSession.timetable_session_timetable_day = ? " +
+      "AND (SessionGroup.group_name = ? OR SessionGroup.group_name = \"\")";
 
 
   TimetableDatabase timetableDatabase;
@@ -43,6 +48,8 @@ public class DatabaseSelectionHelper {
     this.sqLiteDatabase = timetableDatabase.getSqLiteDatabase();
   }
 
+
+
   public TimetableSession[] selectSessions(String courseCode) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
 
@@ -51,6 +58,27 @@ public class DatabaseSelectionHelper {
       String day = d.toString();
 
       Cursor cursor = sqLiteDatabase.rawQuery(SELECT_ALL_SESSIONS, new String[]{day});
+
+      if (cursor.getCount() != 0) {
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+          sessions.add(extractSessionFromCursor(cursor, d));
+        }
+      }
+      cursor.close();
+    }
+    return sessions.toArray(new TimetableSession[sessions.size()]);
+  }
+
+
+  public TimetableSession[] selectSessionForGroup(String courseCode, String group) {
+    ArrayList<TimetableSession> sessions = new ArrayList<>();
+
+    for (int i = 0; i < numberOfDaysForTimetable(courseCode); i++) {
+      Day d = Day.intToDay(i);
+      String day = d.toString();
+
+      Cursor cursor =
+          sqLiteDatabase.rawQuery(SELECT_ALL_SESSIONS_FOR_GROUP, new String[]{day, group});
 
       if (cursor.getCount() != 0) {
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {

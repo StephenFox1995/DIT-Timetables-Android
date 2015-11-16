@@ -4,9 +4,9 @@ package org.stephenfox.dittimetables.gui;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,11 +134,12 @@ public class AvailableCoursesActivity extends FragmentActivity implements
       fragment.setGroupChosenCallback(new ChooseGroupFragment.ChooseGroupCallback() {
         @Override
         public void groupChosen(String group) {
-          Log.d("The group chosen was: ", group);
+          SharedPreferences sharedPreferences = getSharedPreferences("sPreferences", Context.MODE_PRIVATE);
+          SharedPreferences.Editor editor = sharedPreferences.edit();
+          editor.putString("chosenGroup", group);
+          editor.apply();
         }
       });
-
-
     }
   }
 

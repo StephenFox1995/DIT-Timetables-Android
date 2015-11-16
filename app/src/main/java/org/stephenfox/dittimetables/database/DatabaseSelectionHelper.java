@@ -11,6 +11,30 @@ import java.util.ArrayList;
 
 public class DatabaseSelectionHelper {
 
+  String SELECT_ALL_SESSIONS = "SELECT TimetableSession.session_name, " +
+      "TimetableSession.start_time, " +
+      "TimetableSession.end_time, " +
+      "TimetableSession.session_master, " +
+      "TimetableSession.location, " +
+      "TimetableSession.session_name, " +
+      "TimetableSession.type, " +
+      "TimetableSession.location, " +
+      "SessionGroup.group_name " +
+      "FROM TimetableSession " +
+      "JOIN SessionGroup ON TimetableSession._id = SessionGroup.session_group_timetable_session_id " +
+      "WHERE TimetableSession.timetable_session_timetable_day = ?";
+
+  String SELECT_NUMBER_OF_DAYS = "SELECT COUNT(*) FROM TimetableDay " +
+      "JOIN TimetableWeek ON TimetableDay.timetable_day_timetable_week = TimetableWeek._id " +
+      "JOIN Timetable ON TimetableWeek.timetable_week_timetable_course_code = Timetable.course_code " +
+      "WHERE Timetable.course_code = ?";
+
+  String SELECT_ALL_GROUPS = "SELECT DISTINCT SessionGroup.group_name " +
+      "FROM SessionGroup " +
+      "JOIN TimetableSession ON SessionGroup.session_group_timetable_session_id = TimetableSession._id " +
+      "WHERE SessionGroup.group_name != \"\"";
+
+
   TimetableDatabase timetableDatabase;
   SQLiteDatabase sqLiteDatabase;
 
@@ -22,44 +46,16 @@ public class DatabaseSelectionHelper {
 
   public TimetableSession[] selectSessions(String courseCode) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
-    String selection = "SELECT TimetableSession.session_name, " +
-        "TimetableSession.start_time, " +
-        "TimetableSession.end_time, " +
-        "TimetableSession.session_master, " +
-        "TimetableSession.location, " +
-        "TimetableSession.session_name, " +
-        "TimetableSession.type, " +
-        "TimetableSession.location, " +
-        "SessionGroup.group_name " +
-        "FROM TimetableSession " +
-        "JOIN SessionGroup ON TimetableSession._id = SessionGroup.session_group_timetable_session_id " +
-        "WHERE TimetableSession.timetable_session_timetable_day = ?";
 
     for (int i = 0; i < numberOfDaysForTimetable(courseCode); i ++) {
       Day d = Day.intToDay(i);
       String day = d.toString();
 
-      Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{day});
+      Cursor cursor = sqLiteDatabase.rawQuery(SELECT_ALL_SESSIONS, new String[]{day});
 
       if (cursor.getCount() != 0) {
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-          String sessionName = cursor.getString(cursor.getColumnIndex("session_name"));
-          String startTime = cursor.getString(cursor.getColumnIndex("start_time"));
-          String endTime = cursor.getString(cursor.getColumnIndex("end_time"));
-          String sessionMaster = cursor.getString(cursor.getColumnIndex("session_master"));
-          String location = cursor.getString(cursor.getColumnIndex("location"));
-          String type = cursor.getString(cursor.getColumnIndex("type"));
-          String sessionGroup = cursor.getString(cursor.getColumnIndex("session_group"));
-
-          TimetableSession session = new TimetableSession(d,
-              startTime,
-              endTime,
-              sessionName,
-              new String[]{sessionGroup},
-              sessionMaster,
-              location,
-              type);
-          sessions.add(session);
+          sessions.add(extractSessionFromCursor(cursor, d));
         }
       }
       cursor.close();
@@ -69,15 +65,48 @@ public class DatabaseSelectionHelper {
 
 
   /**
+   * A helper method to extract a TimetableSession from a Cursor.
+   * @param cursor The cursor to extract the session from.
+   * @return A Timetable session.
+   **/
+  private TimetableSession extractSessionFromCursor(Cursor cursor, Day day) {
+    String sessionName = null;
+    String startTime = null;
+    String endTime = null;
+    String sessionMaster = null;
+    String location = null;
+    String type = null;
+    String sessionGroup = null;
+
+    try {
+      sessionName = cursor.getString(cursor.getColumnIndexOrThrow("session_name"));
+      startTime = cursor.getString(cursor.getColumnIndexOrThrow("start_time"));
+      endTime = cursor.getString(cursor.getColumnIndexOrThrow("end_time"));
+      sessionMaster = cursor.getString(cursor.getColumnIndexOrThrow("session_master"));
+      location = cursor.getString(cursor.getColumnIndexOrThrow("location"));
+      type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
+      sessionGroup = cursor.getString(cursor.getColumnIndexOrThrow("session_group"));
+    } catch (IllegalArgumentException e) {
+
+    } finally {
+      return new TimetableSession(day,
+          startTime,
+          endTime,
+          sessionName,
+          new String[]{sessionGroup},
+          sessionMaster,
+          location,
+          type);
+    }
+  }
+
+
+
+  /**
    * A helper method to find the number of days a timetable is spread over.
    */
   private int numberOfDaysForTimetable(String courseCode) {
-    String selection = "SELECT COUNT(*) FROM TimetableDay " +
-        "JOIN TimetableWeek ON TimetableDay.timetable_day_timetable_week = TimetableWeek._id " +
-        "JOIN Timetable ON TimetableWeek.timetable_week_timetable_course_code = Timetable.course_code " +
-        "WHERE Timetable.course_code = ?";
-
-    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{courseCode});
+    Cursor cursor = sqLiteDatabase.rawQuery(SELECT_NUMBER_OF_DAYS, new String[]{courseCode});
     if (cursor.getCount() != 0) {
       cursor.moveToFirst();
       int value = cursor.getInt(cursor.getColumnIndex("COUNT(*)"));
@@ -135,11 +164,7 @@ public class DatabaseSelectionHelper {
    * @return All the groups for a timetable.
    * */
   public String[] selectAllGroups() {
-    String selection = "SELECT DISTINCT SessionGroup.group_name " +
-        "FROM SessionGroup " +
-        "JOIN TimetableSession ON SessionGroup.session_group_timetable_session_id = TimetableSession._id " +
-        "WHERE SessionGroup.group_name != \"\"";
-    Cursor cursor = sqLiteDatabase.rawQuery(selection, new String[]{});
+    Cursor cursor = sqLiteDatabase.rawQuery(SELECT_ALL_GROUPS, new String[]{});
 
     String[] groups = new String[cursor.getCount()];
 

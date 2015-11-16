@@ -26,6 +26,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
 
   private String courseID;
   private String courseCode;
+  private SaveCourseDelegate delegate;
 
 
   public static SaveCourseFragment newInstance(String courseID, String courseCode) {
@@ -66,6 +67,13 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
     saveCourseButton.setOnClickListener(this);
   }
 
+  @Override
+  public void onPause() {
+    super.onPause();
+    if (isRemoving()) {
+      delegate.fragmentWillBeRemoved(true);
+    }
+  }
 
   @Override
   public void onClick(View v) {
@@ -156,9 +164,16 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
     });
   }
 
+  public void setDelegate(SaveCourseDelegate delegate) {
+    this.delegate = delegate;
+  }
 
   public interface SaveCourseDelegate {
-    void fragmentWillBeRemoved();
+    /**
+     * A message is sent to a delegate when this fragment will be
+     * removed from the view hierarchy.
+     */
+    void fragmentWillBeRemoved(boolean isRemoving);
   }
 
 }

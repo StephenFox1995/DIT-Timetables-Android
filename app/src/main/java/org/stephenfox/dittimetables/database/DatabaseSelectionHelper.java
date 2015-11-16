@@ -49,7 +49,8 @@ public class DatabaseSelectionHelper {
   }
 
 
-
+  /**
+   * Selects all the sessions from a timetable */
   public TimetableSession[] selectSessions(String courseCode) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
 
@@ -61,7 +62,7 @@ public class DatabaseSelectionHelper {
 
       if (cursor.getCount() != 0) {
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-          sessions.add(extractSessionFromCursor(cursor, d));
+          sessions.add(DatabaseTimetableSessionBuilder.extractSessionFromCursor(cursor, d));
         }
       }
       cursor.close();
@@ -69,7 +70,15 @@ public class DatabaseSelectionHelper {
     return sessions.toArray(new TimetableSession[sessions.size()]);
   }
 
-
+  /**
+   * Selects all the session of a timetable in the database for a particular group.
+   * While this method selects all the sessions belonging to the group it also
+   * selects session that do not have a group associated with it i.e. lectures etc.
+   *
+   * @param courseCode The courseCode of the timetable.
+   * @param group The group to select all the session for.
+   * @return All the session for that group.
+   **/
   public TimetableSession[] selectSessionForGroup(String courseCode, String group) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
 
@@ -82,51 +91,13 @@ public class DatabaseSelectionHelper {
 
       if (cursor.getCount() != 0) {
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-          sessions.add(extractSessionFromCursor(cursor, d));
+          sessions.add(DatabaseTimetableSessionBuilder.extractSessionFromCursor(cursor, d));
         }
       }
       cursor.close();
     }
     return sessions.toArray(new TimetableSession[sessions.size()]);
   }
-
-
-  /**
-   * A helper method to extract a TimetableSession from a Cursor.
-   * @param cursor The cursor to extract the session from.
-   * @return A Timetable session.
-   **/
-  private TimetableSession extractSessionFromCursor(Cursor cursor, Day day) {
-    String sessionName = null;
-    String startTime = null;
-    String endTime = null;
-    String sessionMaster = null;
-    String location = null;
-    String type = null;
-    String sessionGroup = null;
-
-    try {
-      sessionName = cursor.getString(cursor.getColumnIndexOrThrow("session_name"));
-      startTime = cursor.getString(cursor.getColumnIndexOrThrow("start_time"));
-      endTime = cursor.getString(cursor.getColumnIndexOrThrow("end_time"));
-      sessionMaster = cursor.getString(cursor.getColumnIndexOrThrow("session_master"));
-      location = cursor.getString(cursor.getColumnIndexOrThrow("location"));
-      type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
-      sessionGroup = cursor.getString(cursor.getColumnIndexOrThrow("session_group"));
-    } catch (IllegalArgumentException e) {
-
-    } finally {
-      return new TimetableSession(day,
-          startTime,
-          endTime,
-          sessionName,
-          new String[]{sessionGroup},
-          sessionMaster,
-          location,
-          type);
-    }
-  }
-
 
 
   /**

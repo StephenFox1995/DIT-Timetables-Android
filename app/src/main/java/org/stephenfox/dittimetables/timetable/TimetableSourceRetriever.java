@@ -70,8 +70,8 @@ public class TimetableSourceRetriever {
     }
 
     try {
-      TimetableGenerator generator = new TimetableGenerator(sessions);
-      callback.timetableRetrieved(generator.generateTimetable(courseCode));
+      TimetableBuilder builder = new TimetableBuilder(sessions);
+      callback.timetableRetrieved(builder.buildTimetable(courseCode));
     } catch (InvalidTimetableDataException e) {
       callback.timetableRetrieved(null);
     }
@@ -105,8 +105,8 @@ public class TimetableSourceRetriever {
    **/
   private Timetable createTimetableFromNetworkData(String data) {
     try {
-      TimetableGenerator generator = new TimetableGenerator(parseJSON(data));
-      return generator.generateTimetable(courseCode);
+      TimetableBuilder builder = new TimetableBuilder(parseJSON(data));
+      return builder.buildTimetable(courseCode);
     } catch (InvalidTimetableDataException e) {
       return null;
     }

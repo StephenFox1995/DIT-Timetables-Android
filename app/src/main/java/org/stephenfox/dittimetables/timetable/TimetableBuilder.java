@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Use this class to generate a data set for a timetable for a given week.
  */
-public class TimetableGenerator {
+public class TimetableBuilder {
 
 
   private TimetableSession[] sessions;
@@ -18,7 +18,7 @@ public class TimetableGenerator {
    * @param sessions The session which will be used to generate a timetable.
    * @throws InvalidTimetableDataException
    */
-  public TimetableGenerator(TimetableSession[] sessions)
+  public TimetableBuilder(TimetableSession[] sessions)
       throws InvalidTimetableDataException {
     if (sessions.length == 0) {
       throw new
@@ -28,9 +28,6 @@ public class TimetableGenerator {
   }
 
 
-  public TimetableGenerator(TimetableAdapter timetableAdapter) {
-
-  }
 
   /**
    * Generates a new Timetable object from the TimetableWeek instance
@@ -39,7 +36,7 @@ public class TimetableGenerator {
    * @param courseCode The courseCode of the timetable.
    * @return Timetable A Timetable for a given week.
    */
-  public Timetable generateTimetable(String courseCode) {
+  public Timetable buildTimetable(String courseCode) {
     TimetableDay[] timetableDays = createDayArray();
     addSessionsToDays(timetableDays);
 

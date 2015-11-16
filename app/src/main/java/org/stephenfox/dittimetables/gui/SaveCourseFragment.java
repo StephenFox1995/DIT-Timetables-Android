@@ -18,7 +18,7 @@ import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
-import org.stephenfox.dittimetables.timetable.TimetableGenerator;
+import org.stephenfox.dittimetables.timetable.TimetableBuilder;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 
@@ -116,9 +116,9 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
   private Timetable generateTimetableForDatabase(String data) throws InvalidTimetableDataException {
     JsonParser jsonParser = new JsonParser();
     TimetableSession[] sessions = jsonParser.parseSessionsForTimetable(data);
-    TimetableGenerator generator = new TimetableGenerator(sessions);
+    TimetableBuilder builder = new TimetableBuilder(sessions);
 
-    return generator.generateTimetable(courseCode);
+    return builder.buildTimetable(courseCode);
   }
 
 

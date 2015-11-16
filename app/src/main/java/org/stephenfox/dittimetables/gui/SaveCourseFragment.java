@@ -27,6 +27,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
   private String courseID;
   private String courseCode;
 
+
   public static SaveCourseFragment newInstance(String courseID, String courseCode) {
     SaveCourseFragment fragment = new SaveCourseFragment();
     Bundle args = new Bundle();
@@ -154,4 +155,10 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
       }
     });
   }
+
+
+  public interface SaveCourseDelegate {
+    void fragmentWillBeRemoved();
+  }
+
 }

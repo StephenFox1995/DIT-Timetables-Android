@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@color/white"
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
@@ -7,6 +8,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:text="Choose your group"/>
     
     <ListView
@@ -14,5 +16,4 @@
         android:layout_height="fill_parent"
         android:id="@android:id/list">
     </ListView>
-
 </LinearLayout>

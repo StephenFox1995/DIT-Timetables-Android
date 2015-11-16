@@ -67,13 +67,6 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
     saveCourseButton.setOnClickListener(this);
   }
 
-  @Override
-  public void onPause() {
-    super.onPause();
-    if (isRemoving()) {
-      delegate.fragmentWillBeRemoved(true);
-    }
-  }
 
   @Override
   public void onClick(View v) {
@@ -154,12 +147,14 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
         if (data == DatabaseTransactionStatus.Success) {
           Toast.makeText(getActivity().getApplicationContext(),
               "Timetable successfully save to device!", Toast.LENGTH_SHORT).show();
+          delegate.fragmentHasSavedCourse(true);
         }
         else {
           Toast.makeText(getActivity().getApplicationContext(),
               "There was an error saving, please try again.", Toast.LENGTH_SHORT).show();
+          getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
         }
-        getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
+
       }
     });
   }
@@ -173,7 +168,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
      * A message is sent to a delegate when this fragment will be
      * removed from the view hierarchy.
      */
-    void fragmentWillBeRemoved(boolean isRemoving);
+    void fragmentHasSavedCourse(boolean isRemoving);
   }
 
 }

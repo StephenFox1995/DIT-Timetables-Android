@@ -9,7 +9,6 @@
         android:layout_height="40dp"
         android:id="@+id/courseCode"
         android:textColor="@color/timetable_row_gray"
-
         />
 
 </LinearLayout>

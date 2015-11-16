@@ -1,7 +1,6 @@
 package org.stephenfox.dittimetables.gui;
 
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +32,6 @@ public class AvailableCoursesActivity extends FragmentActivity implements
     SaveCourseFragment.SaveCourseDelegate {
 
   private ListView listView;
-  private FragmentManager fragmentManager;
-  private FragmentTransaction fragmentTransaction;
   private HashMap<Integer, String> courseIdentifiersToCourseCodesHash;
 
   @Override
@@ -109,27 +106,39 @@ public class AvailableCoursesActivity extends FragmentActivity implements
 
 
   private void addSaveCourseFragmentToViewHierarchy(int courseID) {
-    fragmentManager = getFragmentManager();
-    fragmentTransaction = fragmentManager.beginTransaction();
+    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
     String _courseID = Integer.toString(courseID);
     String courseCode = courseIdentifiersToCourseCodesHash.get(courseID);
+
     SaveCourseFragment fragment = SaveCourseFragment.newInstance(_courseID, courseCode);
     fragment.setDelegate(this);
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);
+    fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
   }
 
 
   @Override
-  public void fragmentWillBeRemoved(boolean isRemoving) {
+  public void fragmentHasSavedCourse(boolean isRemoving) {
     if (isRemoving) {
-      Log.d("", "isRemoved");
       TimetableDatabase database = new TimetableDatabase(this);
       String[] groups = database.getGroups();
 
-      ChooseGroupFragment fragment = ChooseGroupFragment.newInstance(groups);
-      fragmentTransaction.add(R.id.save_course_placeholder, fragment);
+      ChooseGroupFragment fragment = ChooseGroupFragment.newInstance(groups, true);
+      FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.save_course_placeholder, fragment);
+      fragmentTransaction.addToBackStack(null);
+      fragmentTransaction.commit();
+
+      fragment.setGroupChosenCallback(new ChooseGroupFragment.ChooseGroupCallback() {
+        @Override
+        public void groupChosen(String group) {
+          Log.d("The group chosen was: ", group);
+        }
+      });
+
+
     }
   }
 

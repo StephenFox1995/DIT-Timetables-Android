@@ -43,7 +43,6 @@ public class DatabaseSelectionHelper {
     this.sqLiteDatabase = timetableDatabase.getSqLiteDatabase();
   }
 
-
   public TimetableSession[] selectSessions(String courseCode) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
 

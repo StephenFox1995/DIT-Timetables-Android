@@ -10,4 +10,5 @@
     
     <color name="session_details_view_blue">#4A90E2</color>
     <color name="session_details_view_gray">#747474</color>
+    <color name="sessiom_detail_active_green">#76AC3B</color>
 </resources>

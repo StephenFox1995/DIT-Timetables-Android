@@ -1,12 +1,15 @@
 package org.stephenfox.dittimetables.gui;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
@@ -20,27 +23,36 @@ import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 
 import java.util.ArrayList;
 
-public class DayAssistantActivity extends ListActivity {
+public class DayAssistantActivity extends AppCompatActivity {
+
+  ListView listView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setContentView(R.layout.day_assistant_activity);
+    listView = (ListView)findViewById(R.id.list);
+    TimetablePreferences preferences = new TimetablePreferences(this);
+    String courseGroup = preferences.getCourseGroupPreference();
+    setTitle(courseGroup);
+
+
     setup();
   }
+
 
 
   private void setup() {
     // TODO: This could be possible point of changing activity if there's no preferred timetable.
     TimetablePreferences preferences = new TimetablePreferences(this);
     String courseCode = preferences.getCourseCodePreference();
-    String courseGroup = preferences.getCourseGroupPreference();
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
     sourceRetriever.fetchTimetable(courseCode,
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
           @Override
           public void timetableRetrieved(Timetable timetable) {
-            setListAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, timetable));
+            listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, timetable));
           }
         });
   }
@@ -89,9 +101,13 @@ public class DayAssistantActivity extends ListActivity {
         row = layoutInflater.inflate(R.layout.day_assistant_session, null);
       }
 
+      int colourForHeader = determineColourForSessionDetails(sessions[position]);
+      LinearLayout layout = (LinearLayout)row.findViewById(R.id.session_details_header);
+      layout.setBackgroundColor(colourForHeader);
+
       TextView timeRemainingTextView =
           (TextView)row.findViewById(R.id.session_detail_time_remaining);
-      TextView sessionname = (TextView)row.findViewById(R.id.session_detail_sessioname);
+      TextView sessionname = (TextView)row.findViewById(R.id.session_detail_sessionname);
       sessionname.setText(sessions[position].getSessionName());
 
       TextView sessionMaster = (TextView)row.findViewById(R.id.session_master);
@@ -103,8 +119,11 @@ public class DayAssistantActivity extends ListActivity {
       TextView sessionType = (TextView)row.findViewById(R.id.session_type);
       sessionType.setText(sessions[position].getSessionType());
 
-      return row;
+      TextView timeComponent = (TextView)row.findViewById(R.id.session_time);
+      String time = sessions[position].getStartTime() + " - " + sessions[position].getEndTime();
+      timeComponent.setText(time);
 
+      return row;
     }
 
 
@@ -119,6 +138,14 @@ public class DayAssistantActivity extends ListActivity {
         }
       }
       return lSessions.toArray(new TimetableSession[lSessions.size()]);
+    }
+  }
+
+  private int determineColourForSessionDetails(TimetableSession session) {
+    if (session.isActive()) {
+      return ContextCompat.getColor(getApplicationContext(), R.color.sessiom_detail_active_green);
+    } else {
+      return ContextCompat.getColor(getApplicationContext(), R.color.session_details_view_blue);
     }
   }
 }

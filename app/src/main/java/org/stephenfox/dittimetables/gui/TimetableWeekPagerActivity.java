@@ -32,10 +32,9 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
 
     Intent d = getIntent();
     String courseCode = d.getStringExtra("courseCode");
-    String courseID = d.getStringExtra("courseID");
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
-    sourceRetriever.fetchTimetable(courseCode, courseID,
+    sourceRetriever.fetchTimetable(courseCode,
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
           @Override
           public void timetableRetrieved(Timetable timetable) {

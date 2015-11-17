@@ -35,7 +35,7 @@ public class DayAssistantActivity extends ListActivity {
     String courseGroup = preferences.getCourseGroupPreference();
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
-    sourceRetriever.fetchTimetable(courseCode, courseGroup,
+    sourceRetriever.fetchTimetable(courseCode,
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
           @Override
           public void timetableRetrieved(Timetable timetable) {

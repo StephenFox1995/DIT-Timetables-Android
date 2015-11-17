@@ -20,7 +20,7 @@ import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.NetworkManager;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
-import org.stephenfox.dittimetables.timetable.TimetableIDWrapper;
+import org.stephenfox.dittimetables.network.TimetableServerKeysCache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,8 +57,8 @@ public class AvailableCoursesActivity extends FragmentActivity implements
       public void finished(Object data) {
         if (data != null) {
           addRelevantActionListeners();
-          TimetableIDWrapper.setTimetableIdentifiersHash((String) data);
-          ArrayList<String> courseTitles = formatDataForAdapter(TimetableIDWrapper.getHash());
+          TimetableServerKeysCache.setTimetableIdentifiersHash((String) data);
+          ArrayList<String> courseTitles = formatDataForAdapter(TimetableServerKeysCache.getHash());
           listView.setAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
           listView.setOnItemClickListener(AvailableCoursesActivity.this);
         }
@@ -79,7 +79,6 @@ public class AvailableCoursesActivity extends FragmentActivity implements
       public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         TextView textView = (TextView) view.findViewById(R.id.courseCode);
         String courseCode = textView.getText().toString();
-        Integer courseID = TimetableIDWrapper.getTimetableIDForCourseCode(courseCode);
         addSaveCourseFragmentToViewHierarchy(courseCode);
         return true;
       }
@@ -90,12 +89,10 @@ public class AvailableCoursesActivity extends FragmentActivity implements
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     TextView courseCodeTextView = (TextView)view.findViewById(R.id.courseCode);
     String courseCode = courseCodeTextView.getText().toString();
-    Integer courseID = TimetableIDWrapper.getTimetableIDForCourseCode(courseCode);
 
     Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
 
     timetableWeekActivityIntent.putExtra("courseCode", courseCode);
-    timetableWeekActivityIntent.putExtra("courseID", Integer.toString(courseID));
 
     startActivity(timetableWeekActivityIntent);
   }
@@ -105,8 +102,8 @@ public class AvailableCoursesActivity extends FragmentActivity implements
   private void addSaveCourseFragmentToViewHierarchy(String courseCode) {
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-    int courseID = TimetableIDWrapper.getTimetableIDForCourseCode(courseCode);
-    SaveCourseFragment fragment = SaveCourseFragment.newInstance(Integer.toString(courseID), courseCode);
+    String courseID = TimetableServerKeysCache.getTimetableIDForCourseCode(courseCode);
+    SaveCourseFragment fragment = SaveCourseFragment.newInstance(courseID, courseCode);
     fragment.setDelegate(this);
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);
     fragmentTransaction.addToBackStack(null);

@@ -5,6 +5,7 @@ import android.content.Context;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
+import org.stephenfox.dittimetables.network.TimetableServerKeysCache;
 import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 
@@ -16,7 +17,6 @@ public class TimetableSourceRetriever {
 
   Context context;
   String courseCode;
-  String courseID;
   TimetableRetrieverCallback callback;
   TimetableDatabase database;
 
@@ -30,16 +30,14 @@ public class TimetableSourceRetriever {
    * either network or database.
    *
    * @param courseCode The course code of the timetable to fetch for e.g. DT228/3 etc.
-   * @param courseID The id of the course on the server if needs be that it must be fetched there.
    * @param callback This will be called when the timetable has been found either from the server or
    *                 the database. A null value will be passed in the event a timetable cannot
    *                 be created, i.e there's insufficient information for it most likely when coming
    *                 from the server.
    **/
   public void
-  fetchTimetable(String courseCode, String courseID, TimetableRetrieverCallback callback) {
+  fetchTimetable(String courseCode, TimetableRetrieverCallback callback) {
     this.courseCode = courseCode;
-    this.courseID = courseID;
     this.callback = callback;
 
     database = new TimetableDatabase(context);
@@ -47,6 +45,7 @@ public class TimetableSourceRetriever {
     if (database.timetableExists(courseCode)) {
       fetchTimetableFromDatabase();
     } else {
+      String courseID = TimetableServerKeysCache.getTimetableIDForCourseCode(courseCode);
       String url = WeekDownloader.constructURLToDownloadTimetableWeek(courseID);
       fetchTimetableFromServer(url);
     }

@@ -47,6 +47,7 @@ public class TimetableDay {
     this.sessions = sessions;
   }
 
+
   public TimetableSession[] getSessions() {
     return sessions.toArray(new TimetableSession[sessions.size()]);
   }

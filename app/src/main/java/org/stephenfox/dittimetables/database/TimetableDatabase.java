@@ -55,7 +55,7 @@ public class TimetableDatabase {
     return transactionHelper.insertTimetable(timetable);
   }
 
-
+  
   public boolean timetableExists(String courseCode) {
     open();
     DatabaseSelectionHelper selectionHelper = new DatabaseSelectionHelper(this);

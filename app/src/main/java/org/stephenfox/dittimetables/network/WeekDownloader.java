@@ -6,6 +6,8 @@ package org.stephenfox.dittimetables.network;
  */
 public class WeekDownloader extends HttpDownloader {
 
+
+
   /**
    * Downloads all the timetable information for a
    * course for the week.
@@ -26,5 +28,10 @@ public class WeekDownloader extends HttpDownloader {
         return getHttpData(url);
       }
     }, callback);
+  }
+
+
+  public static String constructURLToDownloadTimetableWeek(String id) {
+    return "http://timothybarnard.org/timetables/classes.php?courseID=" + id + "&semester=1";
   }
 }

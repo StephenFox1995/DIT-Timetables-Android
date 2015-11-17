@@ -21,8 +21,8 @@ public class JsonParser {
    *         Note: The hashmap has a key of identifier and value
    *         of course name.
    */
-  public HashMap<Integer, String> parseTitlesAndIdentifiers(String data) {
-    HashMap<Integer, String> courseIdentifiersAndTitlesHash = new HashMap<>();
+  public HashMap<String, Integer> parseTimetableIdentifiers(String data) {
+    HashMap<String, Integer> courseIdentifiersAndTitlesHash = new HashMap<>();
 
     try {
       JSONObject jsonObject = new JSONObject(data);
@@ -34,7 +34,7 @@ public class JsonParser {
         Integer courseId = o.getInt("id");
         String courseName = o.getString("courseName");
 
-        courseIdentifiersAndTitlesHash.put(courseId, courseName);
+        courseIdentifiersAndTitlesHash.put(courseName, courseId);
       }
     }
     catch (JSONException e) {

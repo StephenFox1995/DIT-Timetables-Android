@@ -50,7 +50,10 @@ public class DatabaseSelectionHelper {
 
 
   /**
-   * Selects all the sessions from a timetable */
+   * Selects all the sessions from a timetable for a courses timetable.
+   * @param courseCode The courseCode of the timetable.
+   * @return The timetable sessions for that timetable.
+   **/
   public TimetableSession[] selectSessions(String courseCode) {
     ArrayList<TimetableSession> sessions = new ArrayList<>();
 
@@ -102,6 +105,8 @@ public class DatabaseSelectionHelper {
 
   /**
    * A helper method to find the number of days a timetable is spread over.
+   * @param courseCode The coursecode of the timetable
+   * @return The number of days the timetable is spread across.
    */
   private int numberOfDaysForTimetable(String courseCode) {
     Cursor cursor = sqLiteDatabase.rawQuery(SELECT_NUMBER_OF_DAYS, new String[]{courseCode});
@@ -159,6 +164,7 @@ public class DatabaseSelectionHelper {
 
   /**
    * Returns all the possible groups from a timetable.
+   *
    * @return All the groups for a timetable.
    * */
   public String[] selectAllGroups() {

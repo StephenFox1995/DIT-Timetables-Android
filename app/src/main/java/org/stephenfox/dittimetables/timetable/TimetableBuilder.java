@@ -51,6 +51,8 @@ public class TimetableBuilder {
   /**
    * Adds all the sessions an instance was initialised with an
    * adds them to the appropriate days.
+   *
+   * @param timetableDays The days used to build the timetable.
    */
   private void addSessionsToDays(TimetableDay[] timetableDays) {
     for (TimetableSession session : sessions) {

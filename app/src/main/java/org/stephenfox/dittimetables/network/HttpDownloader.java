@@ -20,6 +20,8 @@ public class HttpDownloader {
    * a separate thread and not on the main ui thread.
    * Otherwise a NetworkOnMainThreadException will be thrown.
    *
+   * @param urlString The url string to download the data from the server.
+   *
    * @return Returns a string of the data fetched from
    *         the http request.
    */

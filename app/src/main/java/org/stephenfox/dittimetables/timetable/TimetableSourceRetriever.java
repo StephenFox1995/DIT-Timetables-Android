@@ -1,12 +1,12 @@
 package org.stephenfox.dittimetables.timetable;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
 import org.stephenfox.dittimetables.network.WeekDownloader;
+import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 
 /**
  * Use this class to determine the source/ location
@@ -47,10 +47,11 @@ public class TimetableSourceRetriever {
     if (database.timetableExists(courseCode)) {
       fetchTimetableFromDatabase();
     } else {
-      String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
+      String url = WeekDownloader.constructURLToDownloadTimetableWeek(courseID);
       fetchTimetableFromServer(url);
     }
   }
+
 
 
   /**
@@ -59,9 +60,10 @@ public class TimetableSourceRetriever {
    */
   private void fetchTimetableFromDatabase() {
     TimetableSession[] sessions;
-    SharedPreferences preferences =
-        context.getSharedPreferences("sPreferences", Context.MODE_PRIVATE);
-    String courseGroup = preferences.getString("chosenGroup", null);
+
+    // Find the courseGroup that is preferred by the user.
+    TimetablePreferences preferences = new TimetablePreferences(context);
+    String courseGroup = preferences.getCourseGroupPreference();
 
     if (courseGroup != null) {
        sessions = database.getSessionForGroup(courseCode, courseGroup);
@@ -119,13 +121,7 @@ public class TimetableSourceRetriever {
   }
 
 
-  public static String constructURLToDownloadTimetable(int id) {
-    return "http://timothybarnard.org/timetables/classes.php?courseID=" + id + "&semester=1";
-  }
 
-  public static String constructURLToDownloadTimetable(String id) {
-    return "http://timothybarnard.org/timetables/classes.php?courseID=" + id + "&semester=1";
-  }
 
 
   public interface TimetableRetrieverCallback {

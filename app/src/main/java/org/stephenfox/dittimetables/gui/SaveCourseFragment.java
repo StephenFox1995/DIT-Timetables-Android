@@ -20,7 +20,6 @@ import org.stephenfox.dittimetables.timetable.InvalidTimetableDataException;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableBuilder;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
-import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 
 public class SaveCourseFragment extends Fragment implements View.OnClickListener {
 
@@ -79,7 +78,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
       return;
     }
 
-    String url = TimetableSourceRetriever.constructURLToDownloadTimetable(courseID);
+    String url = WeekDownloader.constructURLToDownloadTimetableWeek(courseID);
     WeekDownloader weekDownloader = new WeekDownloader();
     weekDownloader.downloadWeekForCourse(url, new CustomAsyncTask.AsyncCallback() {
       @Override

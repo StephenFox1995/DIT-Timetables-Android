@@ -12,7 +12,6 @@ public class TimetableServerKeysCache {
 
   private static HashMap<String, Integer> timetableIdentifiersHash;
 
-
   public static HashMap<String, Integer> getHash() {
     return timetableIdentifiersHash;
   }

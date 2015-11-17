@@ -25,7 +25,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
 
   private String courseID;
   private String courseCode;
-  private SaveCourseDelegate delegate;
+  private CourseSavedCallback callback;
 
 
   public static SaveCourseFragment newInstance(String courseID, String courseCode) {
@@ -87,8 +87,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
           Toast.makeText(getActivity().getApplicationContext(),
               "Network error, could not download timetable.", Toast.LENGTH_SHORT).show();
           getFragmentManager().beginTransaction().remove(SaveCourseFragment.this).commit();
-        }
-        else {
+        } else {
           try {
             Timetable timetable = generateTimetableForDatabase((String) data);
             beginDatabaseTransaction(timetable);
@@ -146,7 +145,7 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
         if (data == DatabaseTransactionStatus.Success) {
           Toast.makeText(getActivity().getApplicationContext(),
               "Timetable successfully save to device!", Toast.LENGTH_SHORT).show();
-          delegate.fragmentHasSavedCourse(true);
+          callback.fragmentHasSavedCourse(timetable.getCourseCode(), true);
         }
         else {
           Toast.makeText(getActivity().getApplicationContext(),
@@ -157,16 +156,21 @@ public class SaveCourseFragment extends Fragment implements View.OnClickListener
     });
   }
 
-  public void setDelegate(SaveCourseDelegate delegate) {
-    this.delegate = delegate;
+  public void setCallback(CourseSavedCallback callback) {
+    this.callback = callback;
   }
 
-  public interface SaveCourseDelegate {
+  public interface CourseSavedCallback {
     /**
      * A message is sent to a delegate when this fragment will be
      * removed from the view hierarchy.
+     *
+     * @param courseCode The course code of the timetable saved.
+     * @param isRemoving A boolean value determining if the fragment
+     *                   is in the process of being removed. i.e the
+     *                   user no longer needs it.
      */
-    void fragmentHasSavedCourse(boolean isRemoving);
+    void fragmentHasSavedCourse(String courseCode, boolean isRemoving);
   }
 
 }

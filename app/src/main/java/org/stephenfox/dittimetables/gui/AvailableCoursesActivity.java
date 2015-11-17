@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public class AvailableCoursesActivity extends FragmentActivity implements
     AdapterView.OnItemClickListener,
-    SaveCourseFragment.SaveCourseDelegate {
+    SaveCourseFragment.CourseSavedCallback {
 
   private ListView listView;
 
@@ -91,9 +91,7 @@ public class AvailableCoursesActivity extends FragmentActivity implements
     String courseCode = courseCodeTextView.getText().toString();
 
     Intent timetableWeekActivityIntent = new Intent(this, TimetableWeekPagerActivity.class);
-
     timetableWeekActivityIntent.putExtra("courseCode", courseCode);
-
     startActivity(timetableWeekActivityIntent);
   }
 
@@ -104,7 +102,7 @@ public class AvailableCoursesActivity extends FragmentActivity implements
 
     String courseID = TimetableServerKeysCache.getTimetableIDForCourseCode(courseCode);
     SaveCourseFragment fragment = SaveCourseFragment.newInstance(courseID, courseCode);
-    fragment.setDelegate(this);
+    fragment.setCallback(this);
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
@@ -112,12 +110,12 @@ public class AvailableCoursesActivity extends FragmentActivity implements
 
 
   @Override
-  public void fragmentHasSavedCourse(boolean isRemoving) {
+  public void fragmentHasSavedCourse(final String courseCode, boolean isRemoving) {
     if (isRemoving) {
       TimetableDatabase database = new TimetableDatabase(this);
       String[] groups = database.getGroups();
 
-      ChooseGroupFragment fragment = ChooseGroupFragment.newInstance(groups, true);
+      ChooseGroupFragment fragment = ChooseGroupFragment.newInstance(courseCode, groups, true);
       FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.save_course_placeholder, fragment);
       fragmentTransaction.addToBackStack(null);
@@ -125,9 +123,10 @@ public class AvailableCoursesActivity extends FragmentActivity implements
 
       fragment.setGroupChosenCallback(new ChooseGroupFragment.ChooseGroupCallback() {
         @Override
-        public void groupChosen(String group) {
+        public void groupChosen(String courseCode, String group) {
           TimetablePreferences preferences = new TimetablePreferences(AvailableCoursesActivity.this);
           preferences.setCourseGroupPreference(group);
+          preferences.setCourseCodePreference(courseCode);
         }
       });
     }

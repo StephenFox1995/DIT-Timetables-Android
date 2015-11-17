@@ -18,12 +18,13 @@ import java.util.Arrays;
 public class ChooseGroupFragment extends ListFragment {
 
   String[] groups;
+  String courseCode;
   boolean allSelectionEnabled;
   private ChooseGroupCallback groupChosenCallback;
 
   /**
    * Creates a new ChooseFragment instance.
-   *
+   * @param courseCode The course code of the timetable.
    * @param groups The groups to choose from.
    * @param allSelectionEnabled Determines whether or not the ALL row will be present on the list.
    *                            Please note: If the timetable does not contain groups, all will be
@@ -31,8 +32,9 @@ public class ChooseGroupFragment extends ListFragment {
    *
    * @return A new instance of ChooseGroupFragment.
    */
-  public static ChooseGroupFragment newInstance(String[] groups, boolean allSelectionEnabled) {
+  public static ChooseGroupFragment newInstance(String courseCode, String[] groups, boolean allSelectionEnabled) {
     Bundle args = new Bundle();
+    args.putString("courseCode", courseCode);
     args.putStringArray("groups", groups);
     args.putBoolean("allSelectionEnabled", allSelectionEnabled);
     ChooseGroupFragment fragment = new ChooseGroupFragment();
@@ -52,6 +54,7 @@ public class ChooseGroupFragment extends ListFragment {
 
     Bundle args = getArguments();
     this.groups = args.getStringArray("groups");
+    this.courseCode = args.getString("courseCode");
     this.allSelectionEnabled = args.getBoolean("allSelectionEnabled");
 
     setupList();
@@ -61,7 +64,7 @@ public class ChooseGroupFragment extends ListFragment {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String selection = ((TextView) view).getText().toString();
-        groupChosenCallback.groupChosen(selection);
+        groupChosenCallback.groupChosen(courseCode, selection);
       }
     });
   }
@@ -100,7 +103,12 @@ public class ChooseGroupFragment extends ListFragment {
     this.groupChosenCallback = groupChosenCallback;
   }
 
+
   interface ChooseGroupCallback {
-    void groupChosen(String group);
+    /**
+     * @param courseCode The course code of the timetable.
+     * @param group The group that has been selected to save.
+     **/
+    void groupChosen(String courseCode, String group);
   }
 }

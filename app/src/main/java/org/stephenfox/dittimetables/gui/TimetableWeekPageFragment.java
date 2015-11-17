@@ -17,6 +17,7 @@ import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
+import org.stephenfox.dittimetables.utilities.Utilities;
 
 
 /**
@@ -167,11 +168,10 @@ public class TimetableWeekPageFragment extends ListFragment {
      * @return SessionStatus The status for a given session.
      */
     private SessionStatus determineSessionStatus(TimetableSession session) {
-      String sEndTime = stringWithReplacedIndex(session.getEndTime(), '.', 2);
-      String sStartTime = stringWithReplacedIndex(session.getStartTime(), '.', 2);
-      String sCurrentTime = stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
+      String sEndTime = Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2);
+      String sStartTime = Utilities.stringWithReplacedIndex(session.getStartTime(), '.', 2);
+      String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
 
-      float startTime = Float.parseFloat(sStartTime);
       float endTime = Float.parseFloat(sEndTime);
       float currentTime = Float.parseFloat(sCurrentTime);
 
@@ -180,7 +180,7 @@ public class TimetableWeekPageFragment extends ListFragment {
       if (!timetableDay.equalsIgnoreCase(Time.getCurrentDay())) {
         return SessionStatus.InvalidDay;
       }
-      else if (startTime <= currentTime && endTime > currentTime) {
+      else if (session.isActive()) {
         return SessionStatus.Active;
       }
       else if (currentTime > endTime) {
@@ -207,11 +207,6 @@ public class TimetableWeekPageFragment extends ListFragment {
       }
     }
 
-    private String stringWithReplacedIndex(String s, char c, int index) {
-      StringBuilder stringBuilder = new StringBuilder(s);
-      stringBuilder.setCharAt(index, c);
-      return stringBuilder.toString();
-    }
   }
 
 }

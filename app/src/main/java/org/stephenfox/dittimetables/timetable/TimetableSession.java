@@ -1,6 +1,11 @@
 package org.stephenfox.dittimetables.timetable;
 
 
+import android.util.Log;
+
+import org.stephenfox.dittimetables.time.Time;
+import org.stephenfox.dittimetables.utilities.Utilities;
+
 /**
  * This class provides information for a single session
  * for a course's timetable. For example a session could be a
@@ -20,6 +25,27 @@ public class TimetableSession {
     this.sessionMaster = sessionMaster;
     this.sessionLocation = sessionLocation;
     this.sessionType = sessionType;
+  }
+
+
+  /**
+   * Use this method to decide whether or not a session is active i.e
+   * it is currently being held at this moment in time.
+   */
+  public boolean isActive() {
+    String sEndTime = Utilities.stringWithReplacedIndex(getEndTime(), '.', 2);
+    String sStartTime = Utilities.stringWithReplacedIndex(getStartTime(), '.', 2);
+    String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
+
+    float startTime = Float.parseFloat(sStartTime);
+    float endTime = Float.parseFloat(sEndTime);
+    float currentTime = Float.parseFloat(sCurrentTime);
+
+    Day day = Day.stringToDay(Time.getCurrentDay());
+    Log.d("SF", "local day: " + day.toString() + " session day " + this.day);
+    if (day != this.day) {
+      return false;
+    } else return startTime <= currentTime && endTime > currentTime;
   }
 
   /**

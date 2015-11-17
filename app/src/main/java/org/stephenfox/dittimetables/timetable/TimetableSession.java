@@ -1,8 +1,6 @@
 package org.stephenfox.dittimetables.timetable;
 
 
-import android.util.Log;
-
 import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.utilities.Utilities;
 
@@ -42,10 +40,7 @@ public class TimetableSession {
     float currentTime = Float.parseFloat(sCurrentTime);
 
     Day day = Day.stringToDay(Time.getCurrentDay());
-    Log.d("SF", "local day: " + day.toString() + " session day " + this.day);
-    if (day != this.day) {
-      return false;
-    } else return startTime <= currentTime && endTime > currentTime;
+    return day == this.day && startTime <= currentTime && endTime > currentTime;
   }
 
   /**

@@ -20,6 +20,7 @@ import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
+import org.stephenfox.dittimetables.utilities.Utilities;
 
 import java.util.ArrayList;
 
@@ -32,11 +33,11 @@ public class DayAssistantActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.day_assistant_activity);
     listView = (ListView)findViewById(R.id.list);
+
     TimetablePreferences preferences = new TimetablePreferences(this);
     String courseGroup = preferences.getCourseGroupPreference();
+
     setTitle(courseGroup);
-
-
     setup();
   }
 
@@ -107,6 +108,8 @@ public class DayAssistantActivity extends AppCompatActivity {
 
       TextView timeRemainingTextView =
           (TextView)row.findViewById(R.id.session_detail_time_remaining);
+      timeRemainingTextView.setText(stringForTimeComponent(sessions[position]));
+
       TextView sessionname = (TextView)row.findViewById(R.id.session_detail_sessionname);
       sessionname.setText(sessions[position].getSessionName());
 
@@ -128,7 +131,8 @@ public class DayAssistantActivity extends AppCompatActivity {
 
 
     /**
-     * Determines what sessions to show in the list. They may be all finished.*/
+     * Determines what sessions to show in the list. They may be all finished.
+     **/
     private TimetableSession[] determineIncludedSessions(TimetableSession[] sessions) {
       ArrayList<TimetableSession> lSessions = new ArrayList<>();
 
@@ -146,6 +150,23 @@ public class DayAssistantActivity extends AppCompatActivity {
       return ContextCompat.getColor(getApplicationContext(), R.color.sessiom_detail_active_green);
     } else {
       return ContextCompat.getColor(getApplicationContext(), R.color.session_details_view_blue);
+    }
+  }
+
+  private String stringForTimeComponent(TimetableSession session) {
+    float currentTime =
+        Float.parseFloat(Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2));
+    float startTime =
+        Float.parseFloat(Utilities.stringWithReplacedIndex(session.getStartTime(), '.', 2));
+    float endTime =
+        Float.parseFloat(Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2));
+
+    if (session.isActive()) {
+      float timeRemaining = endTime - currentTime;
+      return timeRemaining + " remaining.";
+    } else {
+      float timeUntil = startTime - currentTime;
+      return timeUntil + " until.";
     }
   }
 }

@@ -115,7 +115,7 @@ public class AvailableCoursesActivity extends FragmentActivity implements
       TimetableDatabase database = new TimetableDatabase(this);
       String[] groups = database.getGroups();
 
-      ChooseGroupFragment fragment = ChooseGroupFragment.newInstance(courseCode, groups, true);
+      final ChooseGroupFragment fragment = ChooseGroupFragment.newInstance(courseCode, groups, true);
       FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.save_course_placeholder, fragment);
       fragmentTransaction.addToBackStack(null);
@@ -127,6 +127,11 @@ public class AvailableCoursesActivity extends FragmentActivity implements
           TimetablePreferences preferences = new TimetablePreferences(AvailableCoursesActivity.this);
           preferences.setCourseGroupPreference(group);
           preferences.setCourseCodePreference(courseCode);
+        }
+
+        @Override
+        public void choosingGroupCancelled() {
+          getFragmentManager().beginTransaction().remove(fragment).commit();
         }
       });
     }

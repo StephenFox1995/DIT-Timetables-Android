@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
@@ -21,6 +22,7 @@ public class ChooseGroupFragment extends ListFragment {
   String courseCode;
   boolean allSelectionEnabled;
   private ChooseGroupCallback groupChosenCallback;
+
 
   /**
    * Creates a new ChooseFragment instance.
@@ -67,6 +69,15 @@ public class ChooseGroupFragment extends ListFragment {
         groupChosenCallback.groupChosen(courseCode, selection);
       }
     });
+
+    Button button = (Button)view.findViewById(R.id.choose_group_cancel_button);
+    button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        groupChosenCallback.choosingGroupCancelled();
+      }
+    });
+
   }
 
 
@@ -110,5 +121,7 @@ public class ChooseGroupFragment extends ListFragment {
      * @param group The group that has been selected to save.
      **/
     void groupChosen(String courseCode, String group);
+
+    void choosingGroupCancelled();
   }
 }

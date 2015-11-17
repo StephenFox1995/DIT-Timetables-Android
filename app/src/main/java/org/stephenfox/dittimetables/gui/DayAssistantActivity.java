@@ -135,9 +135,10 @@ public class DayAssistantActivity extends AppCompatActivity {
      **/
     private TimetableSession[] determineIncludedSessions(TimetableSession[] sessions) {
       ArrayList<TimetableSession> lSessions = new ArrayList<>();
+      Day today = Day.stringToDay(Time.getCurrentDay());
 
       for (TimetableSession session : sessions) {
-        if (session.isActive()) {
+        if (session.isActive() || session.getDay() == today) {
           lSessions.add(session);
         }
       }

@@ -43,6 +43,11 @@ public class TimetableSession {
     return day == this.day && startTime <= currentTime && endTime > currentTime;
   }
 
+
+  public boolean isActiveForDay(Day day) {
+    return this.day == day;
+  }
+
   /**
    * The day for which this session will be held
    */

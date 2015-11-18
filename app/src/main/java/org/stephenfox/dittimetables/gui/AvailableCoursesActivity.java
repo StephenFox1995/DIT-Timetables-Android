@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -65,13 +67,27 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.options_menu, menu);
+    inflater.inflate(R.menu.search, menu);
 
     SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
     SearchableInfo s = searchManager.getSearchableInfo(getComponentName());
     searchView.setSearchableInfo(s);
-    searchView.setIconifiedByDefault(true);
+    searchView.setIconifiedByDefault(false);
+    return true;
+  }
+
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.menu.search:
+        Log.d("SF", "Settings selected");
+        break;
+      default:
+        Log.d("SF", "Ah fuck");
+        break;
+    }
     return true;
   }
 

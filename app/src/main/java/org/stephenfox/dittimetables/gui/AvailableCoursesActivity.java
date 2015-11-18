@@ -2,16 +2,21 @@ package org.stephenfox.dittimetables.gui;
 
 
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
@@ -19,18 +24,20 @@ import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.NetworkManager;
-import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 import org.stephenfox.dittimetables.network.TimetableServerKeysCache;
+import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class AvailableCoursesActivity extends FragmentActivity implements
+public class AvailableCoursesActivity extends AppCompatActivity implements
     AdapterView.OnItemClickListener,
     SaveCourseFragment.CourseSavedCallback {
 
   private ListView listView;
+
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,13 @@ public class AvailableCoursesActivity extends FragmentActivity implements
     setContentView(R.layout.activity_available_courses);
 
     listView = (ListView)findViewById(R.id.listview);
+
+    Intent intent = getIntent();
+
+    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+      String query = intent.getStringExtra(SearchManager.QUERY);
+      performSearch(query);
+    }
 
     if (NetworkManager.hasInternetConnection(this)) {
       beginDownload();
@@ -48,6 +62,22 @@ public class AvailableCoursesActivity extends FragmentActivity implements
     }
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.options_menu, menu);
+
+    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
+    SearchableInfo s = searchManager.getSearchableInfo(getComponentName());
+    searchView.setSearchableInfo(s);
+    searchView.setIconifiedByDefault(true);
+    return true;
+  }
+
+  private void performSearch(String string) {
+
+  }
 
   // Downloads all the JSON data from the server.
   private void beginDownload() {
@@ -107,6 +137,7 @@ public class AvailableCoursesActivity extends FragmentActivity implements
     fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
   }
+
 
 
   @Override

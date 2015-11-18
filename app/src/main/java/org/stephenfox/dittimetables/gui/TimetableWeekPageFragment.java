@@ -14,10 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.time.Time;
+import org.stephenfox.dittimetables.timetable.SessionStatus;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
-import org.stephenfox.dittimetables.utilities.Utilities;
 
 
 /**
@@ -88,13 +87,6 @@ public class TimetableWeekPageFragment extends ListFragment {
   }
 
 
-
-  public enum SessionStatus {
-    Finished,
-    Active,
-    Later,
-    InvalidDay
-  }
 
 
   private class TimetableWeekListAdapter extends BaseAdapter {
@@ -168,27 +160,7 @@ public class TimetableWeekPageFragment extends ListFragment {
      * @return SessionStatus The status for a given session.
      */
     private SessionStatus determineSessionStatus(TimetableSession session) {
-      String sEndTime = Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2);
-      String sStartTime = Utilities.stringWithReplacedIndex(session.getStartTime(), '.', 2);
-      String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
-
-      float endTime = Float.parseFloat(sEndTime);
-      float currentTime = Float.parseFloat(sCurrentTime);
-
-      String timetableDay = this.day.getDay().toString();
-
-      if (!timetableDay.equalsIgnoreCase(Time.getCurrentDay())) {
-        return SessionStatus.InvalidDay;
-      }
-      else if (session.isActive()) {
-        return SessionStatus.Active;
-      }
-      else if (currentTime > endTime) {
-        return SessionStatus.Finished;
-      }
-      else {
-        return SessionStatus.Later;
-      }
+      return session.timeStatus();
     }
 
 

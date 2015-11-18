@@ -48,6 +48,34 @@ public class TimetableSession {
     return this.day == day;
   }
 
+
+  /**
+   * Determine the current status of a session. i.e if it is active or has finished for
+   * the day etc.
+   * @return The status.
+   **/
+  public SessionStatus timeStatus() {
+    String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
+    String sEndTime = Utilities.stringWithReplacedIndex(getEndTime(), '.', 2);
+
+    float endTime = Float.parseFloat(sEndTime);
+    float currentTime = Float.parseFloat(sCurrentTime);
+
+    if (!(day == Day.stringToDay(Time.getCurrentDay()))) {
+      return SessionStatus.InvalidDay;
+    }
+    else if (isActive()) {
+      return SessionStatus.Active;
+    }
+    else if (currentTime > endTime) {
+      return SessionStatus.Finished;
+    }
+    else {
+      return SessionStatus.Later;
+    }
+  }
+
+
   /**
    * The day for which this session will be held
    */

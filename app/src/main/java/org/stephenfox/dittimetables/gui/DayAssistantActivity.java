@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.timetable.Day;
+import org.stephenfox.dittimetables.timetable.SessionStatus;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
@@ -138,7 +140,7 @@ public class DayAssistantActivity extends AppCompatActivity {
       Day today = Day.stringToDay(Time.getCurrentDay());
 
       for (TimetableSession session : sessions) {
-        if (session.isActive() || session.getDay() == today) {
+        if (session.isActiveForDay(today) && session.timeStatus() != SessionStatus.Finished) {
           lSessions.add(session);
         }
       }
@@ -162,12 +164,27 @@ public class DayAssistantActivity extends AppCompatActivity {
     float endTime =
         Float.parseFloat(Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2));
 
+    Log.d("SF", "" + currentTime);
     if (session.isActive()) {
       float timeRemaining = endTime - currentTime;
-      return timeRemaining + " remaining.";
+      return formatTimeString(timeRemaining) + " remaining.";
     } else {
-      float timeUntil = startTime - currentTime;
-      return timeUntil + " until.";
+      float timeUntil = currentTime - startTime;
+      return formatTimeString(timeUntil) + " until.";
     }
+  }
+
+  private float convertToHoursAndMinutes(float time) {
+    return ((time / 100) * 60);
+  }
+
+
+  private String formatTimeString(float time) {
+    float hoursAndMinutesValue = convertToHoursAndMinutes(time);
+    String formattedString = String.format("%.2f", hoursAndMinutesValue);
+    String hours = formattedString.split("\\.")[0];
+    char minutes = formattedString.toCharArray()[formattedString.length() - 2];
+
+    return hours + "."  + minutes + "hr(s)";
   }
 }

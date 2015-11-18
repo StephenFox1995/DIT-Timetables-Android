@@ -73,7 +73,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
     SearchableInfo s = searchManager.getSearchableInfo(getComponentName());
     searchView.setSearchableInfo(s);
-    searchView.setIconifiedByDefault(false);
+    searchView.setIconifiedByDefault(true);
     return true;
   }
 

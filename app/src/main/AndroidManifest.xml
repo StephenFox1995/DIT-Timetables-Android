@@ -30,7 +30,7 @@
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
-            <meta-data android:name="android.app.default_searchable"
+            <meta-data android:name=".app.default_searchable"
                        android:resource="@xml/searchable"/>
         </activity>
 

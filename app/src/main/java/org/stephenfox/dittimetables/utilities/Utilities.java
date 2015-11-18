@@ -22,4 +22,10 @@ public class Utilities {
     return stringBuilder.toString();
   }
 
+
+
+  public static void removeWhiteSpace(String s) {
+    s.replaceAll("\\s","");
+  }
+
 }

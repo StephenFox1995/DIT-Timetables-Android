@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +60,7 @@ public class ChooseGroupFragment extends ListFragment {
     this.courseCode = args.getString("courseCode");
     this.allSelectionEnabled = args.getBoolean("allSelectionEnabled");
 
+
     setupList();
 
     // Become listener for clicks on ChooseCourseFragment
@@ -83,6 +85,11 @@ public class ChooseGroupFragment extends ListFragment {
 
   private void setupList() {
     String[] listSelection = shouldIncludeAllSelectionItem();
+
+    for (String s : listSelection) {
+      Utilities.removeWhiteSpace(s);
+    }
+
     ArrayAdapter<String> arrayAdapter =
         new ArrayAdapter<>(getActivity().getApplicationContext(), R.layout.choose_group_row, listSelection);
     setListAdapter(arrayAdapter);

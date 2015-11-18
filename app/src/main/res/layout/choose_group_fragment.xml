@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:background="@color/white"
-              android:orientation="vertical"
               android:layout_width="300dp"
-              android:layout_height="wrap_content">
-    
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="20dp"
         android:background="@color/session_details_view_blue"
+        android:gravity="center"
+        android:letterSpacing="4"
+        android:text="CHOOSE YOUR GROUP"
         android:textColor="@color/white"
-        android:text="Choose your group"/>
-    
-    <ListView
+        android:textSize="20sp"/>
+
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@android:id/list">
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="left"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Tip: Choosing a group means we will customise the timetable to your group!"
+        android:textColor="@color/timetable_row_gray"
+        android:textSize="15sp"/>
+
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
     </ListView>
-    
+
     <Button
         android:id="@+id/choose_group_cancel_button"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:textColor="@color/session_details_view_blue"
-        android:text="Cancel"/>
+        android:text="Cancel"
+        android:textColor="@color/session_details_view_blue"/>
 
 </LinearLayout>

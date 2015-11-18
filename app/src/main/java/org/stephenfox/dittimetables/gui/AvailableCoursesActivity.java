@@ -127,6 +127,7 @@ public class AvailableCoursesActivity extends FragmentActivity implements
           TimetablePreferences preferences = new TimetablePreferences(AvailableCoursesActivity.this);
           preferences.setCourseGroupPreference(group);
           preferences.setCourseCodePreference(courseCode);
+          getFragmentManager().beginTransaction().remove(fragment).commit();
         }
 
         @Override

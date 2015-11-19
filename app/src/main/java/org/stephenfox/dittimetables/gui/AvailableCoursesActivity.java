@@ -2,13 +2,13 @@ package org.stephenfox.dittimetables.gui;
 
 
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +41,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     SearchView.OnQueryTextListener {
 
   private ListView listView;
+  ProgressDialog progressDialog;
 
 
   @Override
@@ -55,7 +56,6 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     }
     else {
       if (NetworkManager.hasInternetConnection(this)) {
-        Log.d("SF", "We have a connection :)");
         beginDownload();
       } else {
         displayNoConnectionTextView();
@@ -78,7 +78,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     }
   }
 
-  // TODO: Error check this completetly.
+  // TODO: Error check this completely.
   private void displayNoConnectionTextView() {
     TextView noConnection = (TextView)findViewById(R.id.no_connection);
     noConnection.setText("Could not connect to network!");
@@ -89,8 +89,10 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
+
     inflater.inflate(R.menu.search, menu);
     inflater.inflate(R.menu.reload, menu);
+
 
     SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
@@ -105,11 +107,11 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.menu.reload:
+      case R.id.menu_refresh:
         reloadDataSource();
         return true;
       default:
-        return false;
+        return super.onOptionsItemSelected(item);
     }
   }
 
@@ -148,6 +150,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
   // Downloads all the JSON data from the server.
   private void beginDownload() {
+    showProgressDialog();
     CourseDownloader cDownloader = new CourseDownloader();
     cDownloader.downloadCourseNamesAndIdentifiers(new CustomAsyncTask.AsyncCallback() {
       @Override
@@ -158,9 +161,27 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
           ArrayList<String> courseTitles = formatDataForAdapter(CourseAndServerIDsDataSource.getHash());
           listView.setAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
           listView.setOnItemClickListener(AvailableCoursesActivity.this);
+          removeProgressDialog();
         }
       }
     });
+  }
+
+  private void showProgressDialog() {
+    if (progressDialog == null) {
+      progressDialog = new ProgressDialog(this);
+      progressDialog.setTitle("Loading");
+      progressDialog.setMessage("Grabbing information");
+      progressDialog.setCancelable(false);
+    }
+    progressDialog.show();
+  }
+
+  private void removeProgressDialog() {
+    if (progressDialog == null) {
+      return;
+    }
+    progressDialog.dismiss();
   }
 
 

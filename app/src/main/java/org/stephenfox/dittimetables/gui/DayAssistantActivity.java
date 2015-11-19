@@ -65,8 +65,9 @@ public class DayAssistantActivity extends AppCompatActivity {
     LayoutInflater layoutInflater;
     Timetable timetable;
     String currentDay;
-    Day day;
+    Day today;
     TimetableSession[] sessions;
+    boolean dayContainsSessions;
 
 
     public SessionDetailsAdapter(Context context, Timetable timetable) {
@@ -74,14 +75,26 @@ public class DayAssistantActivity extends AppCompatActivity {
       this.timetable = timetable;
       this.layoutInflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
       this.currentDay = Time.getCurrentDay();
-      this.day = Day.stringToDay(currentDay);
-      this.sessions = timetable.getTimetableDay(day).getSessions();
+      this.today = Day.stringToDay(currentDay);
+
+      if (timetable.containsDay(today)) {
+        if (timetable.getTimetableDay(today).containsSessions()) {
+          this.sessions = timetable.getTimetableDay(today).getSessions();
+          dayContainsSessions = true;
+        }
+      } else {
+        dayContainsSessions = false;
+      }
     }
 
     @Override
     public int getCount() {
-      TimetableDay timetableDay = timetable.getTimetableDay(day);
-      return determineIncludedSessions(timetableDay.getSessions()).length;
+      if (dayContainsSessions) {
+        TimetableDay timetableDay = timetable.getTimetableDay(today);
+        return determineIncludedSessions(timetableDay.getSessions()).length;
+      } else {
+        return 0;
+      }
     }
 
     @Override

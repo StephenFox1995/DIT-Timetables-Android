@@ -20,8 +20,8 @@ import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 
 /**
- * Fragment which displays a day of the week
- * and the sessions belonging to that day.
+ * Fragment which displays a today of the week
+ * and the sessions belonging to that today.
  */
 public class TimetableWeekPageFragment extends ListFragment {
 
@@ -155,7 +155,7 @@ public class TimetableWeekPageFragment extends ListFragment {
 
     /**
      * Determines the Status of a session. i.e If its finished, has to start etc.
-     * Note: The day for the session must match the actual day of the week
+     * Note: The today for the session must match the actual today of the week
      * in reality.
      * @return SessionStatus The status for a given session.
      */

@@ -56,6 +56,9 @@ public class TimetableWeek {
 
   /**
    * Returns a Day in the week.
+   * Please use hasDay before calling this method
+   * otherwise a IndexOutOfBoundsException will be thrown if the
+   * day does no exist.
    *
    * @param day The day to return.
    * @return The day.
@@ -66,7 +69,13 @@ public class TimetableWeek {
 
 
   public boolean hasDay(Day day) {
-    return this.days.get(day.toInt()) != null;
+    try {
+      days.get(day.toInt());
+      return true;
+    }
+    catch (IndexOutOfBoundsException e) {
+      return false;
+    }
   }
 
 

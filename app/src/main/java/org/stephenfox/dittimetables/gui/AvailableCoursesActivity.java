@@ -54,12 +54,10 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     if (TimetablePreferences.getTimetableSavedPreference(this)) {
       showAssistantActivity();
     }
-    else {
-      if (NetworkManager.hasInternetConnection(this)) {
-        beginDownload();
-      } else {
-        displayNoConnectionTextView();
-      }
+    if (NetworkManager.hasInternetConnection(this)) {
+      beginDownload();
+    } else {
+      displayNoConnectionTextView();
     }
   }
 

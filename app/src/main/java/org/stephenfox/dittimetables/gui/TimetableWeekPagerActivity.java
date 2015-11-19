@@ -115,7 +115,6 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
 
     private Timetable timetable;
 
-
     public SliderAdapter(FragmentManager manager, Timetable timetable) {
       super(manager);
       this.timetable = timetable;

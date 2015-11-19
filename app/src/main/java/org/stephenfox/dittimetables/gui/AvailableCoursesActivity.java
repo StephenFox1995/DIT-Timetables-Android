@@ -26,10 +26,11 @@ import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.NetworkManager;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
+import org.stephenfox.dittimetables.utilities.Search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Set;
 
 
 public class AvailableCoursesActivity extends AppCompatActivity implements
@@ -94,15 +95,12 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
       return;
 
     HashMap<String, Integer> coursesAndServersIDsHash = CourseAndServerIDsCache.getHash();
-    Set<String> keys = coursesAndServersIDsHash.keySet();
-    ArrayList<String> stringsForAdapter = new ArrayList<>();
+    Search courseSearch = new Search();
+    String[] resultSet =
+        courseSearch.performStringSearch(coursesAndServersIDsHash.keySet(), string, false);
 
-    for (String possibleResult : keys) {
-      if (possibleResult.toLowerCase().contains(string.toLowerCase())) {
-        stringsForAdapter.add(possibleResult);
-      }
-    }
-    listView.setAdapter(new CourseListAdapter(getApplicationContext(), stringsForAdapter));
+    listView.setAdapter(new CourseListAdapter(getApplicationContext(),
+        new ArrayList<>(Arrays.asList(resultSet))));
   }
 
   // Downloads all the JSON data from the server.

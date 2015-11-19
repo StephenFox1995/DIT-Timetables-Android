@@ -33,6 +33,11 @@ public class Timetable {
 
   public int getDayCount() { return timetableWeek.getNumberOfDays(); }
 
+  public boolean containsDay(Day day) {
+    return timetableWeek.hasDay(day);
+  }
+
+
   public String getCourseCode() {
     return courseCode;
   }

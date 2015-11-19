@@ -65,6 +65,11 @@ public class TimetableWeek {
   }
 
 
+  public boolean hasDay(Day day) {
+    return this.days.get(day.toInt()) != null;
+  }
+
+
 
   @Override
   public String toString() {

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.stephenfox.dittimetables.R;
-import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
@@ -20,9 +19,11 @@ import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
  * {@link org.stephenfox.dittimetables.gui.TimetableWeekPageFragment}
  * for details on each fragment.
  */
-public class TimetableWeekPagerActivity extends AppCompatActivity {
+public class TimetableWeekPagerActivity extends AppCompatActivity implements
+    ViewPager.OnPageChangeListener {
 
   private ViewPager pager;
+  private Timetable timetable;
 
 
   @Override
@@ -32,6 +33,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
 
     Intent d = getIntent();
     String courseCode = d.getStringExtra("courseCode");
+
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
     sourceRetriever.fetchTimetable(courseCode,
@@ -50,19 +52,41 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
   }
 
 
-
   /**
    * Sets up the activity, with the appropriate timetable.
    *
    * @param timetable The timetable to set up the activity with.
    */
   void setup(Timetable timetable) {
+    this.timetable = timetable;
     pager = (ViewPager) findViewById(R.id.slide);
     pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
-
-    TimetableDatabase database = new TimetableDatabase(this);
-    String[] groups = database.getGroups();
+    pager.addOnPageChangeListener(this);
+    onPageSelected(0);
   }
+
+
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+  }
+
+  @Override
+  public void onPageSelected(int position) {
+    Day selectedDay = Day.intToDay(position);
+
+    if (timetable.containsDay(selectedDay)) {
+      updateActionBarWithDayWithTitle(timetable.getTimetableDay(selectedDay).getDayName());
+    }
+  }
+
+  private void updateActionBarWithDayWithTitle(String title) {
+    setTitle(title);
+  }
+
+  @Override
+  public void onPageScrollStateChanged(int state) {
+  }
+
 
 
 
@@ -80,7 +104,8 @@ public class TimetableWeekPagerActivity extends AppCompatActivity {
     @Override
     public Fragment getItem(int position) {
       Day dayForFragment = Day.intToDay(position);
-      return new TimetableWeekPageFragment().newInstance(this.timetable.getTimetableDay(dayForFragment));
+      return
+          new TimetableWeekPageFragment().newInstance(this.timetable.getTimetableDay(dayForFragment));
     }
 
     @Override

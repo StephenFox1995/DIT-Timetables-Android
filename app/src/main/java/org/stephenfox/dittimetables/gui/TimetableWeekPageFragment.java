@@ -25,7 +25,6 @@ import org.stephenfox.dittimetables.timetable.TimetableSession;
  */
 public class TimetableWeekPageFragment extends ListFragment {
 
-  private static final String TAG = TimetableWeekPageFragment.class.getSimpleName();
 
   private TimetableDay timetableDay;
 

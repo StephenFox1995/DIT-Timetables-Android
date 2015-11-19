@@ -93,7 +93,6 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     inflater.inflate(R.menu.search, menu);
     inflater.inflate(R.menu.reload, menu);
 
-
     SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
     SearchableInfo s = searchManager.getSearchableInfo(getComponentName());
@@ -170,8 +169,8 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   private void showProgressDialog() {
     if (progressDialog == null) {
       progressDialog = new ProgressDialog(this);
-      progressDialog.setTitle("Loading");
-      progressDialog.setMessage("Grabbing information");
+      progressDialog.setTitle("Loading...");
+      progressDialog.setMessage("Grabbing information...");
       progressDialog.setCancelable(false);
     }
     progressDialog.show();

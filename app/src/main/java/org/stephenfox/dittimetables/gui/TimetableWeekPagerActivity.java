@@ -1,5 +1,6 @@
 package org.stephenfox.dittimetables.gui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
 
   private ViewPager pager;
   private Timetable timetable;
+  private ProgressDialog progressDialog;
 
 
   @Override
@@ -34,7 +36,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
     Intent d = getIntent();
     String courseCode = d.getStringExtra("courseCode");
 
-
+    showProgressDialog();
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
     sourceRetriever.fetchTimetable(courseCode,
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
@@ -52,6 +54,24 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
   }
 
 
+  private void showProgressDialog() {
+    if (progressDialog == null) {
+      progressDialog = new ProgressDialog(this);
+      progressDialog.setTitle("Loading...");
+      progressDialog.setMessage("Grabbing information...");
+      progressDialog.setCancelable(false);
+    }
+    progressDialog.show();
+  }
+
+  private void removeProgressDialog() {
+    if (progressDialog == null) {
+      return;
+    }
+    progressDialog.dismiss();
+  }
+
+
   /**
    * Sets up the activity, with the appropriate timetable.
    *
@@ -62,6 +82,7 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
     pager = (ViewPager) findViewById(R.id.slide);
     pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
     pager.addOnPageChangeListener(this);
+    removeProgressDialog();
     onPageSelected(0);
   }
 

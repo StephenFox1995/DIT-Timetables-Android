@@ -8,7 +8,7 @@ import java.util.HashMap;
  * for the server keys, which provide the correct keys to download timetable
  * from the server.
  **/
-public class TimetableServerKeysCache {
+public class CourseAndServerIDsCache {
 
   private static HashMap<String, Integer> timetableIdentifiersHash;
 
@@ -18,7 +18,7 @@ public class TimetableServerKeysCache {
 
   public static void setTimetableIdentifiersHash(String jsonData) {
     JsonParser parser = new JsonParser();
-    TimetableServerKeysCache.timetableIdentifiersHash = parser.parseTimetableIdentifiers(jsonData);
+    CourseAndServerIDsCache.timetableIdentifiersHash = parser.parseTimetableIdentifiers(jsonData);
   }
 
 

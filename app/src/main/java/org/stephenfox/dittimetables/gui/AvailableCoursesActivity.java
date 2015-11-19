@@ -8,11 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,21 +21,24 @@ import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
+import org.stephenfox.dittimetables.network.CourseAndServerIDsCache;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.NetworkManager;
-import org.stephenfox.dittimetables.network.TimetableServerKeysCache;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 
 public class AvailableCoursesActivity extends AppCompatActivity implements
     AdapterView.OnItemClickListener,
-    SaveCourseFragment.CourseSavedCallback {
+    SaveCourseFragment.CourseSavedCallback,
+    SearchView.OnQueryTextListener {
 
   private ListView listView;
+
 
 
 
@@ -48,12 +49,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
     listView = (ListView)findViewById(R.id.listview);
 
-    Intent intent = getIntent();
 
-    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-      String query = intent.getStringExtra(SearchManager.QUERY);
-      performSearch(query);
-    }
 
     if (NetworkManager.hasInternetConnection(this)) {
       beginDownload();
@@ -74,25 +70,39 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     SearchableInfo s = searchManager.getSearchableInfo(getComponentName());
     searchView.setSearchableInfo(s);
     searchView.setIconifiedByDefault(true);
+    searchView.setOnQueryTextListener(this);
     return true;
   }
 
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.menu.search:
-        Log.d("SF", "Settings selected");
-        break;
-      default:
-        Log.d("SF", "Ah fuck");
-        break;
-    }
-    return true;
+  public boolean onQueryTextChange(String newText) {
+    performSearch(newText);
+    return false;
   }
 
-  private void performSearch(String string) {
+  @Override
+  public boolean onQueryTextSubmit(String query) {
+    return false;
+  }
 
+
+  private void performSearch(String string) {
+    // Don't perform search if somehow we've lost connection
+    // as it will be useless.
+    if (!NetworkManager.hasInternetConnection(this))
+      return;
+
+    HashMap<String, Integer> coursesAndServersIDsHash = CourseAndServerIDsCache.getHash();
+    Set<String> keys = coursesAndServersIDsHash.keySet();
+    ArrayList<String> stringsForAdapter = new ArrayList<>();
+
+    for (String possibleResult : keys) {
+      if (possibleResult.toLowerCase().contains(string.toLowerCase())) {
+        stringsForAdapter.add(possibleResult);
+      }
+    }
+    listView.setAdapter(new CourseListAdapter(getApplicationContext(), stringsForAdapter));
   }
 
   // Downloads all the JSON data from the server.
@@ -103,8 +113,8 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
       public void finished(Object data) {
         if (data != null) {
           addRelevantActionListeners();
-          TimetableServerKeysCache.setTimetableIdentifiersHash((String) data);
-          ArrayList<String> courseTitles = formatDataForAdapter(TimetableServerKeysCache.getHash());
+          CourseAndServerIDsCache.setTimetableIdentifiersHash((String) data);
+          ArrayList<String> courseTitles = formatDataForAdapter(CourseAndServerIDsCache.getHash());
           listView.setAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
           listView.setOnItemClickListener(AvailableCoursesActivity.this);
         }
@@ -146,7 +156,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   private void addSaveCourseFragmentToViewHierarchy(String courseCode) {
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-    String courseID = TimetableServerKeysCache.getTimetableIDForCourseCode(courseCode);
+    String courseID = CourseAndServerIDsCache.getTimetableIDForCourseCode(courseCode);
     SaveCourseFragment fragment = SaveCourseFragment.newInstance(courseID, courseCode);
     fragment.setCallback(this);
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);

@@ -5,7 +5,7 @@ import android.content.Context;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.JsonParser;
-import org.stephenfox.dittimetables.network.TimetableServerKeysCache;
+import org.stephenfox.dittimetables.network.CourseAndServerIDsCache;
 import org.stephenfox.dittimetables.network.WeekDownloader;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 
@@ -45,7 +45,7 @@ public class TimetableSourceRetriever {
     if (database.timetableExists(courseCode)) {
       fetchTimetableFromDatabase();
     } else {
-      String courseID = TimetableServerKeysCache.getTimetableIDForCourseCode(courseCode);
+      String courseID = CourseAndServerIDsCache.getTimetableIDForCourseCode(courseCode);
       String url = WeekDownloader.constructURLToDownloadTimetableWeek(courseID);
       fetchTimetableFromServer(url);
     }

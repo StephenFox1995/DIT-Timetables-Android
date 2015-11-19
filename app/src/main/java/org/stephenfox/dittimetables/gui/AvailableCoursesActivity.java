@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
-import org.stephenfox.dittimetables.network.CourseAndServerIDsCache;
+import org.stephenfox.dittimetables.network.CourseAndServerIDsDataSource;
 import org.stephenfox.dittimetables.network.CourseDownloader;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.NetworkManager;
@@ -57,9 +58,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
         Log.d("SF", "We have a connection :)");
         beginDownload();
       } else {
-        TextView noConnection = (TextView)findViewById(R.id.no_connection);
-        noConnection.setText("Could not connect to network!");
-        // TODO: Add callback method to be notified if we get connection.
+        displayNoConnectionTextView();
       }
     }
   }
@@ -71,10 +70,27 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   }
 
 
+  private void reloadDataSource() {
+    if (NetworkManager.hasInternetConnection(this)) {
+      beginDownload();
+    } else {
+      displayNoConnectionTextView();
+    }
+  }
+
+  // TODO: Error check this completetly.
+  private void displayNoConnectionTextView() {
+    TextView noConnection = (TextView)findViewById(R.id.no_connection);
+    noConnection.setText("Could not connect to network!");
+    // TODO: Add callback method to be notified if we get connection.
+  }
+
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.search, menu);
+    inflater.inflate(R.menu.reload, menu);
 
     SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
@@ -85,6 +101,17 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     return true;
   }
 
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.menu.reload:
+        reloadDataSource();
+        return true;
+      default:
+        return false;
+    }
+  }
 
   @Override
   public boolean onQueryTextChange(String newText) {
@@ -103,7 +130,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     if (!NetworkManager.hasInternetConnection(this))
       return false;
 
-    HashMap<String, Integer> coursesAndServersIDsHash = CourseAndServerIDsCache.getHash();
+    HashMap<String, Integer> coursesAndServersIDsHash = CourseAndServerIDsDataSource.getHash();
     Search courseSearch = new Search();
     String[] resultSet =
         courseSearch.performStringSearch(coursesAndServersIDsHash.keySet(), string, false);
@@ -127,8 +154,8 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
       public void finished(Object data) {
         if (data != null) {
           addRelevantActionListeners();
-          CourseAndServerIDsCache.setTimetableIdentifiersHash((String) data);
-          ArrayList<String> courseTitles = formatDataForAdapter(CourseAndServerIDsCache.getHash());
+          CourseAndServerIDsDataSource.setTimetableIdentifiersHash((String) data);
+          ArrayList<String> courseTitles = formatDataForAdapter(CourseAndServerIDsDataSource.getHash());
           listView.setAdapter(new CourseListAdapter(getApplicationContext(), courseTitles));
           listView.setOnItemClickListener(AvailableCoursesActivity.this);
         }
@@ -170,7 +197,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   private void addSaveCourseFragmentToViewHierarchy(String courseCode) {
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-    String courseID = CourseAndServerIDsCache.getTimetableIDForCourseCode(courseCode);
+    String courseID = CourseAndServerIDsDataSource.getTimetableIDForCourseCode(courseCode);
     SaveCourseFragment fragment = SaveCourseFragment.newInstance(courseID, courseCode);
     fragment.setCallback(this);
     fragmentTransaction.add(R.id.save_course_placeholder, fragment);

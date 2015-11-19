@@ -27,7 +27,7 @@ public class TimetableWeekPageFragment extends ListFragment {
 
   private static final String TAG = TimetableWeekPageFragment.class.getSimpleName();
 
-  TimetableDay timetableDay;
+  private TimetableDay timetableDay;
 
 
   /**
@@ -178,7 +178,5 @@ public class TimetableWeekPageFragment extends ListFragment {
           return 0;
       }
     }
-
   }
-
 }

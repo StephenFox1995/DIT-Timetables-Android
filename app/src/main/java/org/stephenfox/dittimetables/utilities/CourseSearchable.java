@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * This interface provides the method signature
- * all should use if they wish to search for a course through
+ * all classes should use if they wish to search for a course through
  * a set of courses.
  **/
 public interface CourseSearchable {

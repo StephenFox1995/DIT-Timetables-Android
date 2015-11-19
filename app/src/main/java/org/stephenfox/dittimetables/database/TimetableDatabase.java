@@ -18,8 +18,6 @@ public class TimetableDatabase {
   private SQLiteDatabase sqLiteDatabase;
 
 
-
-
   public TimetableDatabase(Context context) {
     this.context = context;
   }

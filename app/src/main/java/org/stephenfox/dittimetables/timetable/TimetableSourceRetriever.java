@@ -61,8 +61,7 @@ public class TimetableSourceRetriever {
     TimetableSession[] sessions;
 
     // Find the courseGroup that is preferred by the user.
-    TimetablePreferences preferences = new TimetablePreferences(context);
-    String courseGroup = preferences.getCourseGroupPreference();
+    String courseGroup = TimetablePreferences.getCourseGroupPreference(context);
 
     if (courseGroup != null) {
        sessions = database.getSessionForGroup(courseCode, courseGroup);
@@ -118,9 +117,6 @@ public class TimetableSourceRetriever {
     JsonParser parser = new JsonParser();
     return parser.parseSessionsForTimetable(JSONData);
   }
-
-
-
 
 
   public interface TimetableRetrieverCallback {

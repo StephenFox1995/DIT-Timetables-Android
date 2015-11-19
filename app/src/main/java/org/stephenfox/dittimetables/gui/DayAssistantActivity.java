@@ -36,9 +36,7 @@ public class DayAssistantActivity extends AppCompatActivity {
     setContentView(R.layout.day_assistant_activity);
     listView = (ListView)findViewById(R.id.list);
 
-    TimetablePreferences preferences = new TimetablePreferences(this);
-    String courseGroup = preferences.getCourseGroupPreference();
-
+    String courseGroup = TimetablePreferences.getCourseGroupPreference(this);
     setTitle(courseGroup);
     setup();
   }
@@ -48,7 +46,7 @@ public class DayAssistantActivity extends AppCompatActivity {
   private void setup() {
     // TODO: This could be possible point of changing activity if there's no preferred timetable.
     TimetablePreferences preferences = new TimetablePreferences(this);
-    String courseCode = preferences.getCourseCodePreference();
+    String courseCode = TimetablePreferences.getCourseCodePreference(this);
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
     sourceRetriever.fetchTimetable(courseCode,

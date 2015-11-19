@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,8 +42,6 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   private ListView listView;
 
 
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -50,16 +49,27 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
     listView = (ListView)findViewById(R.id.listview);
 
-
-
-    if (NetworkManager.hasInternetConnection(this)) {
-      beginDownload();
-    } else {
-      TextView noConnection = (TextView)findViewById(R.id.no_connection);
-      noConnection.setText("Could not connect to network!");
-      // TODO: Add callback method to be notified if we get connection.
+    if (TimetablePreferences.getTimetableSavedPreference(this)) {
+      showAssistantActivity();
+    }
+    else {
+      if (NetworkManager.hasInternetConnection(this)) {
+        Log.d("SF", "We have a connection :)");
+        beginDownload();
+      } else {
+        TextView noConnection = (TextView)findViewById(R.id.no_connection);
+        noConnection.setText("Could not connect to network!");
+        // TODO: Add callback method to be notified if we get connection.
+      }
     }
   }
+
+
+  private void showAssistantActivity() {
+    Intent showTimetableAssistant = new Intent(this, DayAssistantActivity.class);
+    startActivity(showTimetableAssistant);
+  }
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,30 +88,36 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
   @Override
   public boolean onQueryTextChange(String newText) {
-    performSearch(newText);
-    return false;
+    return performSearch(newText);
   }
 
   @Override
   public boolean onQueryTextSubmit(String query) {
-    return false;
+    return performSearch(query);
   }
 
 
-  private void performSearch(String string) {
+  private boolean performSearch(String string) {
     // Don't perform search if somehow we've lost connection
     // as it will be useless.
     if (!NetworkManager.hasInternetConnection(this))
-      return;
+      return false;
 
     HashMap<String, Integer> coursesAndServersIDsHash = CourseAndServerIDsCache.getHash();
     Search courseSearch = new Search();
     String[] resultSet =
         courseSearch.performStringSearch(coursesAndServersIDsHash.keySet(), string, false);
 
+    if (resultSet.length == 0) {
+      return false;
+    }
+
     listView.setAdapter(new CourseListAdapter(getApplicationContext(),
         new ArrayList<>(Arrays.asList(resultSet))));
+    return true;
   }
+
+
 
   // Downloads all the JSON data from the server.
   private void beginDownload() {
@@ -179,10 +195,11 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
       fragment.setGroupChosenCallback(new ChooseGroupFragment.ChooseGroupCallback() {
         @Override
         public void groupChosen(String courseCode, String group) {
-          TimetablePreferences preferences = new TimetablePreferences(AvailableCoursesActivity.this);
-          preferences.setCourseGroupPreference(group);
-          preferences.setCourseCodePreference(courseCode);
+          TimetablePreferences.setCourseGroupPreference(AvailableCoursesActivity.this, group);
+          TimetablePreferences.setCourseCodePreference(AvailableCoursesActivity.this, courseCode);
+          TimetablePreferences.setTimetableSavedPreference(AvailableCoursesActivity.this, true);
           getFragmentManager().beginTransaction().remove(fragment).commit();
+          showAssistantActivity();
         }
 
         @Override
@@ -252,8 +269,6 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
       TextView courseTitle = (TextView) row.findViewById(R.id.courseCode);
       courseTitle.setText(courseTitles.get(position));
-
-
       return row;
     }
   }

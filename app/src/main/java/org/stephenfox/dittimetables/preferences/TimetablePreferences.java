@@ -17,27 +17,70 @@ public class TimetablePreferences {
   }
 
 
-  public void setCourseGroupPreference(String courseGroup) {
+  /**
+   * Use this preference should be set if the user has timetable to their
+   * device.
+   * @param status true of false depending on whether they have saved a timetable.
+   **/
+  public static void setTimetableSavedPreference(Context context, boolean status) {
+    SharedPreferences sharedPreferences = context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putBoolean("timetableSaved", status);
+    editor.apply();
+  }
+
+
+  /**
+   * Use this method to check whether a timetable has been saved
+   * to the user's device.
+   * @return A boolean value.
+   **/
+  public static boolean getTimetableSavedPreference(Context context) {
+    SharedPreferences sharedPreferences = context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
+    return sharedPreferences.getBoolean("timetableSaved", false);
+  }
+
+
+  /**
+   * Sets the course group (e.g. DT228/3-B) the user belongs to.
+   * @param courseGroup The course group the user belongs to.
+   **/
+  public static void setCourseGroupPreference(Context context, String courseGroup) {
     SharedPreferences sharedPreferences = context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = sharedPreferences.edit();
     editor.putString("chosenGroup", courseGroup);
     editor.apply();
   }
 
-  public void setCourseCodePreference(String code) {
+
+  /**
+   * Sets the code of the user's course.
+   * @param code The course code.
+   **/
+  public static void setCourseCodePreference(Context context, String code) {
     SharedPreferences sharedPreferences = context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = sharedPreferences.edit();
     editor.putString("courseCode", code);
     editor.apply();
   }
 
-  public String getCourseGroupPreference() {
+
+  /**
+   * Returns the course group the user's belongs to if
+   * it was set.
+   * @return The course group if set, otherwise null.
+   * */
+  public static String getCourseGroupPreference(Context context) {
     SharedPreferences preferences =
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
     return preferences.getString("chosenGroup", null);
   }
 
-  public String getCourseCodePreference() {
+  /**
+   * Returns the course code of the user.
+   * @return The course code of the user's course if set, otherwise null.
+   */
+  public static String getCourseCodePreference(Context context) {
     SharedPreferences preferences =
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
     return preferences.getString("courseCode", null);

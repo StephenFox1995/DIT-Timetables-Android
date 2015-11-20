@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:background="@color/session_details_view_blue"
         android:gravity="center"
-        android:letterSpacing="4"
         android:text="CHOOSE YOUR GROUP"
         android:textColor="@color/white"
         android:textSize="20sp"/>

@@ -4,8 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -41,11 +42,14 @@ public class DayAssistantActivity extends AppCompatActivity {
     setup();
   }
 
-
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater menuInflater = getMenuInflater();
+    menuInflater.inflate(R.menu.show_full_timetable, menu);
+    return true;
+  }
 
   private void setup() {
-    // TODO: This could be possible point of changing activity if there's no preferred timetable.
-    TimetablePreferences preferences = new TimetablePreferences(this);
     String courseCode = TimetablePreferences.getCourseCodePreference(this);
 
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
@@ -53,9 +57,27 @@ public class DayAssistantActivity extends AppCompatActivity {
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
           @Override
           public void timetableRetrieved(Timetable timetable) {
-            listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, timetable));
+            setListAdapter(timetable);
           }
         });
+  }
+
+  /**
+   * This sets the list adapter if there are any sessions to fill it with
+   * otherwise, displays view to user that there are no sessions for that day.
+   **/
+  private void setListAdapter(Timetable timetable) {
+    Day today = Day.stringToDay(Time.getCurrentDay());
+
+    if (timetable.containsDay(today)) {
+      if (timetable.getTimetableDay(today).containsSessions()) {
+        listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, timetable));
+      }
+      return;
+    }
+    TextView noSessionsForToday = (TextView)findViewById(R.id.no_sessions);
+    noSessionsForToday.setText("You have no classes today");
+
   }
 
 
@@ -67,35 +89,24 @@ public class DayAssistantActivity extends AppCompatActivity {
     String currentDay;
     Day today;
     TimetableSession[] sessions;
-    boolean dayContainsSessions;
 
-
+    
     public SessionDetailsAdapter(Context context, Timetable timetable) {
       this.context = context;
       this.timetable = timetable;
       this.layoutInflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
       this.currentDay = Time.getCurrentDay();
       this.today = Day.stringToDay(currentDay);
-
-      if (timetable.containsDay(today)) {
-        if (timetable.getTimetableDay(today).containsSessions()) {
-          this.sessions = timetable.getTimetableDay(today).getSessions();
-          dayContainsSessions = true;
-        }
-      } else {
-        dayContainsSessions = false;
-      }
+      this.sessions = timetable.getTimetableDay(today).getSessions();
     }
+
 
     @Override
     public int getCount() {
-      if (dayContainsSessions) {
-        TimetableDay timetableDay = timetable.getTimetableDay(today);
-        return determineIncludedSessions(timetableDay.getSessions()).length;
-      } else {
-        return 0;
-      }
+      TimetableDay timetableDay = timetable.getTimetableDay(today);
+      return determineIncludedSessions(timetableDay.getSessions()).length;
     }
+
 
     @Override
     public Object getItem(int position) {
@@ -145,6 +156,7 @@ public class DayAssistantActivity extends AppCompatActivity {
 
     /**
      * Determines what sessions to show in the list. They may be all finished.
+     * In that case none will be included.
      **/
     private TimetableSession[] determineIncludedSessions(TimetableSession[] sessions) {
       ArrayList<TimetableSession> lSessions = new ArrayList<>();
@@ -158,6 +170,7 @@ public class DayAssistantActivity extends AppCompatActivity {
       return lSessions.toArray(new TimetableSession[lSessions.size()]);
     }
   }
+
 
   private int determineColourForSessionDetails(TimetableSession session) {
     if (session.isActive()) {
@@ -175,7 +188,6 @@ public class DayAssistantActivity extends AppCompatActivity {
     float endTime =
         Float.parseFloat(Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2));
 
-    Log.d("SF", "" + currentTime);
     if (session.isActive()) {
       float timeRemaining = endTime - currentTime;
       return formatTimeString(timeRemaining) + " remaining.";

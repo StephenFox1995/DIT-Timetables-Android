@@ -5,5 +5,5 @@ public enum SessionStatus {
   Finished,
   Active,
   Later,
-  InvalidDay
+  UnAssociatedDay
 }

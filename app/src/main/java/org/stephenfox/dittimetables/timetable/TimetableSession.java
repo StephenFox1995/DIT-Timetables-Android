@@ -1,6 +1,8 @@
 package org.stephenfox.dittimetables.timetable;
 
 
+import android.util.Log;
+
 import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.utilities.Utilities;
 
@@ -39,8 +41,8 @@ public class TimetableSession {
     float endTime = Float.parseFloat(sEndTime);
     float currentTime = Float.parseFloat(sCurrentTime);
 
-    Day day = Day.stringToDay(Time.getCurrentDay());
-    return day == this.day && startTime <= currentTime && endTime > currentTime;
+    Day today = Day.stringToDay(Time.getCurrentDay());
+    return isActiveForDay(today) && startTime <= currentTime && endTime > currentTime;
   }
 
 
@@ -61,16 +63,19 @@ public class TimetableSession {
     float endTime = Float.parseFloat(sEndTime);
     float currentTime = Float.parseFloat(sCurrentTime);
 
-    if (!(day == Day.stringToDay(Time.getCurrentDay()))) {
-      return SessionStatus.InvalidDay;
+    if (!isActiveForDay(Day.stringToDay(Time.getCurrentDay()))) {
+      return SessionStatus.UnAssociatedDay;
     }
     else if (isActive()) {
+      Log.d("SF", "SessionsStatus.Active: " + toString());
       return SessionStatus.Active;
     }
-    else if (currentTime > endTime) {
+    else if (currentTime < endTime) {
+      Log.d("SF", "SessionsStatus.Finished: " + toString());
       return SessionStatus.Finished;
     }
     else {
+      Log.d("SF", "SessionsStatus.Later: " + toString());
       return SessionStatus.Later;
     }
   }

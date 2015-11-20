@@ -45,7 +45,7 @@ public class DayAssistantActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.show_full_timetable, menu);
+    menuInflater.inflate(R.menu.settings, menu);
     return true;
   }
 
@@ -77,7 +77,6 @@ public class DayAssistantActivity extends AppCompatActivity {
     }
     TextView noSessionsForToday = (TextView)findViewById(R.id.no_sessions);
     noSessionsForToday.setText("You have no classes today");
-
   }
 
 
@@ -90,7 +89,7 @@ public class DayAssistantActivity extends AppCompatActivity {
     Day today;
     TimetableSession[] sessions;
 
-    
+
     public SessionDetailsAdapter(Context context, Timetable timetable) {
       this.context = context;
       this.timetable = timetable;

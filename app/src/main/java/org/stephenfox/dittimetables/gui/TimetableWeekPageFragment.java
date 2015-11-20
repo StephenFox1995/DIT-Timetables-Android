@@ -171,7 +171,7 @@ public class TimetableWeekPageFragment extends ListFragment {
           return ContextCompat.getColor(getContext(), R.color.timetable_row_red);
         case Later:
           return ContextCompat.getColor(getContext(), R.color.timetable_row_gray);
-        case InvalidDay:
+        case UnAssociatedDay:
           return ContextCompat.getColor(getContext(), R.color.timetable_row_gray);
         default:
           return 0;

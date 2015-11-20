@@ -8,17 +8,17 @@
         android:id="@+id/session_details_header"
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="65dp"
         android:background="@color/session_details_view_blue"
-        android:layout_weight="0.4"
         android:weightSum="1">
 
         <TextView
             android:id="@+id/session_detail_time_remaining"
-            android:gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:text="50 Minutes Remaining"
             android:textColor="@color/white"/>
     </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,8 +41,12 @@ public class DayAssistantActivity extends AppCompatActivity {
     listView = (ListView)findViewById(R.id.list);
 
     String courseGroup = TimetablePreferences.getCourseGroupPreference(this);
-    setTitle(courseGroup);
-    setup();
+    if (courseGroup != null) {
+      setTitle(courseGroup);
+      setup();
+    } else {
+      finish();
+    }
   }
 
   @Override
@@ -83,20 +88,30 @@ public class DayAssistantActivity extends AppCompatActivity {
   private void setListAdapter(Timetable timetable) {
     Day today = Day.stringToDay(Time.getCurrentDay());
 
-    if (timetable.containsDay(today)) {
+    if (timetable != null && timetable.containsDay(today)) {
       if (timetable.getTimetableDay(today).containsSessions()) {
         listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, timetable));
       }
       return;
     }
+
+    Log.v("SF", "No sessions today");
     TextView noSessionsForToday = (TextView)findViewById(R.id.no_sessions);
-    noSessionsForToday.setText("You have no classes today");
+    noSessionsForToday.setText("All done for the day.");
   }
 
 
 
   private void displaySettingsActivity() {
-    Intent settingsActivityIntent = new Intent(this, SettingsActivity.class);
+    SettingsActivity settingsActivity = new SettingsActivity();
+    settingsActivity.setSettingsCallback(new SettingsActivity.SettingsCallback() {
+      @Override
+      public void timetableRemovedCallback() {
+        finish();
+      }
+    });
+
+    Intent settingsActivityIntent = new Intent(this, settingsActivity.getClass());
     startActivity(settingsActivityIntent);
   }
 

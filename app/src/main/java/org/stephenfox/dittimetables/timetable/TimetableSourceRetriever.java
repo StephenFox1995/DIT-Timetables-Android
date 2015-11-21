@@ -1,6 +1,7 @@
 package org.stephenfox.dittimetables.timetable;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CustomAsyncTask;
@@ -73,6 +74,7 @@ public class TimetableSourceRetriever {
       TimetableBuilder builder = new TimetableBuilder(sessions);
       callback.timetableRetrieved(builder.buildTimetable(courseCode));
     } catch (InvalidTimetableDataException e) {
+      Log.d("SF", "Invalid timetable data exception thrown.");
       callback.timetableRetrieved(null);
     }
   }

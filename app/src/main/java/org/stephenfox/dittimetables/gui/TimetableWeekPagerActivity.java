@@ -72,6 +72,8 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
   }
 
 
+
+
   /**
    * Sets up the activity, with the appropriate timetable.
    *

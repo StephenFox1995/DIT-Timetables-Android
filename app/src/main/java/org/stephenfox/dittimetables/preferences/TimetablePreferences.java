@@ -12,10 +12,6 @@ public class TimetablePreferences {
   Context context;
   private static final String FILE = "sPreferences";
 
-  public TimetablePreferences(Context context) {
-    this.context = context;
-  }
-
 
   /**
    * Use this preference should be set if the user has timetable to their

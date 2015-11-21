@@ -58,9 +58,9 @@ public class TimetableSession {
    **/
   public SessionStatus timeStatus() {
     String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
-    String sEndTime = Utilities.stringWithReplacedIndex(getEndTime(), '.', 2);
+    String sStartTime = Utilities.stringWithReplacedIndex(getStartTime(), '.', 2);
 
-    float endTime = Float.parseFloat(sEndTime);
+    float startTime = Float.parseFloat(sStartTime);
     float currentTime = Float.parseFloat(sCurrentTime);
 
     if (!isActiveForDay(Day.stringToDay(Time.getCurrentDay()))) {
@@ -70,13 +70,13 @@ public class TimetableSession {
       Log.d("SF", "SessionsStatus.Active: " + toString());
       return SessionStatus.Active;
     }
-    else if (currentTime < endTime) {
+    else if (currentTime < startTime) {
       Log.d("SF", "SessionsStatus.Finished: " + toString());
-      return SessionStatus.Finished;
+      return SessionStatus.Later;
     }
     else {
       Log.d("SF", "SessionsStatus.Later: " + toString());
-      return SessionStatus.Later;
+      return SessionStatus.Finished;
     }
   }
 

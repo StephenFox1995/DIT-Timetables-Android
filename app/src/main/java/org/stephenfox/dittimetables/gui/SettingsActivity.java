@@ -17,11 +17,24 @@ public class SettingsActivity extends AppCompatActivity {
 
   Button removeTimetableButton;
 
+
+  SettingsCallback settingsCallback;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings_activity);
     setTitle("Settings");
+    displayRemoveTimetableButton();
+  }
+
+  private void displayRemoveTimetableButton() {
+
+    Boolean timetableSavedPreference = TimetablePreferences.getTimetableSavedPreference(this);
+
+    if (!timetableSavedPreference) {
+      return;
+    }
 
     removeTimetableButton = (Button)findViewById(R.id.delete_saved_timetable_button);
     removeTimetableButton.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
   }
 
 
+
   /**
    * Deletes a timetable from the database.
    * */
@@ -60,9 +74,10 @@ public class SettingsActivity extends AppCompatActivity {
   }
 
 
+
   /**
    * Removes the preferences for a timetable.
-   * */
+   **/
   private void removeTimetablePreferences() {
     TimetablePreferences.removeAllPreferences(this);
   }
@@ -70,5 +85,18 @@ public class SettingsActivity extends AppCompatActivity {
   private void displayTimetableRemovedToast() {
     Toast.makeText(this,
         "Timetable successfully removed from device!", Toast.LENGTH_SHORT).show();
+  }
+
+
+  public SettingsCallback getSettingsCallback() {
+    return settingsCallback;
+  }
+
+  public void setSettingsCallback(SettingsCallback settingsCallback) {
+    this.settingsCallback = settingsCallback;
+  }
+
+  public interface SettingsCallback {
+    void timetableRemovedCallback();
   }
 }

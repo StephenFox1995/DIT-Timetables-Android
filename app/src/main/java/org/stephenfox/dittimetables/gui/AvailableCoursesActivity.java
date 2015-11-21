@@ -90,7 +90,10 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
     inflater.inflate(R.menu.search, menu);
     inflater.inflate(R.menu.reload, menu);
-    inflater.inflate(R.menu.show_full_timetable, menu);
+
+    if (TimetablePreferences.getTimetableSavedPreference(this)) {
+      inflater.inflate(R.menu.show_full_timetable, menu);
+    }
 
     SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();
@@ -108,6 +111,8 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
       case R.id.menu_refresh:
         reloadDataSource();
         return true;
+      case R.id.show_full_timetable:
+        showAssistantActivity();
       default:
         return super.onOptionsItemSelected(item);
     }

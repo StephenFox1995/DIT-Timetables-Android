@@ -194,12 +194,16 @@ public class DayAssistantActivity extends AppCompatActivity {
      * In that case none will be included.
      **/
     private TimetableSession[] determineIncludedSessions(TimetableSession[] sessions) {
+
       ArrayList<TimetableSession> lSessions = new ArrayList<>();
       Day today = Day.stringToDay(Time.getCurrentDay());
 
       for (TimetableSession session : sessions) {
-        if (session.isActiveForDay(today) && session.timeStatus() != SessionStatus.Finished) {
-          lSessions.add(session);
+        if (session.isActiveForDay(today)) {
+          if (session.isActive(getCurrentTime()) ||
+              session.timeStatus(getCurrentTime()) != SessionStatus.Finished) {
+            lSessions.add(session);
+          }
         }
       }
       return lSessions.toArray(new TimetableSession[lSessions.size()]);
@@ -208,7 +212,7 @@ public class DayAssistantActivity extends AppCompatActivity {
 
 
   private int determineColourForSessionDetails(TimetableSession session) {
-    if (session.isActive()) {
+    if (session.isActive(getCurrentTime())) {
       return ContextCompat.getColor(getApplicationContext(), R.color.sessiom_detail_active_green);
     } else {
       return ContextCompat.getColor(getApplicationContext(), R.color.session_details_view_blue);
@@ -223,12 +227,14 @@ public class DayAssistantActivity extends AppCompatActivity {
     float endTime =
         Float.parseFloat(Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2));
 
-    if (session.isActive()) {
-      float timeRemaining = endTime - currentTime;
-      return formatTimeString(timeRemaining) + " remaining.";
+    if (session.isActive(getCurrentTime())) {
+      return "NOW: " + (endTime - currentTime);
+    } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Later)) {
+      return "LATER: " + (startTime - currentTime);
+    } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Finished)){
+      return "FUCK OFF";
     } else {
-      float timeUntil = currentTime - startTime;
-      return formatTimeString(timeUntil) + " until.";
+      return "";
     }
   }
 
@@ -244,5 +250,10 @@ public class DayAssistantActivity extends AppCompatActivity {
     char minutes = formattedString.toCharArray()[formattedString.length() - 2];
 
     return hours + "."  + minutes + "hr(s)";
+  }
+
+
+  private float getCurrentTime() {
+    return Float.parseFloat(Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2));
   }
 }

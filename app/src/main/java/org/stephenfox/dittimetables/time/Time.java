@@ -13,8 +13,8 @@ public class Time {
    * @return String A string representing the day e.g. Saturday, Sunday etc.
    */
   public static String getCurrentDay() {
-    return "Tuesday";
-    //new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
+    return "Monday";
+    //SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
   }
 
 

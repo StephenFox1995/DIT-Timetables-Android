@@ -31,15 +31,18 @@ public class TimetableSession {
   /**
    * Use this method to decide whether or not a session is active i.e
    * it is currently being held at this moment in time.
+   *
+   * @param currentTime The time the session will use to compare against its start & end time.
+   * @return boolean True: Session is active. False: Not active.
+   *
    */
-  public boolean isActive() {
+  public boolean isActive(float currentTime) {
     String sEndTime = Utilities.stringWithReplacedIndex(getEndTime(), '.', 2);
     String sStartTime = Utilities.stringWithReplacedIndex(getStartTime(), '.', 2);
-    String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
 
     float startTime = Float.parseFloat(sStartTime);
     float endTime = Float.parseFloat(sEndTime);
-    float currentTime = Float.parseFloat(sCurrentTime);
+
 
     Day today = Day.stringToDay(Time.getCurrentDay());
     return isActiveForDay(today) && startTime <= currentTime && endTime > currentTime;
@@ -54,19 +57,18 @@ public class TimetableSession {
   /**
    * Determine the current status of a session. i.e if it is active or has finished for
    * the day etc.
+   * @param currentTime The time to compare against.
    * @return The status.
    **/
-  public SessionStatus timeStatus() {
-    String sCurrentTime = Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2);
+  public SessionStatus timeStatus(float currentTime) {
     String sStartTime = Utilities.stringWithReplacedIndex(getStartTime(), '.', 2);
 
     float startTime = Float.parseFloat(sStartTime);
-    float currentTime = Float.parseFloat(sCurrentTime);
 
     if (!isActiveForDay(Day.stringToDay(Time.getCurrentDay()))) {
       return SessionStatus.UnAssociatedDay;
     }
-    else if (isActive()) {
+    else if (isActive(currentTime)) {
       Log.d("SF", "SessionsStatus.Active: " + toString());
       return SessionStatus.Active;
     }

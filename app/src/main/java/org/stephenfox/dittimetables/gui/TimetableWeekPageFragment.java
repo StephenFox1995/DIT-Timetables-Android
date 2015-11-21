@@ -14,9 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.stephenfox.dittimetables.R;
+import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.timetable.SessionStatus;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
-import org.stephenfox.dittimetables.timetable.TimetableSession;
+import org.stephenfox.dittimetables.utilities.Utilities;
 
 
 /**
@@ -128,7 +129,8 @@ public class TimetableWeekPageFragment extends ListFragment {
         row = this.inflater.inflate(R.layout.timetable_session_row, null);
       }
 
-      int colorForRow = colourForSessionStatus(determineSessionStatus(day.getSession(position)));
+      int colorForRow =
+          colourForSessionStatus(day.getSession(position).timeStatus(getCurrentTime()));
 
       View sessionStatus = row.findViewById(R.id.session_status);
       sessionStatus.setBackgroundColor(colorForRow);
@@ -152,17 +154,6 @@ public class TimetableWeekPageFragment extends ListFragment {
     }
 
 
-    /**
-     * Determines the Status of a session. i.e If its finished, has to start etc.
-     * Note: The today for the session must match the actual today of the week
-     * in reality.
-     * @return SessionStatus The status for a given session.
-     */
-    private SessionStatus determineSessionStatus(TimetableSession session) {
-      return session.timeStatus();
-    }
-
-
     private int colourForSessionStatus(SessionStatus status) {
       switch (status) {
         case Active:
@@ -177,5 +168,9 @@ public class TimetableWeekPageFragment extends ListFragment {
           return 0;
       }
     }
+  }
+
+  private float getCurrentTime() {
+    return Float.parseFloat(Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2));
   }
 }

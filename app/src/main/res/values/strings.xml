@@ -4,6 +4,6 @@
     <string name="preferencesFile">sPreferences</string>
     <string name="hint">hint</string>
     <string name="reload">Reload</string>
-
+    <string name="timetable">See your timetable</string>
 
 </resources>

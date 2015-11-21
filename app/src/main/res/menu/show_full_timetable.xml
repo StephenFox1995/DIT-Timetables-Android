@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_refresh"
-        android:icon="@drawable/save_icon"
+        android:id="@+id/show_full_timetable"
+        android:icon="@drawable/clock"
         app:showAsAction="always"
-        android:title="@string/settings"/>
+        android:title="@string/timetable"/>
 </menu>

@@ -201,7 +201,7 @@ public class DayAssistantActivity extends AppCompatActivity {
       for (TimetableSession session : sessions) {
         if (session.isActiveForDay(today)) {
           if (session.isActive(getCurrentTime()) ||
-              session.timeStatus(getCurrentTime()) != SessionStatus.Finished) {
+              session.timeStatus(getCurrentTime()) == SessionStatus.Later) {
             lSessions.add(session);
           }
         }
@@ -232,7 +232,7 @@ public class DayAssistantActivity extends AppCompatActivity {
     } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Later)) {
       return "LATER: " + (startTime - currentTime);
     } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Finished)){
-      return "FUCK OFF";
+      return "FINISED";
     } else {
       return "";
     }

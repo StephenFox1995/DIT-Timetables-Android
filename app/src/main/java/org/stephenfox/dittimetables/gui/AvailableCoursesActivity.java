@@ -90,6 +90,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
 
     inflater.inflate(R.menu.search, menu);
     inflater.inflate(R.menu.reload, menu);
+    inflater.inflate(R.menu.show_full_timetable, menu);
 
     SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
     SearchView searchView =  (SearchView) menu.findItem(R.id.search).getActionView();

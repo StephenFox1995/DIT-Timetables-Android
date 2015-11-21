@@ -61,7 +61,13 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     }
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    invalidateOptionsMenu();
+  }
 
+  
   private void showAssistantActivity() {
     Intent showTimetableAssistant = new Intent(this, DayAssistantActivity.class);
     startActivity(showTimetableAssistant);

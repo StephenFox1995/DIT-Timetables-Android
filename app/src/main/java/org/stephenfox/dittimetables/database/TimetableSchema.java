@@ -12,9 +12,13 @@ public class TimetableSchema {
     public static final String KEY_TIMETABLE_ID = "_id";
     public static final String KEY_TIMETABLE_COURSE_CODE = "course_code";
 
-    public static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+    public static String CREATE_TABLE =
+        "CREATE TABLE " + TABLE_NAME +
         "(" + KEY_TIMETABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
         + KEY_TIMETABLE_COURSE_CODE + " TEXT NOT NULL );";
+
+    public static String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
+
   }
 
 
@@ -30,6 +34,8 @@ public class TimetableSchema {
         + "FOREIGN KEY (" + COL_TIMETABLE_ID + ") REFERENCES "
         + Timetable.TABLE_NAME + "(" + Timetable.KEY_TIMETABLE_ID + ")"
         + ");";
+
+    public static String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 
 
@@ -47,6 +53,8 @@ public class TimetableSchema {
         + "FOREIGN KEY (" + COL_TIMETABLE_WEEK_ID + ") REFERENCES "
         + TimetableWeek.TABLE_NAME + "(" + TimetableWeek.KEY_TIMETABLE_WEEK_ID + ")"
         + ");";
+
+    public static String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 
 
@@ -75,6 +83,8 @@ public class TimetableSchema {
         + "FOREIGN KEY (" + COL_TIMETABLE_DAY_ID + ") REFERENCES "
         + TimetableDay.TABLE_NAME + "(" + TimetableDay.COL_DAY_NAME + ")"
         + ");";
+
+    public static String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 
 
@@ -92,5 +102,7 @@ public class TimetableSchema {
         + "FOREIGN KEY (" + COL_TIMETABLE_SESSION_ID + ") REFERENCES "
         + TimetableSession.TABLE_NAME + "(" + TimetableSession.KEY_TIMETABLE_SESSION_ID + ")"
         + ")";
+
+    public static String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 }

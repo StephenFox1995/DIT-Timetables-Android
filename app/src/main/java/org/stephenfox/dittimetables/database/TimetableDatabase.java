@@ -12,7 +12,6 @@ import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 public class TimetableDatabase {
 
-
   private DatabaseTimetableHelper dbHelper;
   private Context context;
   private SQLiteDatabase sqLiteDatabase;
@@ -98,6 +97,18 @@ public class TimetableDatabase {
   }
 
 
+  public DatabaseTransactionStatus deleteTimetable() {
+    open();
+    DatabaseTransactionHelper transactionHelper = new DatabaseTransactionHelper(this);
+    DatabaseTransactionStatus status =  transactionHelper.deleteTimetable();
+    close();
+    return status;
+  }
+
+
+  public Context getContext() {
+    return context;
+  }
 
   public SQLiteDatabase getSqLiteDatabase() {
     return this.sqLiteDatabase;

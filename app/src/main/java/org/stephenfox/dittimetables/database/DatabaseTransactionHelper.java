@@ -2,6 +2,7 @@ package org.stephenfox.dittimetables.database;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.stephenfox.dittimetables.timetable.Timetable;
 import org.stephenfox.dittimetables.timetable.TimetableDay;
@@ -44,6 +45,28 @@ public class DatabaseTransactionHelper {
     results.add(insertSessionGroups());
 
     return insertTransactionStatus(results.toArray(new Boolean[results.size()]));
+  }
+
+  /**
+   * Deletes a timetable from the database.
+   **/
+  public DatabaseTransactionStatus deleteTimetable() {
+    try {
+      sqLiteDatabase.execSQL(TimetableSchema.Timetable.DELETE_TABLE);
+      sqLiteDatabase.execSQL(TimetableSchema.TimetableWeek.DELETE_TABLE);
+      sqLiteDatabase.execSQL(TimetableSchema.TimetableDay.DELETE_TABLE);
+      sqLiteDatabase.execSQL(TimetableSchema.TimetableSession.DELETE_TABLE);
+      sqLiteDatabase.execSQL(TimetableSchema.SessionGroup.DELETE_TABLE);
+    } catch (android.database.SQLException e) {
+      Log.d("SF", "SQLException thrown in deleteTimetable");
+      return DatabaseTransactionStatus.Failed;
+    }
+
+    if (timetableDatabase.getContext().deleteDatabase(TimetableSchema.DATABASE_NAME)) {
+      return DatabaseTransactionStatus.Success;
+    } else {
+      return DatabaseTransactionStatus.Failed;
+    }
   }
 
 

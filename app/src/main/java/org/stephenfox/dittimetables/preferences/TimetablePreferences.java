@@ -85,4 +85,14 @@ public class TimetablePreferences {
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
     return preferences.getString("courseCode", null);
   }
+
+
+
+  public static void removeAllPreferences(Context context) {
+    SharedPreferences preferences =
+        context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
+    preferences.edit().remove("courseCode").apply();
+    preferences.edit().remove("chosenGroup").apply();
+    preferences.edit().remove("timetableSaved").apply();
+  }
 }

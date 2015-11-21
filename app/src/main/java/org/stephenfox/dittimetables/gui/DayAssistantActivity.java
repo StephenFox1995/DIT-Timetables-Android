@@ -1,12 +1,14 @@
 package org.stephenfox.dittimetables.gui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -49,6 +51,18 @@ public class DayAssistantActivity extends AppCompatActivity {
     return true;
   }
 
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.settings:
+        displaySettingsActivity();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
   private void setup() {
     String courseCode = TimetablePreferences.getCourseCodePreference(this);
 
@@ -77,6 +91,13 @@ public class DayAssistantActivity extends AppCompatActivity {
     }
     TextView noSessionsForToday = (TextView)findViewById(R.id.no_sessions);
     noSessionsForToday.setText("You have no classes today");
+  }
+
+
+
+  private void displaySettingsActivity() {
+    Intent settingsActivityIntent = new Intent(this, SettingsActivity.class);
+    startActivity(settingsActivityIntent);
   }
 
 

@@ -31,6 +31,8 @@
         <activity android:name=".gui.TimetableWeekPagerActivity">
         </activity>
 
+        <activity android:name=".gui.SettingsActivity"/>
+
 
     </application>
 

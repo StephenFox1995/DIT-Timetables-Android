@@ -179,7 +179,6 @@ public class DayAssistantActivity extends AppCompatActivity {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       View row = convertView;
-      Log.e("SF", "Getvvivviviviviv");
       if (row == null) {
         row = layoutInflater.inflate(R.layout.day_assistant_session, null);
       }
@@ -190,6 +189,7 @@ public class DayAssistantActivity extends AppCompatActivity {
 
       TextView timeRemainingTextView =
           (TextView)row.findViewById(R.id.session_detail_time_remaining);
+      timeRemainingTextView.setText(stringForHeader(sessions[position]));
 
       TextView sessionname = (TextView)row.findViewById(R.id.session_detail_sessionname);
       sessionname.setText(sessions[position].getSessionName());
@@ -220,21 +220,12 @@ public class DayAssistantActivity extends AppCompatActivity {
     }
   }
 
-
-
-  private float convertToHoursAndMinutes(float time) {
-    return ((time / 100) * 60);
-  }
-
-
-
-  private String formatTimeString(float time) {
-    float hoursAndMinutesValue = convertToHoursAndMinutes(time);
-    String formattedString = String.format("%.2f", hoursAndMinutesValue);
-    String hours = formattedString.split("\\.")[0];
-    char minutes = formattedString.toCharArray()[formattedString.length() - 2];
-
-    return hours + "."  + minutes + "hr(s)";
+  private String stringForHeader(TimetableSession session) {
+    if (session.isActive(getCurrentTime())) {
+      return "Now";
+    } else {
+      return "Later";
+    }
   }
 
 

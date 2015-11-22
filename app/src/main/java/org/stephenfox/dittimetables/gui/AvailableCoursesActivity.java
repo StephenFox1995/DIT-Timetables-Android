@@ -47,8 +47,8 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_available_courses);
 
+    setContentView(R.layout.activity_available_courses);
     listView = (ListView)findViewById(R.id.listview);
 
     if (TimetablePreferences.getTimetableSavedPreference(this)) {
@@ -59,6 +59,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     } else {
       displayNoConnectionTextView();
     }
+
   }
 
   @Override
@@ -86,6 +87,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   private void displayNoConnectionTextView() {
     TextView noConnection = (TextView)findViewById(R.id.no_connection);
     noConnection.setText("Could not connect to network!");
+    // TODO: No wifi image
     // TODO: Add callback method to be notified if we get connection.
   }
 

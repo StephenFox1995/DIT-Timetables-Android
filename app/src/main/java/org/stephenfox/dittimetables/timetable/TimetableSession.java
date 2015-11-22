@@ -43,8 +43,8 @@ public class TimetableSession {
     float startTime = Float.parseFloat(sStartTime);
     float endTime = Float.parseFloat(sEndTime);
 
-
     Day today = Day.stringToDay(Time.getCurrentDay());
+
     return isActiveForDay(today) && startTime <= currentTime && endTime > currentTime;
   }
 

@@ -67,7 +67,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     invalidateOptionsMenu();
   }
 
-  
+
   private void showAssistantActivity() {
     Intent showTimetableAssistant = new Intent(this, DayAssistantActivity.class);
     startActivity(showTimetableAssistant);

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +22,6 @@ import org.stephenfox.dittimetables.time.Time;
 import org.stephenfox.dittimetables.timetable.Day;
 import org.stephenfox.dittimetables.timetable.SessionStatus;
 import org.stephenfox.dittimetables.timetable.Timetable;
-import org.stephenfox.dittimetables.timetable.TimetableDay;
 import org.stephenfox.dittimetables.timetable.TimetableSession;
 import org.stephenfox.dittimetables.timetable.TimetableSourceRetriever;
 import org.stephenfox.dittimetables.utilities.Utilities;
@@ -76,28 +74,61 @@ public class DayAssistantActivity extends AppCompatActivity {
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
           @Override
           public void timetableRetrieved(Timetable timetable) {
-            setListAdapter(timetable);
+            if (timetable == null) {
+              displayNoSessions();
+            }
+            else {
+              TimetableSession[] sessions = determineIncludedSessions(timetable);
+              if (sessions != null) {
+                setListAdapter(sessions);
+              }
+              else {
+                displayNoSessions();
+              }
+            }
           }
         });
+  }
+
+
+  /**
+   * Determines what sessions to show in the list. They may be all finished.
+   * In that case none will be included and a null value will be returned.
+   *
+   * @param timetable The timetable to extract the correct session from.
+   */
+  private TimetableSession[] determineIncludedSessions(Timetable timetable) {
+    Day today = Day.stringToDay(Time.getCurrentDay());
+    ArrayList<TimetableSession> lSessions = new ArrayList<>();
+
+    if (timetable.containsDay(today) &&
+        timetable.getTimetableDay(today).containsSessions()) {
+      for (TimetableSession session : timetable.getTimetableDay(today).getSessions()) {
+
+        if (session.isActive(getCurrentTime()) ||
+            (session.timeStatus(getCurrentTime()) != SessionStatus.Finished)) {
+          lSessions.add(session);
+        }
+      }
+      return lSessions.toArray(new TimetableSession[lSessions.size()]);
+    } else {
+      return null;
+    }
+  }
+
+
+
+  private void displayNoSessions() {
+    TextView noSession = (TextView)findViewById(R.id.no_sessions);
+    noSession.setText("You have no classes today");
   }
 
   /**
    * This sets the list adapter if there are any sessions to fill it with
    * otherwise, displays view to user that there are no sessions for that day.
    **/
-  private void setListAdapter(Timetable timetable) {
-    Day today = Day.stringToDay(Time.getCurrentDay());
-
-    if (timetable != null && timetable.containsDay(today)) {
-      if (timetable.getTimetableDay(today).containsSessions()) {
-        listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, timetable));
-      }
-      return;
-    }
-
-    Log.v("SF", "No sessions today");
-    TextView noSessionsForToday = (TextView)findViewById(R.id.no_sessions);
-    noSessionsForToday.setText("All done for the day.");
+  private void setListAdapter(TimetableSession[] sessions) {
+    listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, sessions));
   }
 
 
@@ -120,26 +151,24 @@ public class DayAssistantActivity extends AppCompatActivity {
 
     Context context;
     LayoutInflater layoutInflater;
-    Timetable timetable;
     String currentDay;
     Day today;
     TimetableSession[] sessions;
 
 
-    public SessionDetailsAdapter(Context context, Timetable timetable) {
+
+    public SessionDetailsAdapter(Context context, TimetableSession[] sessions) {
       this.context = context;
-      this.timetable = timetable;
       this.layoutInflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
       this.currentDay = Time.getCurrentDay();
       this.today = Day.stringToDay(currentDay);
-      this.sessions = timetable.getTimetableDay(today).getSessions();
+      this.sessions = sessions;
     }
 
 
     @Override
     public int getCount() {
-      TimetableDay timetableDay = timetable.getTimetableDay(today);
-      return determineIncludedSessions(timetableDay.getSessions()).length;
+      return sessions.length;
     }
 
 
@@ -189,25 +218,7 @@ public class DayAssistantActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Determines what sessions to show in the list. They may be all finished.
-     * In that case none will be included.
-     **/
-    private TimetableSession[] determineIncludedSessions(TimetableSession[] sessions) {
 
-      ArrayList<TimetableSession> lSessions = new ArrayList<>();
-      Day today = Day.stringToDay(Time.getCurrentDay());
-
-      for (TimetableSession session : sessions) {
-        if (session.isActiveForDay(today)) {
-          if (session.isActive(getCurrentTime()) ||
-              session.timeStatus(getCurrentTime()) == SessionStatus.Later) {
-            lSessions.add(session);
-          }
-        }
-      }
-      return lSessions.toArray(new TimetableSession[lSessions.size()]);
-    }
   }
 
 
@@ -228,11 +239,11 @@ public class DayAssistantActivity extends AppCompatActivity {
         Float.parseFloat(Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2));
 
     if (session.isActive(getCurrentTime())) {
-      return "NOW: " + (endTime - currentTime);
+      return String.format("%.0f", (endTime - currentTime));
     } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Later)) {
       return "LATER: " + (startTime - currentTime);
     } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Finished)){
-      return "FINISED";
+      return "FINISHED";
     } else {
       return "";
     }
@@ -241,6 +252,7 @@ public class DayAssistantActivity extends AppCompatActivity {
   private float convertToHoursAndMinutes(float time) {
     return ((time / 100) * 60);
   }
+
 
 
   private String formatTimeString(float time) {

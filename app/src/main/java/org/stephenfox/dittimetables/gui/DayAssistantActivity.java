@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,14 +77,17 @@ public class DayAssistantActivity extends AppCompatActivity {
           public void timetableRetrieved(Timetable timetable) {
             if (timetable == null) {
               displayNoSessions();
+              Log.e("SF", "Timetable received from timetableRetrieved was null");
             }
             else {
               TimetableSession[] sessions = determineIncludedSessions(timetable);
               if (sessions != null) {
+                Log.e("SF", "Timetable received from timetableRetrieved was NOT null");
                 setListAdapter(sessions);
               }
               else {
                 displayNoSessions();
+                Log.e("SF", "There actually is no sessions to show.lol");
               }
             }
           }
@@ -104,8 +108,8 @@ public class DayAssistantActivity extends AppCompatActivity {
     if (timetable.containsDay(today) &&
         timetable.getTimetableDay(today).containsSessions()) {
       for (TimetableSession session : timetable.getTimetableDay(today).getSessions()) {
-
         if (session.isActive(getCurrentTime()) ||
+            session.timeStatus(getCurrentTime()) == SessionStatus.Active ||
             (session.timeStatus(getCurrentTime()) != SessionStatus.Finished)) {
           lSessions.add(session);
         }
@@ -117,20 +121,15 @@ public class DayAssistantActivity extends AppCompatActivity {
   }
 
 
-
   private void displayNoSessions() {
     TextView noSession = (TextView)findViewById(R.id.no_sessions);
     noSession.setText("You have no classes today");
   }
 
-  /**
-   * This sets the list adapter if there are any sessions to fill it with
-   * otherwise, displays view to user that there are no sessions for that day.
-   **/
-  private void setListAdapter(TimetableSession[] sessions) {
-    listView.setAdapter(new SessionDetailsAdapter(DayAssistantActivity.this, sessions));
-  }
 
+  private void setListAdapter(TimetableSession[] sessions) {
+    listView.setAdapter(new SessionDetailsAdapter(this, sessions));
+  }
 
 
   private void displaySettingsActivity() {
@@ -151,17 +150,12 @@ public class DayAssistantActivity extends AppCompatActivity {
 
     Context context;
     LayoutInflater layoutInflater;
-    String currentDay;
-    Day today;
     TimetableSession[] sessions;
-
 
 
     public SessionDetailsAdapter(Context context, TimetableSession[] sessions) {
       this.context = context;
       this.layoutInflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-      this.currentDay = Time.getCurrentDay();
-      this.today = Day.stringToDay(currentDay);
       this.sessions = sessions;
     }
 
@@ -185,7 +179,7 @@ public class DayAssistantActivity extends AppCompatActivity {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       View row = convertView;
-
+      Log.e("SF", "Getvvivviviviviv");
       if (row == null) {
         row = layoutInflater.inflate(R.layout.day_assistant_session, null);
       }
@@ -196,7 +190,6 @@ public class DayAssistantActivity extends AppCompatActivity {
 
       TextView timeRemainingTextView =
           (TextView)row.findViewById(R.id.session_detail_time_remaining);
-      timeRemainingTextView.setText(stringForTimeComponent(sessions[position]));
 
       TextView sessionname = (TextView)row.findViewById(R.id.session_detail_sessionname);
       sessionname.setText(sessions[position].getSessionName());
@@ -216,9 +209,6 @@ public class DayAssistantActivity extends AppCompatActivity {
 
       return row;
     }
-
-
-
   }
 
 
@@ -230,24 +220,7 @@ public class DayAssistantActivity extends AppCompatActivity {
     }
   }
 
-  private String stringForTimeComponent(TimetableSession session) {
-    float currentTime =
-        Float.parseFloat(Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2));
-    float startTime =
-        Float.parseFloat(Utilities.stringWithReplacedIndex(session.getStartTime(), '.', 2));
-    float endTime =
-        Float.parseFloat(Utilities.stringWithReplacedIndex(session.getEndTime(), '.', 2));
 
-    if (session.isActive(getCurrentTime())) {
-      return String.format("%.0f", (endTime - currentTime));
-    } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Later)) {
-      return "LATER: " + (startTime - currentTime);
-    } else if (session.timeStatus(getCurrentTime()).equals(SessionStatus.Finished)){
-      return "FINISHED";
-    } else {
-      return "";
-    }
-  }
 
   private float convertToHoursAndMinutes(float time) {
     return ((time / 100) * 60);

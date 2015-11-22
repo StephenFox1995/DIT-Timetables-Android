@@ -28,6 +28,8 @@ public class TimetableSession {
   }
 
 
+
+
   /**
    * Use this method to decide whether or not a session is active i.e
    * it is currently being held at this moment in time.

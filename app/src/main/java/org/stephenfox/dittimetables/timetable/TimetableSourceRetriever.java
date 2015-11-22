@@ -70,11 +70,15 @@ public class TimetableSourceRetriever {
       sessions = database.getSessions(courseCode);
     }
 
+    for (TimetableSession session : sessions) {
+      Log.d("SFNEW", session.toString());
+    }
+
     try {
       TimetableBuilder builder = new TimetableBuilder(sessions);
       callback.timetableRetrieved(builder.buildTimetable(courseCode));
     } catch (InvalidTimetableDataException e) {
-      Log.d("SF", "Invalid timetable data exception thrown.");
+      Log.e("SF", "Invalid timetable data exception thrown.");
       callback.timetableRetrieved(null);
     }
   }

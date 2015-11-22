@@ -3,11 +3,6 @@
     android:layout_width="300dp"
     android:layout_height="300dp">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="15dp"/>
-
     <LinearLayout
         android:id="@+id/session_details_header"
         android:orientation="vertical"
@@ -22,7 +17,6 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:textSize="25sp"
-            android:text="50 Minutes Remaining"
             android:textColor="@color/white"/>
     </LinearLayout>
     

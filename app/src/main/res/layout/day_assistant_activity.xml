@@ -3,18 +3,20 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/no_sessions"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
+
 
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/list">
     </ListView>
+
+    <TextView
+        android:id="@+id/no_sessions"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
 
 
 

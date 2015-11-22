@@ -87,8 +87,8 @@ public class TimetablePreferences {
   public static void removeAllPreferences(Context context) {
     SharedPreferences preferences =
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
-    preferences.edit().remove("courseCode").apply();
-    preferences.edit().remove("chosenGroup").apply();
-    preferences.edit().remove("timetableSaved").apply();
+    preferences.edit().remove("courseCode").commit();
+    preferences.edit().remove("chosenGroup").commit();
+    preferences.edit().remove("timetableSaved").commit();
   }
 }

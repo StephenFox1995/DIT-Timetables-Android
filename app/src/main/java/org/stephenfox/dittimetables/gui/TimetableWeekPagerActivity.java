@@ -61,14 +61,14 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
       progressDialog.setMessage("Grabbing information...");
       progressDialog.setCancelable(false);
     }
-    progressDialog.show();
+//    progressDialog.show();
   }
 
   private void removeProgressDialog() {
     if (progressDialog == null) {
       return;
     }
-    progressDialog.dismiss();
+  //  progressDialog.dismiss();
   }
 
 

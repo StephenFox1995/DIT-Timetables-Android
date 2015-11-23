@@ -2,7 +2,7 @@ package org.stephenfox.dittimetables.time;
 
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Locale;
 
 
 public class Time {
@@ -13,8 +13,7 @@ public class Time {
    * @return String A string representing the day e.g. Saturday, Sunday etc.
    */
   public static String getCurrentDay() {
-    return "Tuesday";
-    //SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
+    return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
   }
 
 
@@ -24,7 +23,8 @@ public class Time {
    * @return String A string representing the current time in the format HH:mm:ss. e.g 18:39
    */
   public static String getCurrentTime() {
-    return new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+    return "14.49";
+    //new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
   }
 
 }

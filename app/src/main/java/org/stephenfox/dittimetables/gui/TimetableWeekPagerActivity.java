@@ -36,12 +36,14 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
     Intent d = getIntent();
     String courseCode = d.getStringExtra("courseCode");
 
-    showProgressDialog();
+
     TimetableSourceRetriever sourceRetriever = new TimetableSourceRetriever(this);
+    showProgressDialog();
     sourceRetriever.fetchTimetable(courseCode,
         new TimetableSourceRetriever.TimetableRetrieverCallback() {
           @Override
           public void timetableRetrieved(Timetable timetable) {
+            removeProgressDialog();
             if (timetable != null) {
               setup(timetable);
             } else {
@@ -61,14 +63,14 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
       progressDialog.setMessage("Grabbing information...");
       progressDialog.setCancelable(false);
     }
-//    progressDialog.show();
+    progressDialog.show();
   }
 
   private void removeProgressDialog() {
     if (progressDialog == null) {
       return;
     }
-  //  progressDialog.dismiss();
+    progressDialog.dismiss();
   }
 
 
@@ -84,7 +86,6 @@ public class TimetableWeekPagerActivity extends AppCompatActivity implements
     pager = (ViewPager) findViewById(R.id.slide);
     pager.setAdapter(new SliderAdapter(getSupportFragmentManager(), timetable));
     pager.addOnPageChangeListener(this);
-    removeProgressDialog();
     onPageSelected(0);
   }
 

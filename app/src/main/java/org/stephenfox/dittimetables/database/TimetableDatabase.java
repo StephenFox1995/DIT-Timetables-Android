@@ -133,6 +133,12 @@ public class TimetableDatabase {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+      db.execSQL(TimetableSchema.Timetable.DELETE_TABLE);
+      db.execSQL(TimetableSchema.TimetableWeek.DELETE_TABLE);
+      db.execSQL(TimetableSchema.TimetableDay.DELETE_TABLE);
+      db.execSQL(TimetableSchema.TimetableSession.DELETE_TABLE);
+      db.execSQL(TimetableSchema.SessionGroup.DELETE_TABLE);
+      onCreate(db);
     }
   }
 }

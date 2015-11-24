@@ -86,8 +86,8 @@ public class ChooseGroupFragment extends ListFragment {
   private void setupList() {
     String[] listSelection = shouldIncludeAllSelectionItem();
 
-    for (String s : listSelection) {
-      Utilities.removeWhiteSpace(s);
+    for (int i = 0; i < listSelection.length; i++) {
+      listSelection[i] = Utilities.stringRemoveWhiteSpace(listSelection[i]);
     }
 
     ArrayAdapter<String> arrayAdapter =

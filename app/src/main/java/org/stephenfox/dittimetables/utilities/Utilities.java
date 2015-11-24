@@ -24,8 +24,8 @@ public class Utilities {
 
 
 
-  public static void removeWhiteSpace(String s) {
-    s.replaceAll("\\s","");
+  public static String stringRemoveWhiteSpace(String s) {
+    return s.replaceAll("\\s","");
   }
 
 }

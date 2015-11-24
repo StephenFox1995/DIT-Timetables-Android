@@ -81,13 +81,12 @@ public class DayAssistantActivity extends AppCompatActivity {
             }
             else {
               TimetableSession[] sessions = determineIncludedSessions(timetable);
-              if (sessions != null) {
+              if (sessions.length > 0) {
                 Log.e("SF", "Timetable received from timetableRetrieved was NOT null");
                 setListAdapter(sessions);
               }
               else {
                 displayNoSessions();
-                Log.e("SF", "There actually is no sessions to show.lol");
               }
             }
           }

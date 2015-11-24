@@ -3,9 +3,11 @@ package org.stephenfox.dittimetables.time;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 public class Time {
+
 
   /**
    * The current day of the week.
@@ -13,8 +15,7 @@ public class Time {
    * @return String A string representing the day e.g. Saturday, Sunday etc.
    */
   public static String getCurrentDay() {
-    return "9:00";
-    //return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
+    return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis());
   }
 
 

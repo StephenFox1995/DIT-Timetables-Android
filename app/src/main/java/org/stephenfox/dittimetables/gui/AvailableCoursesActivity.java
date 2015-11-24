@@ -144,6 +144,9 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
       return false;
 
     HashMap<String, Integer> coursesAndServersIDsHash = CourseAndServerIDsDataSource.getHash();
+    if (coursesAndServersIDsHash == null)
+      return false;
+
     Search courseSearch = new Search();
     String[] resultSet =
         courseSearch.performStringSearch(coursesAndServersIDsHash.keySet(), string, false);

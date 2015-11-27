@@ -29,7 +29,7 @@ public class TimetablePreferences {
   /**
    * Use this method to check whether a timetable has been saved
    * to the user's device.
-   * @return True: Theres a timetable saved to the user's device.
+   * @return True: There's a timetable saved to the user's device.
    **/
   public static boolean getTimetableSavedPreference(Context context) {
     SharedPreferences sharedPreferences = context.getSharedPreferences(FILE, Context.MODE_PRIVATE);

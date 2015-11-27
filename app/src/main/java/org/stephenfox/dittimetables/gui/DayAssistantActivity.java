@@ -227,7 +227,6 @@ public class DayAssistantActivity extends AppCompatActivity {
     }
   }
 
-
   private float getCurrentTime() {
     return Float.parseFloat(Utilities.stringWithReplacedIndex(Time.getCurrentTime(), '.', 2));
   }

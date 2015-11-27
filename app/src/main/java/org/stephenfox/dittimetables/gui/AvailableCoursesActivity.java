@@ -20,7 +20,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-
 import org.stephenfox.dittimetables.R;
 import org.stephenfox.dittimetables.database.TimetableDatabase;
 import org.stephenfox.dittimetables.network.CourseAndServerIDsDataSource;
@@ -29,7 +28,6 @@ import org.stephenfox.dittimetables.network.CustomAsyncTask;
 import org.stephenfox.dittimetables.network.NetworkManager;
 import org.stephenfox.dittimetables.preferences.TimetablePreferences;
 import org.stephenfox.dittimetables.utilities.Search;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,8 +85,6 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
   private void displayNoConnectionTextView() {
     TextView noConnection = (TextView)findViewById(R.id.no_connection);
     noConnection.setText("Could not connect to network!");
-    // TODO: No wifi image
-    // TODO: Add callback method to be notified if we get connection.
   }
 
 
@@ -109,6 +105,7 @@ public class AvailableCoursesActivity extends AppCompatActivity implements
     searchView.setSearchableInfo(s);
     searchView.setIconifiedByDefault(true);
     searchView.setOnQueryTextListener(this);
+
     return true;
   }
 

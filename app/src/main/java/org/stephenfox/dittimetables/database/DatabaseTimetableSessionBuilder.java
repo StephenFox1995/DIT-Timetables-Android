@@ -6,7 +6,7 @@ import org.stephenfox.dittimetables.timetable.TimetableSession;
 
 
 /**
- * Use this class to build session that have been retrieved from the database.
+ * Use this class to build session that have been retrieved from the database using a cursor.
  * */
 public class DatabaseTimetableSessionBuilder {
 

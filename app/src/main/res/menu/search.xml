@@ -7,6 +7,4 @@
           app:icon="@drawable/search_icon"
           app:showAsAction="always"
           app:actionViewClass="android.widget.SearchView" />
-
-
 </menu>

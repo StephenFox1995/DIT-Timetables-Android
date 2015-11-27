@@ -22,11 +22,11 @@ public class CustomAsyncTask extends AsyncTask {
    *  #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncExecutableForCallback }
    * reference, which is the code that will be called on the background thread.
    *
-   * A callback, is then called when the executableWithCallback code has finished. If there's no need
-   * for a callback then use
+   * A callback, is then called when the executableWithCallback code has finished. If a callback
+   * is not what is needed then use:
    * #{@link org.stephenfox.dittimetables.network.CustomAsyncTask.AsyncCallback }
    *
-   * @param executable A reference to a AsyncExecutable interface where the code
+   * @param executable A reference to a AsyncExecutable where the code
    *                   to be executed on a background thread will be executed.
    *
    * @param callback A reference to a AsyncCallback interface where any data that results from

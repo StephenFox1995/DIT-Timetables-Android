@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 public class TimetablePreferences {
 
   private static final String FILE = "sPreferences";
-  
+
   /**
    * Use this preference should be set if the user has timetable to their
    * device.

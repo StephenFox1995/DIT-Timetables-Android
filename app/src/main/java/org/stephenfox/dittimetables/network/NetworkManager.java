@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 
 
 /**
- * A class for querying basic network inforamtion
+ * A class for querying basic network information
  */
 public class NetworkManager {
 
@@ -20,6 +20,7 @@ public class NetworkManager {
    * Reference:
    * {@link
    * 'http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html'}
+   *
    */
   public static boolean hasInternetConnection(Context context) {
     ConnectivityManager connManager = (ConnectivityManager)
